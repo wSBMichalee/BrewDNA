@@ -1,0 +1,170 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../features/dev/presentation/screens/widget_gallery_screen.dart';
+import '../../features/onboarding/presentation/screens/splash_screen.dart';
+import '../../features/onboarding/presentation/screens/intro_screen.dart';
+import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
+import '../../features/onboarding/presentation/screens/hook_screen.dart';
+import '../../features/auth/presentation/screens/email_screen.dart';
+import '../../features/auth/presentation/screens/password_screen.dart';
+import '../../features/auth/presentation/screens/details_screen.dart';
+import '../../features/auth/presentation/screens/welcome_screen.dart';
+import '../../features/auth/presentation/screens/auth_start_screen.dart';
+import '../../features/auth/presentation/screens/login_screen.dart';
+import '../../features/paywall/presentation/screens/paywall_screen.dart';
+
+import '../../features/main/presentation/screens/scan_screen.dart';
+import '../../features/main/presentation/screens/history_screen.dart';
+import '../../features/main/presentation/screens/map_screen.dart';
+import '../../features/main/presentation/screens/discover_screen.dart';
+import '../../features/main/presentation/screens/profile_screen.dart';
+import '../../features/beer/presentation/screens/beer_details_screen.dart';
+import 'main_shell.dart';
+import '../theme/app_theme.dart';
+import '../../core/di/injection.dart';
+import '../../features/auth/presentation/bloc/auth_cubit.dart';
+
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> _authShellNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> _mainShellNavigatorKey = GlobalKey<NavigatorState>();
+
+class AuthShell extends StatelessWidget {
+  final Widget child;
+  AuthShell({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final location = GoRouterState.of(context).uri.toString();
+    final hideBack = location == '/' || location == '/onboarding/intro' || location == '/auth/welcome' || location == '/auth/start';
+
+    return BlocProvider.value(
+      value: getIt<AuthCubit>(),
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
+          if (!hideBack && context.canPop()) {
+            context.pop();
+          }
+        },
+        child: Scaffold(
+          backgroundColor: AppColors.background,
+          appBar: hideBack
+              ? null
+              : AppBar(
+                  backgroundColor: AppColors.background,
+                  elevation: 0,
+                  leading: IconButton(
+                    icon: Icon(CupertinoIcons.back, color: AppColors.label),
+                    onPressed: () {
+                      if (context.canPop()) {
+                        context.pop();
+                      }
+                    },
+                  ),
+                ),
+          body: child,
+        ),
+      ),
+    );
+  }
+}
+
+
+final GoRouter appRouter = GoRouter(
+  navigatorKey: _rootNavigatorKey,
+  initialLocation: '/',
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => SplashScreen(),
+    ),
+    GoRoute(
+      path: '/paywall',
+      builder: (context, state) => PaywallScreen(),
+    ),
+    // Auth Flow Shell
+    ShellRoute(
+      navigatorKey: _authShellNavigatorKey,
+      builder: (context, state, child) => AuthShell(child: child),
+      routes: [
+        GoRoute(
+          path: '/onboarding/intro',
+          builder: (context, state) => IntroScreen(),
+        ),
+        GoRoute(
+          path: '/onboarding/quiz',
+          builder: (context, state) => OnboardingScreen(),
+        ),
+        GoRoute(
+          path: '/onboarding/hook',
+          builder: (context, state) => HookScreen(),
+        ),
+        GoRoute(
+          path: '/auth/start',
+          builder: (context, state) => AuthStartScreen(),
+        ),
+        GoRoute(
+          path: '/auth/login',
+          builder: (context, state) => LoginScreen(),
+        ),
+        GoRoute(
+          path: '/auth/email',
+          builder: (context, state) => AuthEmailScreen(),
+        ),
+        GoRoute(
+          path: '/auth/password',
+          builder: (context, state) => AuthPasswordScreen(),
+        ),
+        GoRoute(
+          path: '/auth/details',
+          builder: (context, state) => AuthDetailsScreen(),
+        ),
+        GoRoute(
+          path: '/auth/welcome',
+          builder: (context, state) => AuthWelcomeScreen(),
+        ),
+      ],
+    ),
+    // Main App Shell
+    ShellRoute(
+      navigatorKey: _mainShellNavigatorKey,
+      builder: (context, state, child) => MainShell(child: child),
+      routes: [
+        GoRoute(
+          path: '/main/scan',
+          pageBuilder: (context, state) => NoTransitionPage(child: ScanScreen()),
+        ),
+        GoRoute(
+          path: '/main/history',
+          pageBuilder: (context, state) => NoTransitionPage(child: HistoryScreen()),
+        ),
+        GoRoute(
+          path: '/main/map',
+          pageBuilder: (context, state) => NoTransitionPage(child: MapScreen()),
+        ),
+        GoRoute(
+          path: '/main/discover',
+          pageBuilder: (context, state) => NoTransitionPage(child: DiscoverScreen()),
+        ),
+        GoRoute(
+          path: '/main/profile',
+          pageBuilder: (context, state) => NoTransitionPage(child: ProfileScreen()),
+        ),
+      ],
+    ),
+    // Beer Details (Full screen, no bottom bar)
+    GoRoute(
+      path: '/main/beer/:id',
+      builder: (context, state) => BeerDetailsScreen(id: state.pathParameters['id']!),
+    ),
+    GoRoute(
+      path: '/_widget-gallery',
+      builder: (context, state) => WidgetGalleryScreen(),
+    ),
+  ],
+);
