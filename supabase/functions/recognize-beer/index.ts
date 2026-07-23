@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
-import { z } from "zod";
+import { z } from "https://esm.sh/zod@3.22.4";
 import { corsHeaders } from "../_shared/cors.ts";
 import { AppError, handleError } from "../_shared/errors.ts";
 import { createServiceRoleClient } from "../_shared/supabaseClient.ts";
