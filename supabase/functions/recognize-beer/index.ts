@@ -141,12 +141,12 @@ serve(async (req) => {
           name: aiResult.name,
           brewery_id: breweryId,
           style_id: styleId,
-          abv: aiResult.abv ? parseFloat(aiResult.abv) : null,
+          abv: aiResult.abv != null ? parseFloat(aiResult.abv) : null,
           description: aiResult.description || null,
-          axis_strength: aiResult.axis_strength ? parseInt(aiResult.axis_strength) : null,
-          axis_bitterness: aiResult.axis_bitterness ? parseInt(aiResult.axis_bitterness) : null,
-          axis_fruitiness: aiResult.axis_fruitiness ? parseInt(aiResult.axis_fruitiness) : null,
-          axis_maltiness: aiResult.axis_maltiness ? parseInt(aiResult.axis_maltiness) : null,
+          axis_strength: aiResult.axis_strength != null ? parseInt(aiResult.axis_strength) : null,
+          axis_bitterness: aiResult.axis_bitterness != null ? parseInt(aiResult.axis_bitterness) : null,
+          axis_fruitiness: aiResult.axis_fruitiness != null ? parseInt(aiResult.axis_fruitiness) : null,
+          axis_maltiness: aiResult.axis_maltiness != null ? parseInt(aiResult.axis_maltiness) : null,
         })
         .select("id")
         .single();

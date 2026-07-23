@@ -34,12 +34,26 @@ serve(async (req) => {
     // Fetch user's taste profile
     const { data: tasteProfile, error: profileError } = await supabase
       .from("taste_profiles")
-      .select("axis_strength, axis_bitterness, axis_fruitiness, axis_maltiness, preferred_styles, preferred_countries, experience_level")
+      .select("axis_strength, axis_bitterness, axis_fruitiness, axis_maltiness, preferred_styles, preferred_countries, experience_level, rating_count, last_generated_at_count, insights_json")
       .eq("user_id", user.id)
       .maybeSingle();
 
     if (profileError) {
       throw new AppError(500, "Błąd pobierania profilu smakowego", "DB_ERROR");
+    }
+
+    const currentRatingCount = tasteProfile?.rating_count || 0;
+    const lastGeneratedCount = tasteProfile?.last_generated_at_count || 0;
+
+    // Check if we have enough new ratings to warrant an AI generation
+    if (tasteProfile?.insights_json && (currentRatingCount - lastGeneratedCount) < 10 && currentRatingCount > 0) {
+      return new Response(JSON.stringify({ 
+        success: true, 
+        profile: tasteProfile.insights_json,
+        cached: true
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     // Fetch user's ratings
@@ -91,12 +105,13 @@ Poziom doświadczenia: ${tasteProfile.experience_level || 'beginner'}
       throw new AppError(500, "Zły format odpowiedzi z AI", "AI_PARSE_ERROR");
     }
 
-    // Save to taste_profiles insights_json
+    // Save to taste_profiles insights_json and update last_generated_at_count
     const { error: upsertError } = await supabase
       .from("taste_profiles")
       .upsert({
         user_id: user.id,
         insights_json: aiResult,
+        last_generated_at_count: currentRatingCount,
         updated_at: new Date().toISOString(),
       }, {
         onConflict: 'user_id'
@@ -109,7 +124,8 @@ Poziom doświadczenia: ${tasteProfile.experience_level || 'beginner'}
 
     return new Response(JSON.stringify({ 
       success: true, 
-      profile: aiResult 
+      profile: aiResult,
+      cached: false
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
