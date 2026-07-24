@@ -33,6 +33,7 @@ class HopIqApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp.router(
           title: 'HopIQ',
+          debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
           routerConfig: appRouter,
         );
