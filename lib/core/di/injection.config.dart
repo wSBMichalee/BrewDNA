@@ -16,6 +16,7 @@ import '../../features/auth/presentation/bloc/auth_cubit.dart' as _i52;
 import '../../features/beer/data/repositories/mock_beer_repository.dart' as _i2;
 import '../../features/beer/domain/repositories/i_beer_repository.dart'
     as _i425;
+import '../../features/beer/presentation/bloc/beer_cubit.dart' as _i378;
 import '../../features/onboarding/presentation/bloc/onboarding_cubit.dart'
     as _i153;
 
@@ -29,6 +30,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i52.AuthCubit>(() => _i52.AuthCubit());
     gh.factory<_i153.OnboardingCubit>(() => _i153.OnboardingCubit());
     gh.lazySingleton<_i425.IBeerRepository>(() => _i2.MockBeerRepository());
+    gh.factory<_i378.BeerCubit>(
+      () => _i378.BeerCubit(gh<_i425.IBeerRepository>()),
+    );
     return this;
   }
 }

@@ -66,6 +66,21 @@ class MockBeerRepository implements IBeerRepository {
   }
 
   @override
+  Future<Either<String, Beer>> getBeerById(String id) async {
+    await Future.delayed(Duration(milliseconds: 500));
+    final beers = [_mockBeer, _mockBeer2, _mockBeer3];
+    final match = beers.firstWhere((b) => b.id == id, orElse: () => _mockBeer);
+    // As per user requirement: return match or error. Wait, user said "zwracającą dopasowanie po id z listy mocków, albo pierwszy z brzegu jeśli nie znaleziono, z sensownym błędem po stronie Either.left gdy nie istnieje". 
+    // Let's implement Either.left if not found:
+    final found = beers.where((b) => b.id == id).toList();
+    if (found.isNotEmpty) {
+      return right(found.first);
+    } else {
+      return left('Nie znaleziono piwa o podanym ID.');
+    }
+  }
+
+  @override
   Future<Either<String, Beer>> scanBeer(String mockResult) async {
     await Future.delayed(Duration(seconds: 2));
     return right(_mockBeer);
