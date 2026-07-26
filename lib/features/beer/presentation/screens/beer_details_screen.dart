@@ -144,9 +144,10 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                               
                               Text(beer.name, style: AppTypography.largeTitle),
                               SizedBox(height: AppSpacings.s8),
-                              Text(
-                                '${beer.brewery} · ${beer.country}\n${beer.style} · ${beer.abv}% ABV',
-                                style: AppTypography.title2.copyWith(color: AppColors.labelSecondary, fontWeight: FontWeight.normal),
+                              Row(
+                                children: [
+                                  Text('🍺 ${beer.style} z ${beer.country}', style: AppTypography.title2.copyWith(color: AppColors.labelSecondary, fontWeight: FontWeight.normal)),
+                                ],
                               ),
                               
                               SizedBox(height: AppSpacings.s24),
@@ -158,39 +159,73 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                                 builder: (context, ratingState) {
                                   return ratingState.maybeWhen(
                                     loaded: (histogram, reviews, userRating) {
-                                      return Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          // Global Rating
-                                          GestureDetector(
-                                            onTap: () {
-                                              context.push('/main/reviews', extra: {'beerId': beer.id, 'beerName': beer.name, 'histogram': histogram, 'reviews': reviews});
-                                            },
+                                          Row(
+                                            children: [
+                                              _buildPillButton(
+                                                icon: CupertinoIcons.star,
+                                                label: 'Oceń',
+                                                onTap: () => _showRateBeerSheet(context, beer.id, beer.name, beer.brewery, beer.imageUrl),
+                                              ),
+                                              SizedBox(width: AppSpacings.s8),
+                                              _buildPillButton(
+                                                icon: CupertinoIcons.ellipsis,
+                                                onTap: () {
+                                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Więcej opcji...')));
+                                                },
+                                              ),
+                                              const Spacer(),
+                                              if (userRating != null)
+                                                _buildPillButton(
+                                                  avatarUrl: 'https://media.screensdesign.com/gasset/b187515082164f9b884126bfdbaf486c_screen_image_michal_c009d732c4.png',
+                                                  label: 'Oceniłeś: ${userRating.toDouble()}',
+                                                  highlightLabel: true,
+                                                  onTap: () => _showRateBeerSheet(context, beer.id, beer.name, beer.brewery, beer.imageUrl),
+                                                ),
+                                            ],
+                                          ),
+                                          SizedBox(height: AppSpacings.s32),
+                                          Text(beer.name, style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, height: 1.1)),
+                                          SizedBox(height: AppSpacings.s8),
+                                          Text(
+                                            '🍺 ${beer.style} z ${beer.country}',
+                                            style: AppTypography.title2.copyWith(color: AppColors.labelSecondary, fontWeight: FontWeight.normal),
+                                          ),
+                                          
+                                          SizedBox(height: AppSpacings.s32),
+                                          Text('Wgląd w piwo', style: AppTypography.title2),
+                                          SizedBox(height: AppSpacings.s4),
+                                          Text('Czy to piwo Ci zasmakuje?', style: AppTypography.body.copyWith(color: AppColors.labelSecondary)),
+                                          SizedBox(height: AppSpacings.s16),
+                                          
+                                          Container(
+                                            padding: EdgeInsets.all(AppSpacings.s16),
+                                            decoration: BoxDecoration(
+                                              color: AppColors.white,
+                                              borderRadius: BorderRadius.circular(24),
+                                              border: Border.all(color: AppColors.separator.withValues(alpha: 0.5)),
+                                            ),
                                             child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
-                                                Text(histogram.averageRating.toStringAsFixed(1), style: AppTypography.largeTitle),
-                                                SizedBox(width: AppSpacings.s8),
-                                                Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    StarRating(rating: histogram.averageRating, size: 16),
-                                                    SizedBox(height: 4),
-                                                    Text('${histogram.totalCount} OCEN', style: AppTypography.caption.copyWith(color: AppColors.labelSecondary, letterSpacing: 1.2)),
-                                                  ],
+                                                CircleAvatar(
+                                                  backgroundColor: AppColors.gold.withValues(alpha: 0.2),
+                                                  radius: 24,
+                                                  child: Icon(CupertinoIcons.drop_fill, color: AppColors.gold), // Zastępcza ikona szklanki
+                                                ),
+                                                SizedBox(width: AppSpacings.s16),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(beer.style, style: AppTypography.subhead.copyWith(fontWeight: FontWeight.bold)),
+                                                      Text('Prawdopodobnie polubisz ten styl', style: AppTypography.caption.copyWith(color: AppColors.labelSecondary)),
+                                                    ],
+                                                  ),
                                                 ),
                                               ],
                                             ),
-                                          ),
-                                          
-                                          // User Rating
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.end,
-                                            children: [
-                                              Text('TWOJA OCENA', style: AppTypography.caption.copyWith(color: AppColors.labelSecondary, letterSpacing: 1.2)),
-                                              SizedBox(height: 4),
-                                              StarRating(rating: userRating?.toDouble() ?? 0.0, size: 16),
-                                            ],
                                           ),
                                         ],
                                       );
@@ -200,27 +235,7 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                                 },
                               ),
                               
-                              SizedBox(height: AppSpacings.s32),
-                              
-                              AppButton(
-                                text: 'Oceń to piwo',
-                                isPrimary: true,
-                                onPressed: () {
-                                  _showRateBeerSheet(context, beer.id, beer.name, beer.imageUrl);
-                                },
-                              ),
-                              SizedBox(height: AppSpacings.s16),
-                              AppButton(
-                                text: 'Dodaj do piwniczki',
-                                isPrimary: false,
-                                onPressed: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('TODO: Dodano do piwniczki')),
-                                  );
-                                },
-                              ),
-                              
-                              SizedBox(height: 100),
+                              const SizedBox(height: 100),
                             ],
                           ),
                         ),
@@ -259,14 +274,58 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
     );
   }
   
-  void _showRateBeerSheet(BuildContext parentContext, String beerId, String beerName, String imageUrl) {
+  Widget _buildPillButton({
+    IconData? icon,
+    String? avatarUrl,
+    String? label,
+    bool highlightLabel = false,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: AppColors.separator.withValues(alpha: 0.5)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Icon(icon, size: 16, color: AppColors.gold),
+              if (label != null) const SizedBox(width: 8),
+            ],
+            if (avatarUrl != null) ...[
+              CircleAvatar(
+                radius: 10,
+                backgroundImage: NetworkImage(avatarUrl),
+              ),
+              if (label != null) const SizedBox(width: 8),
+            ],
+            if (label != null)
+              Text(
+                label,
+                style: AppTypography.subhead.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: highlightLabel ? AppColors.gold : AppColors.label,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  void _showRateBeerSheet(BuildContext parentContext, String beerId, String beerName, String breweryName, String imageUrl) {
     showModalBottomSheet(
       context: parentContext,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => BlocProvider.value(
         value: parentContext.read<RatingCubit>(),
-        child: RateBeerScreen(beerId: beerId, beerName: beerName, imageUrl: imageUrl),
+        child: RateBeerScreen(beerId: beerId, beerName: beerName, breweryName: breweryName, imageUrl: imageUrl),
       ),
     );
   }

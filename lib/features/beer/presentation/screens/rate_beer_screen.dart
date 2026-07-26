@@ -11,12 +11,14 @@ import '../bloc/rating_state.dart';
 class RateBeerScreen extends StatefulWidget {
   final String beerId;
   final String beerName;
+  final String breweryName;
   final String imageUrl;
 
   const RateBeerScreen({
     super.key,
     required this.beerId,
     required this.beerName,
+    required this.breweryName,
     required this.imageUrl,
   });
 
@@ -106,7 +108,13 @@ class _RateBeerScreenState extends State<RateBeerScreen> {
                                 : null,
                           ),
                           SizedBox(width: AppSpacings.s12),
-                          Text(widget.beerName, style: AppTypography.title2),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(widget.beerName, style: AppTypography.title2),
+                              Text(widget.breweryName, style: AppTypography.subhead.copyWith(color: AppColors.labelSecondary)),
+                            ],
+                          ),
                         ],
                       ),
                       CircleAvatar(

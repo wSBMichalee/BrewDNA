@@ -18,10 +18,13 @@ class ScanningAnalyzingScreen extends StatefulWidget {
   State<ScanningAnalyzingScreen> createState() => _ScanningAnalyzingScreenState();
 }
 
-class _ScanningAnalyzingScreenState extends State<ScanningAnalyzingScreen> with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _animation;
-  
+class _ScanningAnalyzingScreenState extends State<ScanningAnalyzingScreen> with TickerProviderStateMixin {
+  late final AnimationController _animationController;
+  late final Animation<double> _animation;
+  late final AnimationController _labelsController;
+  late final Animation<double> _label1Animation;
+  late final Animation<double> _label2Animation;
+
   @override
   void initState() {
     super.initState();
@@ -29,21 +32,35 @@ class _ScanningAnalyzingScreenState extends State<ScanningAnalyzingScreen> with 
       vsync: this,
       duration: const Duration(seconds: 2),
     )..repeat(reverse: true);
-    
-    _animation = Tween<double>(begin: 0.1, end: 0.9).animate(CurvedAnimation(
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
     ));
     
-    // Start analysis
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ScanCubit>().analyzeImage(widget.imageBytes);
-    });
+    _labelsController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    )..repeat();
+    
+    _label1Animation = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.0), weight: 10),
+      TweenSequenceItem(tween: ConstantTween(1.0), weight: 80),
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0), weight: 10),
+    ]).animate(CurvedAnimation(parent: _labelsController, curve: const Interval(0.0, 0.5)));
+    
+    _label2Animation = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.0), weight: 10),
+      TweenSequenceItem(tween: ConstantTween(1.0), weight: 80),
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0), weight: 10),
+    ]).animate(CurvedAnimation(parent: _labelsController, curve: const Interval(0.5, 1.0)));
+
+    context.read<ScanCubit>().analyzeImage(widget.imageBytes);
   }
-  
+
   @override
   void dispose() {
     _animationController.dispose();
+    _labelsController.dispose();
     super.dispose();
   }
 
@@ -140,16 +157,84 @@ class _ScanningAnalyzingScreenState extends State<ScanningAnalyzingScreen> with 
                     );
                   },
                 ),
+                
+                // Floating Label 1
+                Positioned(
+                  top: 60,
+                  right: -40,
+                  child: FadeTransition(
+                    opacity: _label1Animation,
+                    child: _buildFloatingLabel(CupertinoIcons.drop_fill, 'ANALIZA KOLORU...'),
+                  ),
+                ),
+                
+                // Floating Label 2
+                Positioned(
+                  bottom: 80,
+                  right: -80,
+                  child: FadeTransition(
+                    opacity: _label2Animation,
+                    child: _buildFloatingLabel(CupertinoIcons.circle_fill, 'ROZPOZNAWANIE ETYKIETY...', iconSize: 8),
+                  ),
+                ),
               ],
             ),
           ),
           const SizedBox(height: 32),
-          const Text(
-            'Analizujemy Twoje piwo...',
-            style: TextStyle(color: AppColors.white, fontSize: 18, fontWeight: FontWeight.w600),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildDot(0),
+              const SizedBox(width: 4),
+              _buildDot(1),
+              const SizedBox(width: 4),
+              _buildDot(2),
+            ],
           ),
           const SizedBox(height: 16),
-          const CupertinoActivityIndicator(color: AppColors.accent),
+          const Text(
+            'Analizujemy Twoje piwo...',
+            style: TextStyle(color: AppColors.white, fontSize: 16, fontWeight: FontWeight.normal),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildDot(int index) {
+    return AnimatedBuilder(
+      animation: _labelsController,
+      builder: (context, child) {
+        final phase = (_labelsController.value * 3).floor();
+        final isActive = phase == index || phase > index;
+        return Container(
+          width: 6,
+          height: 6,
+          decoration: BoxDecoration(
+            color: isActive ? AppColors.accent : AppColors.separator.withValues(alpha: 0.5),
+            shape: BoxShape.circle,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildFloatingLabel(IconData icon, String text, {double iconSize = 14}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: AppColors.accent, size: iconSize),
+          const SizedBox(width: 8),
+          Text(
+            text,
+            style: AppTypography.caption.copyWith(fontWeight: FontWeight.bold, letterSpacing: 0.5),
+          ),
         ],
       ),
     );
