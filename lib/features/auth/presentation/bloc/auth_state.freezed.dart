@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AuthState {
 
- String get email; String get password; String get name; String get country; bool get acceptedTerms;
+ String get email; String get password; String get name; String get country; bool get acceptedTerms; bool get isReturningUser;
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AuthStateCopyWith<AuthState> get copyWith => _$AuthStateCopyWithImpl<AuthState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.name, name) || other.name == name)&&(identical(other.country, country) || other.country == country)&&(identical(other.acceptedTerms, acceptedTerms) || other.acceptedTerms == acceptedTerms));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.name, name) || other.name == name)&&(identical(other.country, country) || other.country == country)&&(identical(other.acceptedTerms, acceptedTerms) || other.acceptedTerms == acceptedTerms)&&(identical(other.isReturningUser, isReturningUser) || other.isReturningUser == isReturningUser));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,email,password,name,country,acceptedTerms);
+int get hashCode => Object.hash(runtimeType,email,password,name,country,acceptedTerms,isReturningUser);
 
 @override
 String toString() {
-  return 'AuthState(email: $email, password: $password, name: $name, country: $country, acceptedTerms: $acceptedTerms)';
+  return 'AuthState(email: $email, password: $password, name: $name, country: $country, acceptedTerms: $acceptedTerms, isReturningUser: $isReturningUser)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $AuthStateCopyWith<$Res>  {
   factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) _then) = _$AuthStateCopyWithImpl;
 @useResult
 $Res call({
- String email, String password, String name, String country, bool acceptedTerms
+ String email, String password, String name, String country, bool acceptedTerms, bool isReturningUser
 });
 
 
@@ -62,13 +62,14 @@ class _$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? email = null,Object? password = null,Object? name = null,Object? country = null,Object? acceptedTerms = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? email = null,Object? password = null,Object? name = null,Object? country = null,Object? acceptedTerms = null,Object? isReturningUser = null,}) {
   return _then(_self.copyWith(
 email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,country: null == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
 as String,acceptedTerms: null == acceptedTerms ? _self.acceptedTerms : acceptedTerms // ignore: cast_nullable_to_non_nullable
+as bool,isReturningUser: null == isReturningUser ? _self.isReturningUser : isReturningUser // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -154,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String email,  String password,  String name,  String country,  bool acceptedTerms)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String email,  String password,  String name,  String country,  bool acceptedTerms,  bool isReturningUser)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AuthState() when $default != null:
-return $default(_that.email,_that.password,_that.name,_that.country,_that.acceptedTerms);case _:
+return $default(_that.email,_that.password,_that.name,_that.country,_that.acceptedTerms,_that.isReturningUser);case _:
   return orElse();
 
 }
@@ -175,10 +176,10 @@ return $default(_that.email,_that.password,_that.name,_that.country,_that.accept
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String email,  String password,  String name,  String country,  bool acceptedTerms)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String email,  String password,  String name,  String country,  bool acceptedTerms,  bool isReturningUser)  $default,) {final _that = this;
 switch (_that) {
 case _AuthState():
-return $default(_that.email,_that.password,_that.name,_that.country,_that.acceptedTerms);case _:
+return $default(_that.email,_that.password,_that.name,_that.country,_that.acceptedTerms,_that.isReturningUser);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +196,10 @@ return $default(_that.email,_that.password,_that.name,_that.country,_that.accept
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String email,  String password,  String name,  String country,  bool acceptedTerms)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String email,  String password,  String name,  String country,  bool acceptedTerms,  bool isReturningUser)?  $default,) {final _that = this;
 switch (_that) {
 case _AuthState() when $default != null:
-return $default(_that.email,_that.password,_that.name,_that.country,_that.acceptedTerms);case _:
+return $default(_that.email,_that.password,_that.name,_that.country,_that.acceptedTerms,_that.isReturningUser);case _:
   return null;
 
 }
@@ -210,7 +211,7 @@ return $default(_that.email,_that.password,_that.name,_that.country,_that.accept
 
 
 class _AuthState implements AuthState {
-  const _AuthState({this.email = '', this.password = '', this.name = '', this.country = 'Polska', this.acceptedTerms = false});
+  const _AuthState({this.email = '', this.password = '', this.name = '', this.country = 'Polska', this.acceptedTerms = false, this.isReturningUser = false});
   
 
 @override@JsonKey() final  String email;
@@ -218,6 +219,7 @@ class _AuthState implements AuthState {
 @override@JsonKey() final  String name;
 @override@JsonKey() final  String country;
 @override@JsonKey() final  bool acceptedTerms;
+@override@JsonKey() final  bool isReturningUser;
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +231,16 @@ _$AuthStateCopyWith<_AuthState> get copyWith => __$AuthStateCopyWithImpl<_AuthSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.name, name) || other.name == name)&&(identical(other.country, country) || other.country == country)&&(identical(other.acceptedTerms, acceptedTerms) || other.acceptedTerms == acceptedTerms));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.name, name) || other.name == name)&&(identical(other.country, country) || other.country == country)&&(identical(other.acceptedTerms, acceptedTerms) || other.acceptedTerms == acceptedTerms)&&(identical(other.isReturningUser, isReturningUser) || other.isReturningUser == isReturningUser));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,email,password,name,country,acceptedTerms);
+int get hashCode => Object.hash(runtimeType,email,password,name,country,acceptedTerms,isReturningUser);
 
 @override
 String toString() {
-  return 'AuthState(email: $email, password: $password, name: $name, country: $country, acceptedTerms: $acceptedTerms)';
+  return 'AuthState(email: $email, password: $password, name: $name, country: $country, acceptedTerms: $acceptedTerms, isReturningUser: $isReturningUser)';
 }
 
 
@@ -249,7 +251,7 @@ abstract mixin class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Re
   factory _$AuthStateCopyWith(_AuthState value, $Res Function(_AuthState) _then) = __$AuthStateCopyWithImpl;
 @override @useResult
 $Res call({
- String email, String password, String name, String country, bool acceptedTerms
+ String email, String password, String name, String country, bool acceptedTerms, bool isReturningUser
 });
 
 
@@ -266,13 +268,14 @@ class __$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? email = null,Object? password = null,Object? name = null,Object? country = null,Object? acceptedTerms = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? email = null,Object? password = null,Object? name = null,Object? country = null,Object? acceptedTerms = null,Object? isReturningUser = null,}) {
   return _then(_AuthState(
 email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,country: null == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
 as String,acceptedTerms: null == acceptedTerms ? _self.acceptedTerms : acceptedTerms // ignore: cast_nullable_to_non_nullable
+as bool,isReturningUser: null == isReturningUser ? _self.isReturningUser : isReturningUser // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

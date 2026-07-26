@@ -10,5 +10,6 @@ abstract class AuthState with _$AuthState {
     @Default('') String name,
     @Default('Polska') String country,
     @Default(false) bool acceptedTerms,
+    @Default(false) bool isReturningUser,
   }) = _AuthState;
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
@@ -30,18 +30,18 @@ class AuthStartScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(AppSpacings.s24),
+          padding: EdgeInsets.all(AppSpacings.s24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Spacer(),
-              const Text(
+              Text(
                 'Zacznij budować swoją kolekcję',
                 style: AppTypography.largeTitle,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: AppSpacings.s48),
+              SizedBox(height: AppSpacings.s48),
               
               // Apple Button Mock
               CupertinoButton(
@@ -52,13 +52,13 @@ class AuthStartScreen extends StatelessWidget {
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(CupertinoIcons.applelogo, color: Colors.white, size: 24),
+                    Icon(Icons.apple, color: Colors.white, size: 24),
                     SizedBox(width: 8),
                     Text('Kontynuuj z Apple', style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),
-              const SizedBox(height: AppSpacings.s16),
+              SizedBox(height: AppSpacings.s16),
               
               // Google Button Mock
               CupertinoButton(
@@ -77,18 +77,18 @@ class AuthStartScreen extends StatelessWidget {
                 ),
               ),
               
-              const SizedBox(height: AppSpacings.s32),
+              SizedBox(height: AppSpacings.s32),
               Row(
                 children: [
                   const Expanded(child: Divider(color: AppColors.separator)),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: AppSpacings.s16),
+                    padding: EdgeInsets.symmetric(horizontal: AppSpacings.s16),
                     child: Text('lub', style: AppTypography.caption.copyWith(color: AppColors.labelSecondary)),
                   ),
                   const Expanded(child: Divider(color: AppColors.separator)),
                 ],
               ),
-              const SizedBox(height: AppSpacings.s32),
+              SizedBox(height: AppSpacings.s32),
               
               // Email Button
               AppButton(

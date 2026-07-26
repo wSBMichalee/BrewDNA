@@ -4,7 +4,7 @@ import 'auth_state.dart';
 
 @injectable
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(AuthState());
+  AuthCubit() : super(const AuthState());
 
   void updateEmail(String email) {
     emit(state.copyWith(email: email));
@@ -24,5 +24,12 @@ class AuthCubit extends Cubit<AuthState> {
 
   void toggleTerms(bool value) {
     emit(state.copyWith(acceptedTerms: value));
+  }
+
+  void checkEmailExists(String email) {
+    // TODO: Actual Supabase check goes here.
+    // For UI demonstration, we assume any email with 'powrot' is a returning user.
+    final isReturning = email.contains('powrot'); 
+    emit(state.copyWith(isReturningUser: isReturning));
   }
 }
