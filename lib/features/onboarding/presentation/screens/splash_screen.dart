@@ -1,12 +1,12 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/theme/app_theme.dart';
 
 class SplashScreen extends StatefulWidget {
-  SplashScreen({super.key});
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -93,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                         foreground: Paint()
                           ..style = PaintingStyle.stroke
                           ..strokeWidth = 2
-                          ..color = AppColors.labelSecondary.withOpacity(0.3),
+                          ..color = AppColors.accentTint.withValues(alpha: 0.3),
                       ),
                     ),
                   ),

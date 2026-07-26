@@ -4,7 +4,7 @@ import 'onboarding_state.dart';
 
 @injectable
 class OnboardingCubit extends Cubit<OnboardingState> {
-  OnboardingCubit() : super(OnboardingState());
+  OnboardingCubit() : super(const OnboardingState());
 
   void setStep(int step) {
     emit(state.copyWith(currentStep: step));
@@ -24,6 +24,30 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
   void updateCrispMalty(double value) {
     emit(state.copyWith(crispMaltyValue: value));
+  }
+
+  void toggleStyle(String style) {
+    final styles = Set<String>.from(state.selectedStyles);
+    if (styles.contains(style)) {
+      styles.remove(style);
+    } else {
+      styles.add(style);
+    }
+    emit(state.copyWith(selectedStyles: styles));
+  }
+
+  void toggleCountry(String country) {
+    final countries = Set<String>.from(state.selectedCountries);
+    if (countries.contains(country)) {
+      countries.remove(country);
+    } else {
+      countries.add(country);
+    }
+    emit(state.copyWith(selectedCountries: countries));
+  }
+
+  void setExperienceLevel(String level) {
+    emit(state.copyWith(experienceLevel: level));
   }
 
   String getRecommendedStyle() {

@@ -8,6 +8,10 @@ import '../../../../core/theme/app_theme.dart';
 import '../bloc/onboarding_cubit.dart';
 import '../bloc/onboarding_state.dart';
 import '../widgets/quiz_question_page.dart';
+import '../widgets/chip_selection_page.dart';
+import 'interstitial_fact_page.dart';
+import 'experience_level_page.dart';
+import 'analyzing_page.dart';
 import 'hook_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
@@ -40,7 +44,7 @@ class _OnboardingViewState extends State<_OnboardingView> {
   }
 
   void _nextPage() {
-    if (_currentIndex < 4) {
+    if (_currentIndex < 9) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -59,6 +63,15 @@ class _OnboardingViewState extends State<_OnboardingView> {
     }
   }
 
+  int get _activeIndicatorStep {
+    if (_currentIndex <= 3) return _currentIndex;
+    if (_currentIndex == 4) return 3; // Interstitial Fact Page shares step 4
+    if (_currentIndex >= 5 && _currentIndex <= 7) return _currentIndex - 1;
+    return 6;
+  }
+
+  bool get _showTopBar => _currentIndex < 8; // Hide on Analyzing and Hook
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,8 +81,8 @@ class _OnboardingViewState extends State<_OnboardingView> {
           builder: (context, state) {
             return Column(
               children: [
-                // Header navigation (hidden on page 5)
-                if (_currentIndex < 4)
+                // Header navigation (hidden on Analyzing and Result)
+                if (_showTopBar)
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: AppSpacings.s16, vertical: AppSpacings.s16),
@@ -84,14 +97,14 @@ class _OnboardingViewState extends State<_OnboardingView> {
                         Expanded(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(4, (index) {
+                            children: List.generate(7, (index) {
                               return Container(
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 4),
                                 width: 24,
                                 height: 4,
                                 decoration: BoxDecoration(
-                                  color: index <= _currentIndex
+                                  color: index <= _activeIndicatorStep
                                       ? AppColors.accent
                                       : AppColors.separator,
                                   borderRadius: BorderRadius.circular(2),
@@ -117,6 +130,7 @@ class _OnboardingViewState extends State<_OnboardingView> {
                       context.read<OnboardingCubit>().setStep(index);
                     },
                     children: [
+                      // Page 0: Q1
                       QuizQuestionPage(
                         step: 1,
                         question: 'Co powiesz na goryczkę?',
@@ -129,6 +143,7 @@ class _OnboardingViewState extends State<_OnboardingView> {
                         buttonLabel: 'Następne pytanie',
                         onNext: _nextPage,
                       ),
+                      // Page 1: Q2
                       QuizQuestionPage(
                         step: 2,
                         question: 'Jak lubisz swoje piwo?',
@@ -141,6 +156,7 @@ class _OnboardingViewState extends State<_OnboardingView> {
                         buttonLabel: 'Następne pytanie',
                         onNext: _nextPage,
                       ),
+                      // Page 2: Q3
                       QuizQuestionPage(
                         step: 3,
                         question: 'Owocowe czy wytrawne?',
@@ -153,6 +169,7 @@ class _OnboardingViewState extends State<_OnboardingView> {
                         buttonLabel: 'Następne pytanie',
                         onNext: _nextPage,
                       ),
+                      // Page 3: Q4
                       QuizQuestionPage(
                         step: 4,
                         question: 'A może coś słodowego?',
@@ -162,19 +179,55 @@ class _OnboardingViewState extends State<_OnboardingView> {
                         rightLabel: 'Słodowe',
                         sliderValue: state.crispMaltyValue,
                         onSliderChanged: (v) => context.read<OnboardingCubit>().updateCrispMalty(v),
-                        buttonLabel: 'Zobacz mój profil',
+                        buttonLabel: 'Dalej',
                         onNext: _nextPage,
                       ),
-                      // Wrap HookScreen without its internal Scaffold so it fits in PageView cleanly
-                      // HookScreen has a Scaffold, so we should actually provide a widget without a scaffold here.
-                      // Wait, I can just use a local method or modify HookScreen to not have Scaffold.
-                      // I will modify HookScreen to remove Scaffold, or use HookScreen body here.
-                      // HookScreen uses Scaffold. Let's see what happens.
-                      // Actually, let's fix HookScreen so it just returns the content, or if we use HookScreen, 
-                      // we can just put it here since PageView handles it. But Scaffold in Scaffold is bad.
-                      // I will just use HookScreen() and fix HookScreen in the previous write_to_file!
-                      // I DID use Scaffold in HookScreen. I will remove Scaffold from HookScreen.
-                      HookScreen(),
+                      // Page 4: Interstitial
+                      InterstitialFactPage(
+                        onNext: _nextPage,
+                      ),
+                      // Page 5: Styles
+                      ChipSelectionPage(
+                        step: 5,
+                        totalSteps: 7,
+                        question: 'Jakie style już znasz i lubisz?',
+                        subtitle: 'Wybierz tyle, ile chcesz — to pomoże nam Cię lepiej poznać.',
+                        options: const ['IPA', 'Lager', 'Weizen', 'Stout', 'Sour', 'Belgijskie', 'Porter', 'Pils'],
+                        selectedValues: state.selectedStyles,
+                        onToggle: (v) => context.read<OnboardingCubit>().toggleStyle(v),
+                        onNext: _nextPage,
+                      ),
+                      // Page 6: Countries
+                      ChipSelectionPage(
+                        step: 6,
+                        totalSteps: 7,
+                        question: 'Skąd najchętniej sięgasz po piwo?',
+                        subtitle: 'Wybierz swoje ulubione kraje piwne.',
+                        options: const [
+                          'Polska 🇵🇱', 'Belgia 🇧🇪', 'Niemcy 🇩🇪', 'Czechy 🇨🇿', 'USA 🇺🇸',
+                          'Wielka Brytania 🇬🇧', 'Irlandia 🇮🇪', 'Hiszpania 🇪🇸', 'Włochy 🇮🇹',
+                          'Holandia 🇳🇱', 'Austria 🇦🇹', 'Francja 🇫🇷', 'Dania 🇩🇰', 'Szwajcaria 🇨🇭',
+                          'Meksyk 🇲🇽', 'Brazylia 🇧🇷', 'Kanada 🇨🇦', 'Japonia 🇯🇵', 'Chiny 🇨🇳',
+                          'Korea Południowa 🇰🇷', 'Australia 🇦🇺', 'RPA 🇿🇦'
+                        ],
+                        selectedValues: state.selectedCountries,
+                        onToggle: (v) => context.read<OnboardingCubit>().toggleCountry(v),
+                        onNext: _nextPage,
+                      ),
+                      // Page 7: Experience Level
+                      ExperienceLevelPage(
+                        step: 7,
+                        totalSteps: 7,
+                        selectedLevel: state.experienceLevel,
+                        onSelect: (v) => context.read<OnboardingCubit>().setExperienceLevel(v),
+                        onNext: _nextPage,
+                      ),
+                      // Page 8: Analyzing Loading
+                      AnalyzingPage(
+                        onComplete: _nextPage,
+                      ),
+                      // Page 9: Hook Result
+                      const HookScreen(),
                     ],
                   ),
                 ),

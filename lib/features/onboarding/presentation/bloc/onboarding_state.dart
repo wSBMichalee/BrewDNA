@@ -10,5 +10,8 @@ abstract class OnboardingState with _$OnboardingState {
     @Default(50.0) double bitterSweetValue,
     @Default(50.0) double dryFruityValue,
     @Default(50.0) double crispMaltyValue,
+    @Default({}) Set<String> selectedStyles,
+    @Default({}) Set<String> selectedCountries,
+    String? experienceLevel,
   }) = _OnboardingState;
 }

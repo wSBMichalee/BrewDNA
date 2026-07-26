@@ -25,6 +25,7 @@ class AppSpacings {
   static double get s8 => 8.0.r;
   static double get s12 => 12.0.r;
   static double get s16 => 16.0.r;
+  static double get s20 => 20.0.r;
   static double get s24 => 24.0.r;
   static double get s32 => 32.0.r;
   static double get s48 => 48.0.r;
