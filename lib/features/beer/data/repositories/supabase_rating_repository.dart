@@ -33,10 +33,10 @@ class SupabaseRatingRepository implements IRatingRepository {
         averageRating: (response['average'] as num?)?.toDouble() ?? 0.0,
       ));
     } catch (e) {
-      // Mock fallback for now in case DB is not fully ready
+      // W przypadku błędu (np. bazy) zwracamy prawdziwe 0, a nie fake-owe dane.
       return right(const RatingHistogram(
-        count5: 1200, count4: 850, count3: 320, count2: 82, count1: 31,
-        totalCount: 2483, averageRating: 4.3,
+        count5: 0, count4: 0, count3: 0, count2: 0, count1: 0,
+        totalCount: 0, averageRating: 0.0,
       ));
     }
   }

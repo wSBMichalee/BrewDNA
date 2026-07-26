@@ -248,7 +248,7 @@ class _RateBeerScreenState extends State<RateBeerScreen> {
             child: CupertinoSlider(
               value: value,
               min: 0,
-              max: 10,
+              max: 5,
               activeColor: AppColors.accent,
               thumbColor: AppColors.accent,
               onChanged: onChanged,
