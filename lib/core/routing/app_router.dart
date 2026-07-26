@@ -14,7 +14,7 @@ import '../../features/auth/presentation/screens/password_screen.dart';
 import '../../features/auth/presentation/screens/details_screen.dart';
 import '../../features/auth/presentation/screens/welcome_screen.dart';
 import '../../features/auth/presentation/screens/auth_start_screen.dart';
-import '../../features/auth/presentation/screens/login_screen.dart';
+
 import '../../features/paywall/presentation/screens/paywall_screen.dart';
 
 import '../../features/main/presentation/screens/scan_screen.dart';
@@ -108,10 +108,7 @@ final GoRouter appRouter = GoRouter(
           path: '/auth/start',
           builder: (context, state) => AuthStartScreen(),
         ),
-        GoRoute(
-          path: '/auth/login',
-          builder: (context, state) => LoginScreen(),
-        ),
+
         GoRoute(
           path: '/auth/email',
           builder: (context, state) => AuthEmailScreen(),
