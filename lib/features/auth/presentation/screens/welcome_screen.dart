@@ -19,7 +19,7 @@ class AuthWelcomeScreen extends StatelessWidget {
           backgroundColor: AppColors.background,
           body: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(AppSpacings.s24),
+              padding: EdgeInsets.all(AppSpacings.s24),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       CurvedAnimation(parent: _mainController, curve: Interval(0.0, 0.2, curve: Curves.easeIn)),
     );
 
-    _fillHeight = Tween<double>(begin: 0, end: 1.1).animate(
+    _fillHeight = Tween<double>(begin: 0, end: 0.45).animate(
       CurvedAnimation(parent: _mainController, curve: Interval(0.13, 0.69, curve: Curves.easeInOut)),
     );
 
@@ -72,10 +72,12 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
         builder: (context, child) {
           return Opacity(
             opacity: _fadeTransition.value,
-            child: Center(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
+            child: Stack(
+              children: [
+                Center(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
                   Opacity(
                     opacity: _outlineOpacity.value,
                     child: Text(
@@ -133,11 +135,39 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                 ],
               ),
             ),
-          );
-        },
-      ),
-    );
-  }
+            Positioned(
+              bottom: AppSpacings.s48 + MediaQuery.of(context).padding.bottom,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildDot(false),
+                  SizedBox(width: AppSpacings.s8),
+                  _buildDot(true),
+                  SizedBox(width: AppSpacings.s8),
+                  _buildDot(true),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  ),
+);
+}
+
+Widget _buildDot(bool faded) {
+  return Container(
+    width: 6,
+    height: 6,
+    decoration: BoxDecoration(
+      color: faded ? AppColors.accent.withValues(alpha: 0.3) : AppColors.accent,
+      shape: BoxShape.circle,
+    ),
+  );
+}
 }
 
 class _LiquidClipper extends CustomClipper<Path> {
