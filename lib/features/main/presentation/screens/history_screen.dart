@@ -59,7 +59,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           ),
                           itemCount: history.length,
                           itemBuilder: (context, index) {
-                            final beer = history[index];
+                            final record = history[index];
+                            final beer = record.beer;
                             return Padding(
                               padding: EdgeInsets.only(bottom: AppSpacings.s16),
                               child: AppCard(
@@ -86,6 +87,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             Text(beer.name, style: AppTypography.subhead),
                                             SizedBox(height: 2),
                                             Text('${beer.brewery} • ${beer.style}', style: AppTypography.caption.copyWith(color: AppColors.labelSecondary)),
+                                            SizedBox(height: 2),
+                                            Text('${record.locationCity} • ${record.checkinDate.day}.${record.checkinDate.month}.${record.checkinDate.year}', style: AppTypography.caption.copyWith(color: AppColors.accent)),
                                             SizedBox(height: 8),
                                             Row(
                                               children: [

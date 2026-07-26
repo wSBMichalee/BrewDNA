@@ -128,7 +128,7 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<Beer> history,  List<Beer> recommendations,  Beer? beerOfTheDay,  Beer? selectedBeer)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<CheckinRecord> history,  List<Beer> recommendations,  Beer? beerOfTheDay,  Beer? selectedBeer)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
@@ -152,7 +152,7 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<Beer> history,  List<Beer> recommendations,  Beer? beerOfTheDay,  Beer? selectedBeer)  loaded,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<CheckinRecord> history,  List<Beer> recommendations,  Beer? beerOfTheDay,  Beer? selectedBeer)  loaded,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
@@ -175,7 +175,7 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<Beer> history,  List<Beer> recommendations,  Beer? beerOfTheDay,  Beer? selectedBeer)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<CheckinRecord> history,  List<Beer> recommendations,  Beer? beerOfTheDay,  Beer? selectedBeer)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
@@ -257,11 +257,11 @@ String toString() {
 
 
 class _Loaded implements BeerState {
-  const _Loaded({final  List<Beer> history = const [], final  List<Beer> recommendations = const [], this.beerOfTheDay, this.selectedBeer}): _history = history,_recommendations = recommendations;
+  const _Loaded({final  List<CheckinRecord> history = const [], final  List<Beer> recommendations = const [], this.beerOfTheDay, this.selectedBeer}): _history = history,_recommendations = recommendations;
   
 
- final  List<Beer> _history;
-@JsonKey() List<Beer> get history {
+ final  List<CheckinRecord> _history;
+@JsonKey() List<CheckinRecord> get history {
   if (_history is EqualUnmodifiableListView) return _history;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_history);
@@ -307,7 +307,7 @@ abstract mixin class _$LoadedCopyWith<$Res> implements $BeerStateCopyWith<$Res> 
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) = __$LoadedCopyWithImpl;
 @useResult
 $Res call({
- List<Beer> history, List<Beer> recommendations, Beer? beerOfTheDay, Beer? selectedBeer
+ List<CheckinRecord> history, List<Beer> recommendations, Beer? beerOfTheDay, Beer? selectedBeer
 });
 
 
@@ -327,7 +327,7 @@ class __$LoadedCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? history = null,Object? recommendations = null,Object? beerOfTheDay = freezed,Object? selectedBeer = freezed,}) {
   return _then(_Loaded(
 history: null == history ? _self._history : history // ignore: cast_nullable_to_non_nullable
-as List<Beer>,recommendations: null == recommendations ? _self._recommendations : recommendations // ignore: cast_nullable_to_non_nullable
+as List<CheckinRecord>,recommendations: null == recommendations ? _self._recommendations : recommendations // ignore: cast_nullable_to_non_nullable
 as List<Beer>,beerOfTheDay: freezed == beerOfTheDay ? _self.beerOfTheDay : beerOfTheDay // ignore: cast_nullable_to_non_nullable
 as Beer?,selectedBeer: freezed == selectedBeer ? _self.selectedBeer : selectedBeer // ignore: cast_nullable_to_non_nullable
 as Beer?,

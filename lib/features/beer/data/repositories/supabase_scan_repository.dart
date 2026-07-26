@@ -22,30 +22,25 @@ class SupabaseScanRepository implements IScanRepository {
         body: {'image': base64Image},
       );
       
-      // Parse the response to extract Beer data
-      // (This will fail as GEMINI_API_KEY is not set in Supabase, but it is expected)
       final data = response.data;
       
-      // In a real scenario, we'd parse the map into a Beer entity.
-      // For now, let's construct a dummy beer based on what we'd expect or just rely on the API.
-      // Since it will throw anyway due to missing API key, this is a placeholder.
-      if (data == null || data['error'] != null) {
+      if (data == null || data['error'] != null || data['id'] == null) {
         return left('Wystąpił błąd podczas analizy piwa.');
       }
       
       return right(Beer(
-        id: data['id'] ?? 'scan_1',
-        name: data['name'] ?? 'Rozpoznane Piwo',
-        brewery: data['brewery'] ?? 'Nieznany Browar',
-        country: data['country'] ?? 'Nieznany Kraj',
-        style: data['style'] ?? 'Brak Danych',
-        abv: (data['abv'] as num?)?.toDouble() ?? 5.0,
-        rating: 0.0,
-        lightStrong: 50,
-        bitterSweet: 50,
-        dryFruity: 50,
-        crispMalty: 50,
-        imageUrl: '',
+        id: data['id'].toString(),
+        name: data['name']?.toString() ?? '',
+        brewery: data['brewery']?.toString() ?? '',
+        country: data['country']?.toString() ?? '',
+        style: data['style']?.toString() ?? '',
+        abv: (data['abv'] as num?)?.toDouble() ?? 0.0,
+        rating: (data['rating'] as num?)?.toDouble() ?? 0.0,
+        lightStrong: (data['lightStrong'] as num?)?.toDouble() ?? 50.0,
+        bitterSweet: (data['bitterSweet'] as num?)?.toDouble() ?? 50.0,
+        dryFruity: (data['dryFruity'] as num?)?.toDouble() ?? 50.0,
+        crispMalty: (data['crispMalty'] as num?)?.toDouble() ?? 50.0,
+        imageUrl: data['imageUrl']?.toString() ?? '',
       ));
     } catch (e) {
       return left('Nie udało się rozpoznać piwa. Spróbuj ponownie.');

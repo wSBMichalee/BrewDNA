@@ -1,6 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import '../../domain/entities/beer.dart';
+import '../../domain/entities/checkin_record.dart';
 import '../../domain/repositories/i_beer_repository.dart';
 
 @LazySingleton(as: IBeerRepository)
@@ -51,9 +52,13 @@ class MockBeerRepository implements IBeerRepository {
   );
 
   @override
-  Future<Either<String, List<Beer>>> getHistory() async {
+  Future<Either<String, List<CheckinRecord>>> getHistory() async {
     await Future.delayed(Duration(milliseconds: 500));
-    return right([_mockBeer, _mockBeer2, _mockBeer3]);
+    return right([
+      CheckinRecord(beer: _mockBeer, checkinDate: DateTime.now().subtract(Duration(days: 1)), locationCity: 'Warszawa'),
+      CheckinRecord(beer: _mockBeer2, checkinDate: DateTime.now().subtract(Duration(days: 2)), locationCity: 'Kraków'),
+      CheckinRecord(beer: _mockBeer3, checkinDate: DateTime.now().subtract(Duration(days: 3)), locationCity: 'Gdańsk'),
+    ]);
   }
 
   @override
