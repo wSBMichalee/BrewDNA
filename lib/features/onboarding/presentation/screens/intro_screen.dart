@@ -151,12 +151,9 @@ class IntroScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: AppSpacings.s8),
-                  TextButton(
+                  CupertinoButton(
                     onPressed: () => context.go('/auth/start'),
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppColors.label,
-                      padding: EdgeInsets.symmetric(vertical: AppSpacings.s12, horizontal: AppSpacings.s24),
-                    ),
+                    padding: EdgeInsets.symmetric(vertical: AppSpacings.s12, horizontal: AppSpacings.s24),
                     child: Text(
                       'Zaloguj się',
                       style: AppTypography.body.copyWith(
