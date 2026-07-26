@@ -14,36 +14,23 @@ class SupabaseRatingRepository implements IRatingRepository {
   @override
   Future<Either<String, RatingHistogram>> getRatingHistogram(String beerId) async {
     try {
+      // Zgodnie z wytycznymi - nie pobieramy wszystkich wierszy do klienta.
+      // Używamy funkcji RPC po stronie bazy, która zwraca od razu podsumowanie.
       final response = await _supabase
-          .from('ratings')
-          .select('overall')
-          .eq('beer_id', beerId);
+          .rpc('get_rating_histogram', params: {'p_beer_id': beerId});
+          
+      // TODO: Upewnij się, że funkcja RPC istnieje w Supabase i zwraca dane w tym formacie.
+      // Oczekiwany format odpowiedzi: 
+      // { 'count5': int, 'count4': int, 'count3': int, 'count2': int, 'count1': int, 'total': int, 'average': double }
       
-      final ratings = response as List<dynamic>;
-      int count5 = 0, count4 = 0, count3 = 0, count2 = 0, count1 = 0;
-      double sum = 0;
-
-      for (var row in ratings) {
-        int overall = (row['overall'] as num?)?.round() ?? 0;
-        sum += overall;
-        if (overall == 5) { count5++; }
-        else if (overall == 4) { count4++; }
-        else if (overall == 3) { count3++; }
-        else if (overall == 2) { count2++; }
-        else if (overall == 1) { count1++; }
-      }
-
-      int total = count5 + count4 + count3 + count2 + count1;
-      double avg = total > 0 ? sum / total : 0.0;
-
       return right(RatingHistogram(
-        count5: count5,
-        count4: count4,
-        count3: count3,
-        count2: count2,
-        count1: count1,
-        totalCount: total,
-        averageRating: avg,
+        count5: response['count5'] as int? ?? 0,
+        count4: response['count4'] as int? ?? 0,
+        count3: response['count3'] as int? ?? 0,
+        count2: response['count2'] as int? ?? 0,
+        count1: response['count1'] as int? ?? 0,
+        totalCount: response['total'] as int? ?? 0,
+        averageRating: (response['average'] as num?)?.toDouble() ?? 0.0,
       ));
     } catch (e) {
       // Mock fallback for now in case DB is not fully ready
