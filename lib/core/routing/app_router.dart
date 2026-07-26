@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'dart:typed_data';
 import '../../features/dev/presentation/screens/widget_gallery_screen.dart';
 import '../../features/onboarding/presentation/screens/splash_screen.dart';
 import '../../features/onboarding/presentation/screens/intro_screen.dart';
@@ -22,6 +23,9 @@ import '../../features/main/presentation/screens/history_screen.dart';
 import '../../features/main/presentation/screens/map_screen.dart';
 import '../../features/main/presentation/screens/discover_screen.dart';
 import '../../features/main/presentation/screens/profile_screen.dart';
+import '../../features/main/presentation/screens/scan_screen.dart';
+import '../../features/main/presentation/screens/scanning_analyzing_screen.dart';
+import '../../features/beer/presentation/bloc/scan_cubit.dart';
 import '../../features/beer/presentation/screens/beer_details_screen.dart';
 import 'main_shell.dart';
 import '../theme/app_theme.dart';
@@ -158,6 +162,16 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/main/beer/:id',
       builder: (context, state) => BeerDetailsScreen(id: state.pathParameters['id']!),
+    ),
+    GoRoute(
+      path: '/main/scanning',
+      builder: (context, state) {
+        final imageBytes = state.extra as List<int>;
+        return BlocProvider(
+          create: (context) => getIt<ScanCubit>(),
+          child: ScanningAnalyzingScreen(imageBytes: Uint8List.fromList(imageBytes)),
+        );
+      },
     ),
     GoRoute(
       path: '/_widget-gallery',

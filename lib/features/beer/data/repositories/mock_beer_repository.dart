@@ -79,10 +79,4 @@ class MockBeerRepository implements IBeerRepository {
       return left('Nie znaleziono piwa o podanym ID.');
     }
   }
-
-  @override
-  Future<Either<String, Beer>> scanBeer(String mockResult) async {
-    await Future.delayed(Duration(seconds: 2));
-    return right(_mockBeer);
-  }
 }

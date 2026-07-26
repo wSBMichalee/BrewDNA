@@ -1,41 +1,153 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_segmented_control.dart';
 
 class ScanScreen extends StatefulWidget {
-  ScanScreen({super.key});
+  const ScanScreen({super.key});
 
   @override
   State<ScanScreen> createState() => _ScanScreenState();
 }
 
-class _ScanScreenState extends State<ScanScreen> {
+class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
   int _segmentedIndex = 0;
+  CameraController? _controller;
+  List<CameraDescription> _cameras = [];
+  bool _isCameraInitialized = false;
+  bool _isCameraPermissionDenied = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _initCamera();
+  }
+  
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _controller?.dispose();
+    super.dispose();
+  }
+  
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final CameraController? cameraController = _controller;
+    
+    if (cameraController == null || !cameraController.value.isInitialized) {
+      return;
+    }
+
+    if (state == AppLifecycleState.inactive) {
+      cameraController.dispose();
+    } else if (state == AppLifecycleState.resumed) {
+      _initCamera();
+    }
+  }
+
+  Future<void> _initCamera() async {
+    try {
+      _cameras = await availableCameras();
+      if (_cameras.isNotEmpty) {
+        final backCamera = _cameras.firstWhere(
+          (c) => c.lensDirection == CameraLensDirection.back,
+          orElse: () => _cameras.first,
+        );
+        
+        _controller = CameraController(
+          backCamera,
+          ResolutionPreset.high,
+          enableAudio: false,
+        );
+        
+        await _controller!.initialize();
+        if (mounted) {
+          setState(() {
+            _isCameraInitialized = true;
+          });
+        }
+      }
+    } on CameraException catch (e) {
+      if (e.code == 'cameraPermission') {
+        if (mounted) {
+          setState(() {
+            _isCameraPermissionDenied = true;
+          });
+        }
+      }
+    }
+  }
+
+  Future<void> _takePicture() async {
+    if (_controller == null || !_controller!.value.isInitialized || _controller!.value.isTakingPicture) {
+      return;
+    }
+    try {
+      final XFile picture = await _controller!.takePicture();
+      final bytes = await picture.readAsBytes();
+      if (mounted) {
+        context.push('/main/scanning', extra: bytes);
+      }
+    } catch (e) {
+      // Ignore or show snackbar
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.black,
       body: Stack(
         children: [
-          // Camera Placeholder
+          // Camera Preview
           Positioned.fill(
-            child: Container(
-              color: AppColors.black,
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(CupertinoIcons.camera_viewfinder, color: AppColors.white.withValues(alpha: 0.54), size: 80),
-                    SizedBox(height: AppSpacings.s16),
-                    Text('Trwa ładowanie kamery...', style: TextStyle(color: AppColors.white.withValues(alpha: 0.54))),
-                  ],
+            child: _buildCameraPreview(),
+          ),
+          
+          // Overlays
+          if (_isCameraInitialized) ...[
+            // Viewfinder corners
+            Center(
+              child: Container(
+                width: 250,
+                height: 350,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: AppColors.accent,
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
                 ),
               ),
             ),
-          ),
+            
+            // Shutter Button
+            Positioned(
+              bottom: 40,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: GestureDetector(
+                  onTap: _takePicture,
+                  child: Container(
+                    width: 72,
+                    height: 72,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.white, width: 4),
+                      color: AppColors.accent.withValues(alpha: 0.8),
+                    ),
+                    child: const Center(
+                      child: Icon(CupertinoIcons.camera, color: AppColors.white, size: 32),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
           
           // Header / Segmented Control
           SafeArea(
@@ -51,5 +163,39 @@ class _ScanScreenState extends State<ScanScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildCameraPreview() {
+    if (_isCameraPermissionDenied) {
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.all(AppSpacings.s24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(CupertinoIcons.camera_fill, color: AppColors.separator, size: 64),
+              const SizedBox(height: 16),
+              Text(
+                'Brak dostępu do aparatu',
+                style: AppTypography.title2,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Aby zeskanować etykietę, zezwól aplikacji na dostęp do aparatu w ustawieniach urządzenia.',
+                style: AppTypography.body.copyWith(color: AppColors.labelSecondary),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    
+    if (!_isCameraInitialized || _controller == null) {
+      return const Center(child: CupertinoActivityIndicator(color: AppColors.white));
+    }
+    
+    return CameraPreview(_controller!);
   }
 }

@@ -6,5 +6,4 @@ abstract class IBeerRepository {
   Future<Either<String, List<Beer>>> getRecommendations();
   Future<Either<String, Beer>> getBeerOfTheDay();
   Future<Either<String, Beer>> getBeerById(String id);
-  Future<Either<String, Beer>> scanBeer(String mockResult);
 }
