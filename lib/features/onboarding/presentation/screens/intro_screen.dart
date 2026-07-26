@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/custom_icons.dart';
 
 class IntroScreen extends StatelessWidget {
   const IntroScreen({super.key});
@@ -83,7 +84,13 @@ class IntroScreen extends StatelessWidget {
                       ],
                     ),
                     child: Center(
-                      child: Icon(Icons.liquor, color: AppColors.accent, size: 32),
+                      child: SizedBox(
+                        width: 32,
+                        height: 32,
+                        child: CustomPaint(
+                          painter: BottlePainter(color: AppColors.accent),
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(height: AppSpacings.s24),
@@ -119,7 +126,13 @@ class IntroScreen extends StatelessWidget {
                         ),
                         SizedBox(height: AppSpacings.s24),
                         _buildFeatureItem(
-                          icon: Icons.biotech,
+                          customIcon: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CustomPaint(
+                              painter: DnaHelixPainter(color: AppColors.accent),
+                            ),
+                          ),
                           title: 'Dopasowanie smaku',
                           description: 'Znajdź piwa idealnie dopasowane do Twojego profilu.',
                         ),
@@ -163,7 +176,8 @@ class IntroScreen extends StatelessWidget {
   }
 
   Widget _buildFeatureItem({
-    required IconData icon,
+    IconData? icon,
+    Widget? customIcon,
     required String title,
     required String description,
   }) {
@@ -178,7 +192,7 @@ class IntroScreen extends StatelessWidget {
             shape: BoxShape.circle,
           ),
           child: Center(
-            child: Icon(icon, color: AppColors.accent, size: 20),
+            child: customIcon ?? Icon(icon!, color: AppColors.accent, size: 20),
           ),
         ),
         SizedBox(width: AppSpacings.s16),

@@ -128,3 +128,79 @@ class WheatEarPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
+
+class BottlePainter extends CustomPainter {
+  final Color color;
+  BottlePainter({this.color = AppColors.accent});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = size.width * 0.08
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    // Bottle body
+    final bodyRect = Rect.fromLTRB(size.width * 0.25, size.height * 0.4, size.width * 0.75, size.height * 0.95);
+    final bodyRRect = RRect.fromRectAndRadius(bodyRect, Radius.circular(size.width * 0.1));
+    canvas.drawRRect(bodyRRect, paint);
+
+    // Neck
+    final neckPath = Path()
+      ..moveTo(size.width * 0.4, size.height * 0.4)
+      ..lineTo(size.width * 0.4, size.height * 0.15)
+      ..lineTo(size.width * 0.6, size.height * 0.15)
+      ..lineTo(size.width * 0.6, size.height * 0.4);
+    canvas.drawPath(neckPath, paint);
+
+    // Cap
+    canvas.drawLine(Offset(size.width * 0.35, size.height * 0.1), Offset(size.width * 0.65, size.height * 0.1), paint);
+
+    // Label
+    canvas.drawLine(Offset(size.width * 0.4, size.height * 0.6), Offset(size.width * 0.6, size.height * 0.6), paint);
+    canvas.drawLine(Offset(size.width * 0.4, size.height * 0.75), Offset(size.width * 0.6, size.height * 0.75), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class DnaHelixPainter extends CustomPainter {
+  final Color color;
+  DnaHelixPainter({this.color = AppColors.accent});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = size.width * 0.08
+      ..strokeCap = StrokeCap.round;
+
+    // Helix strand 1
+    final path1 = Path()
+      ..moveTo(size.width * 0.2, size.height * 0.1)
+      ..quadraticBezierTo(size.width * 0.8, size.height * 0.3, size.width * 0.5, size.height * 0.5)
+      ..quadraticBezierTo(size.width * 0.2, size.height * 0.7, size.width * 0.8, size.height * 0.9);
+      
+    // Helix strand 2
+    final path2 = Path()
+      ..moveTo(size.width * 0.8, size.height * 0.1)
+      ..quadraticBezierTo(size.width * 0.2, size.height * 0.3, size.width * 0.5, size.height * 0.5)
+      ..quadraticBezierTo(size.width * 0.8, size.height * 0.7, size.width * 0.2, size.height * 0.9);
+
+    canvas.drawPath(path1, paint);
+    canvas.drawPath(path2, paint);
+
+    // Crossbars
+    canvas.drawLine(Offset(size.width * 0.35, size.height * 0.2), Offset(size.width * 0.65, size.height * 0.2), paint);
+    canvas.drawLine(Offset(size.width * 0.45, size.height * 0.35), Offset(size.width * 0.55, size.height * 0.35), paint);
+    canvas.drawLine(Offset(size.width * 0.45, size.height * 0.65), Offset(size.width * 0.55, size.height * 0.65), paint);
+    canvas.drawLine(Offset(size.width * 0.35, size.height * 0.8), Offset(size.width * 0.65, size.height * 0.8), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
