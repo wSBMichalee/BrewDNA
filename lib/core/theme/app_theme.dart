@@ -3,16 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppColors {
-  static const background = Color(0xFFFFFFFF);
-  static const groupedBackground = Color(0xFFF2F2F7);
-  static const separator = Color(0xFFE5E5EA);
-  static const label = Color(0xFF1C1C1E);
-  static const labelSecondary = Color(0xFF6B5D4C); // as per spec, or 8E8E93
-  static const Color accent = Color(0xFFD99A3D);
-  static const Color accentTint = Color(0xFFFDF3E1);
+  static const Color background = Color(0xFFFAFAF9);
+  static const Color groupedBackground = Color(0xFFF2F2F7);
+  static const Color separator = Color(0xFFE5E5E7);
+  static const Color label = Color(0xFF1A1A1A);
+  static const Color labelSecondary = Color(0xFF6B7280);
+  static const Color labelMuted = Color(0xFF9CA3AF);
+  static const Color accent = Color(0xFFF5A623);
+  static const Color accentDeep = Color(0xFFD98D10);
+  static const Color accentTint = Color(0xFFFDF1E0);
   static const Color gold = Color(0xFFE3A438);
-  static const darkCard = Color(0xFF1C1C1E);
-  static const Color card = Color(0xFFF2F2F7); // Added based on typical usage
+  static const Color darkCard = Color(0xFF1C1C1E);
+  static const Color card = Color(0xFFF2F2F7);
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
   static const Color transparent = Color(0x00000000);
@@ -29,7 +31,7 @@ class AppSpacings {
 }
 
 class AppRadius {
-  static double get card => 20.0.r;
+  static double get card => 32.0.r;
   static double get button => 22.0.r;
   static double get full => 999.0.r;
 }
