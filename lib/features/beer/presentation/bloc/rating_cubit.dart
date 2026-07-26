@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'rating_state.dart';
 import '../../domain/repositories/i_rating_repository.dart';
+import '../../domain/entities/review.dart';
+import '../../domain/entities/rating_histogram.dart';
 
 @injectable
 class RatingCubit extends Cubit<RatingState> {

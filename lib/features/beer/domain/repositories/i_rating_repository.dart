@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
-import 'review.dart';
-import 'rating_histogram.dart';
+import '../entities/review.dart';
+import '../entities/rating_histogram.dart';
 
 abstract class IRatingRepository {
   Future<Either<String, RatingHistogram>> getRatingHistogram(String beerId);

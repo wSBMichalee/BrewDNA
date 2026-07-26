@@ -38,7 +38,7 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
               error: (msg) => Center(child: Text(msg, style: AppTypography.body.copyWith(color: Colors.red))),
               loaded: (_, __, ___, selectedBeer) {
                 if (selectedBeer == null) {
-                  return const Center(child: Text('Brak danych piwa', style: AppTypography.body));
+                  return Center(child: Text('Brak danych piwa', style: AppTypography.body));
                 }
                 final beer = selectedBeer;
                 
@@ -189,7 +189,7 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                                             children: [
                                               Text('TWOJA OCENA', style: AppTypography.caption.copyWith(color: AppColors.labelSecondary, letterSpacing: 1.2)),
                                               SizedBox(height: 4),
-                                              StarRating(rating: userRating?.toDouble() ?? 0.0, size: 16, color: userRating != null ? AppColors.accent : AppColors.separator),
+                                              StarRating(rating: userRating?.toDouble() ?? 0.0, size: 16),
                                             ],
                                           ),
                                         ],
