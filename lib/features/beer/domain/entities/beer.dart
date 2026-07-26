@@ -9,6 +9,7 @@ abstract class Beer with _$Beer {
     required String id,
     required String name,
     required String brewery,
+    required String country,
     required String style,
     required double abv,
     required double rating,

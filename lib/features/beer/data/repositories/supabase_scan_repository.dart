@@ -37,6 +37,7 @@ class SupabaseScanRepository implements IScanRepository {
         id: data['id'] ?? 'scan_1',
         name: data['name'] ?? 'Rozpoznane Piwo',
         brewery: data['brewery'] ?? 'Nieznany Browar',
+        country: data['country'] ?? 'Nieznany Kraj',
         style: data['style'] ?? 'Brak Danych',
         abv: (data['abv'] as num?)?.toDouble() ?? 5.0,
         rating: 0.0,

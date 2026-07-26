@@ -81,6 +81,7 @@ class MapScreen extends StatelessWidget {
                               children: [
                                 const Icon(CupertinoIcons.globe, color: AppColors.white, size: 14),
                                 const SizedBox(width: 4),
+                                // TODO: Calculate actual percentage based on discovered countries
                                 Text(
                                   '6% ODKRYTE',
                                   style: AppTypography.caption.copyWith(color: AppColors.white, fontWeight: FontWeight.bold),

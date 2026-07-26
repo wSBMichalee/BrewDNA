@@ -27,6 +27,9 @@ import '../../features/main/presentation/screens/scan_screen.dart';
 import '../../features/main/presentation/screens/scanning_analyzing_screen.dart';
 import '../../features/beer/presentation/bloc/scan_cubit.dart';
 import '../../features/beer/presentation/screens/beer_details_screen.dart';
+import '../../features/beer/presentation/screens/beer_reviews_screen.dart';
+import '../../features/beer/domain/entities/review.dart';
+import '../../features/beer/domain/entities/rating_histogram.dart';
 import 'main_shell.dart';
 import '../theme/app_theme.dart';
 import '../../core/di/injection.dart';
@@ -170,6 +173,18 @@ final GoRouter appRouter = GoRouter(
         return BlocProvider(
           create: (context) => getIt<ScanCubit>(),
           child: ScanningAnalyzingScreen(imageBytes: Uint8List.fromList(imageBytes)),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/main/reviews',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        return BeerReviewsScreen(
+          beerId: extra['beerId'] as String,
+          beerName: extra['beerName'] as String,
+          histogram: extra['histogram'] as RatingHistogram,
+          reviews: extra['reviews'] as List<Review>,
         );
       },
     ),

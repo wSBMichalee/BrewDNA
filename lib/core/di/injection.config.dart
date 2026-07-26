@@ -15,12 +15,17 @@ import 'package:supabase_flutter/supabase_flutter.dart' as _i454;
 
 import '../../features/auth/presentation/bloc/auth_cubit.dart' as _i52;
 import '../../features/beer/data/repositories/mock_beer_repository.dart' as _i2;
+import '../../features/beer/data/repositories/supabase_rating_repository.dart'
+    as _i51;
 import '../../features/beer/data/repositories/supabase_scan_repository.dart'
     as _i347;
 import '../../features/beer/domain/repositories/i_beer_repository.dart'
     as _i425;
+import '../../features/beer/domain/repositories/i_rating_repository.dart'
+    as _i100;
 import '../../features/beer/domain/repositories/i_scan_repository.dart' as _i83;
 import '../../features/beer/presentation/bloc/beer_cubit.dart' as _i378;
+import '../../features/beer/presentation/bloc/rating_cubit.dart' as _i848;
 import '../../features/beer/presentation/bloc/scan_cubit.dart' as _i1012;
 import '../../features/onboarding/presentation/bloc/onboarding_cubit.dart'
     as _i153;
@@ -41,8 +46,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i83.IScanRepository>(
       () => _i347.SupabaseScanRepository(gh<_i454.SupabaseClient>()),
     );
+    gh.lazySingleton<_i100.IRatingRepository>(
+      () => _i51.SupabaseRatingRepository(gh<_i454.SupabaseClient>()),
+    );
     gh.factory<_i378.BeerCubit>(
       () => _i378.BeerCubit(gh<_i425.IBeerRepository>()),
+    );
+    gh.factory<_i848.RatingCubit>(
+      () => _i848.RatingCubit(gh<_i100.IRatingRepository>()),
     );
     gh.factory<_i1012.ScanCubit>(
       () => _i1012.ScanCubit(gh<_i83.IScanRepository>()),
