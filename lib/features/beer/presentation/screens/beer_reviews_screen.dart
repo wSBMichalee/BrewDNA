@@ -75,6 +75,8 @@ class BeerReviewsScreen extends StatelessWidget {
                                   Text(histogram.averageRating.toStringAsFixed(1), style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold, height: 1)),
                                   SizedBox(height: AppSpacings.s8),
                                   StarRating(rating: histogram.averageRating, size: 16),
+                                  SizedBox(height: AppSpacings.s8),
+                                  Text('ŚREDNIA', style: AppTypography.caption.copyWith(color: AppColors.labelSecondary, fontWeight: FontWeight.bold, letterSpacing: 1.1)),
                                 ],
                               ),
                               SizedBox(width: AppSpacings.s32),

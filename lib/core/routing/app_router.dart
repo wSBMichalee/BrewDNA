@@ -19,7 +19,7 @@ import '../../features/auth/presentation/screens/auth_start_screen.dart';
 import '../../features/paywall/presentation/screens/paywall_screen.dart';
 
 import '../../features/main/presentation/screens/scan_screen.dart';
-import '../../features/main/presentation/screens/history_screen.dart';
+import '../../features/main/presentation/screens/my_beers_screen.dart';
 import '../../features/main/presentation/screens/map_screen.dart';
 import '../../features/main/presentation/screens/discover_screen.dart';
 import '../../features/main/presentation/screens/profile_screen.dart';

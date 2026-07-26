@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../domain/repositories/i_cellar_repository.dart';
 import '../../domain/entities/beer.dart';
+import '../../domain/entities/cellar_record.dart';
 
 @LazySingleton(as: ICellarRepository)
 class SupabaseCellarRepository implements ICellarRepository {
@@ -11,7 +12,7 @@ class SupabaseCellarRepository implements ICellarRepository {
   SupabaseCellarRepository(this._supabase);
 
   @override
-  Future<Either<String, List<Beer>>> getCellar() async {
+  Future<Either<String, List<CellarRecord>>> getCellar() async {
     try {
       final user = _supabase.auth.currentUser;
       if (user == null) return left('Użytkownik niezalogowany');
@@ -32,16 +33,17 @@ class SupabaseCellarRepository implements ICellarRepository {
               dry_fruity,
               crisp_malty,
               image_url
-            )
+            ),
+            quantity
           ''')
           .eq('user_id', user.id)
           .order('created_at', ascending: false);
 
-      final List<Beer> results = (response as List<dynamic>).map((row) {
+      final List<CellarRecord> results = (response as List<dynamic>).map((row) {
         final beerData = row['beers'] as Map<String, dynamic>?;
         if (beerData == null) return null;
         
-        return Beer(
+        final beer = Beer(
           id: beerData['id']?.toString() ?? '',
           name: beerData['name'] as String? ?? 'Nieznane',
           brewery: beerData['brewery'] as String? ?? '',
@@ -55,7 +57,12 @@ class SupabaseCellarRepository implements ICellarRepository {
           crispMalty: (beerData['crisp_malty'] as num?)?.toDouble() ?? 50.0,
           imageUrl: beerData['image_url'] as String? ?? '',
         );
-      }).whereType<Beer>().toList();
+
+        return CellarRecord(
+          beer: beer,
+          quantity: (row['quantity'] as num?)?.toInt() ?? 1,
+        );
+      }).whereType<CellarRecord>().toList();
 
       return right(results);
     } catch (e) {
