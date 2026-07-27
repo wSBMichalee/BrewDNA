@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -7,6 +8,8 @@ import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/star_rating.dart';
 import '../bloc/rating_cubit.dart';
 import '../bloc/rating_state.dart';
+import '../widgets/share_card.dart';
+import '../utils/share_utils.dart';
 
 class RateBeerScreen extends StatefulWidget {
   final String beerId;
@@ -34,6 +37,10 @@ class _RateBeerScreenState extends State<RateBeerScreen> {
   double _appearance = 5;
   double _drinkability = 5;
   final TextEditingController _noteController = TextEditingController();
+  
+  bool _showShareCard = false;
+  bool _isCapturing = false;
+  final GlobalKey _shareCardKey = GlobalKey();
 
   @override
   void dispose() {
@@ -47,7 +54,9 @@ class _RateBeerScreenState extends State<RateBeerScreen> {
       listener: (context, state) {
         state.maybeWhen(
           submitted: () {
-            if (context.canPop()) context.pop();
+            setState(() {
+              _showShareCard = true;
+            });
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Ocena zapisana!')),
             );
@@ -62,14 +71,14 @@ class _RateBeerScreenState extends State<RateBeerScreen> {
       },
       child: Container(
         height: MediaQuery.of(context).size.height * 0.9,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: AppColors.background,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(32),
-            topRight: Radius.circular(32),
+            topLeft: Radius.circular(32.r),
+            topRight: Radius.circular(32.r),
           ),
         ),
-        child: Column(
+        child: _showShareCard ? _buildShareView() : Column(
           children: [
             // Handle & Title
             Padding(
@@ -77,11 +86,11 @@ class _RateBeerScreenState extends State<RateBeerScreen> {
               child: Column(
                 children: [
                   Container(
-                    width: 40,
-                    height: 4,
+                    width: 40.w,
+                    height: 4.h,
                     decoration: BoxDecoration(
                       color: AppColors.separator,
-                      borderRadius: BorderRadius.circular(2),
+                      borderRadius: BorderRadius.circular(2.r),
                     ),
                   ),
                   SizedBox(height: AppSpacings.s16),
@@ -91,11 +100,11 @@ class _RateBeerScreenState extends State<RateBeerScreen> {
                       Row(
                         children: [
                           Container(
-                            width: 40,
-                            height: 40,
+                            width: 40.w,
+                            height: 40.h,
                             decoration: BoxDecoration(
                               color: AppColors.card,
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(8.r),
                               image: widget.imageUrl.isNotEmpty
                                   ? DecorationImage(
                                       image: NetworkImage(widget.imageUrl),
@@ -122,7 +131,7 @@ class _RateBeerScreenState extends State<RateBeerScreen> {
                         radius: 16,
                         child: IconButton(
                           padding: EdgeInsets.zero,
-                          icon: const Icon(CupertinoIcons.xmark, size: 16, color: AppColors.labelSecondary),
+                          icon: Icon(CupertinoIcons.xmark, size: 16.sp, color: AppColors.labelSecondary),
                           onPressed: () => context.pop(),
                         ),
                       ),
@@ -140,7 +149,7 @@ class _RateBeerScreenState extends State<RateBeerScreen> {
                     // Main rating
                     StarRating(
                       rating: _overall.toDouble(),
-                      size: 40,
+                      size: 40.sp,
                       onRatingChanged: (rating) {
                         setState(() {
                           _overall = rating.round();
@@ -173,7 +182,7 @@ class _RateBeerScreenState extends State<RateBeerScreen> {
                       padding: EdgeInsets.all(AppSpacings.s16),
                       decoration: BoxDecoration(
                         color: AppColors.white,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(16.r),
                         border: Border.all(color: AppColors.separator),
                       ),
                     ),
@@ -192,19 +201,19 @@ class _RateBeerScreenState extends State<RateBeerScreen> {
                       padding: EdgeInsets.all(AppSpacings.s24),
                       decoration: BoxDecoration(
                         color: AppColors.background,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(16.r),
                         border: Border.all(color: AppColors.separator, style: BorderStyle.solid), // In a real app we'd use dashed border here
                       ),
                       child: Column(
                         children: [
-                          Icon(CupertinoIcons.camera, color: AppColors.labelSecondary, size: 32),
-                          SizedBox(height: 8),
+                          Icon(CupertinoIcons.camera, color: AppColors.labelSecondary, size: 32.sp),
+                          SizedBox(height: 8.h),
                           Text('Dodaj zdjęcie (TODO)', style: AppTypography.caption.copyWith(color: AppColors.labelSecondary)),
                         ],
                       ),
                     ),
                     
-                    SizedBox(height: 100),
+                    SizedBox(height: 100.h),
                   ],
                 ),
               ),
@@ -249,7 +258,7 @@ class _RateBeerScreenState extends State<RateBeerScreen> {
       child: Row(
         children: [
           SizedBox(
-            width: 100,
+            width: 100.w,
             child: Text(label, style: AppTypography.body.copyWith(fontWeight: FontWeight.w600)),
           ),
           Expanded(
@@ -265,5 +274,94 @@ class _RateBeerScreenState extends State<RateBeerScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildShareView() {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24, vertical: AppSpacings.s16),
+          child: Column(
+            children: [
+              Container(
+                width: 40.w,
+                height: 4.h,
+                decoration: BoxDecoration(
+                  color: AppColors.separator,
+                  borderRadius: BorderRadius.circular(2.r),
+                ),
+              ),
+              SizedBox(height: AppSpacings.s16),
+              Text('Twoja ocena', style: AppTypography.title2),
+            ],
+          ),
+        ),
+        
+        Expanded(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24, vertical: AppSpacings.s16),
+            child: Column(
+              children: [
+                RepaintBoundary(
+                  key: _shareCardKey,
+                  child: ShareCard(
+                    beerName: widget.beerName,
+                    breweryName: widget.breweryName,
+                    beerStyle: 'Craft Beer',
+                    imageUrl: widget.imageUrl,
+                    rating: _overall.toDouble(),
+                    matchPercentage: 96,
+                    isCapturing: _isCapturing,
+                    onSaveTap: () => _handleSaveToGallery(),
+                  ),
+                ),
+                
+                SizedBox(height: AppSpacings.s32),
+                
+                AppButton(
+                  text: 'Udostępnij ocenę',
+                  onPressed: _isCapturing ? () {} : _handleShare,
+                ),
+                
+                SizedBox(height: AppSpacings.s16),
+                
+                AppButton(
+                  text: 'Zamknij',
+                  onPressed: () => context.pop(),
+                  isPrimary: false,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _handleSaveToGallery() async {
+    setState(() => _isCapturing = true);
+    await Future.delayed(const Duration(milliseconds: 100)); // wait for frame
+    final path = await ShareUtils.captureWidget(_shareCardKey);
+    setState(() => _isCapturing = false);
+    
+    if (path != null) {
+      final success = await ShareUtils.saveToGallery(path);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(success ? 'Zapisano w galerii!' : 'Błąd zapisu.')),
+        );
+      }
+    }
+  }
+
+  Future<void> _handleShare() async {
+    setState(() => _isCapturing = true);
+    await Future.delayed(const Duration(milliseconds: 100)); // wait for frame
+    final path = await ShareUtils.captureWidget(_shareCardKey);
+    setState(() => _isCapturing = false);
+    
+    if (path != null) {
+      await ShareUtils.shareImage(path);
+    }
   }
 }

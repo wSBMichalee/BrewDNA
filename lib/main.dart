@@ -13,10 +13,10 @@ void main() async {
   configureDependencies();
 
   // Initialize Supabase (requires url and anonKey in .env or via config)
-  // await Supabase.initialize(
-  //   url: 'YOUR_SUPABASE_URL',
-  //   anonKey: 'YOUR_SUPABASE_ANON_KEY',
-  // );
+  await Supabase.initialize(
+    url: 'YOUR_SUPABASE_URL',
+    anonKey: 'YOUR_SUPABASE_ANON_KEY',
+  );
 
   runApp(HopIqApp());
 }

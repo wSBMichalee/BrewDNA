@@ -28,6 +28,10 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Aplikacja używa aparatu do skanowania etykiet piwa.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Aplikacja uzyskuje dostęp do galerii w celu udostępniania oceny.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Aplikacja zapisuje karty z Twoimi ocenami piw w galerii.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

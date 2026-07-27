@@ -52,9 +52,9 @@ class AuthStartScreen extends StatelessWidget {
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.apple, color: Colors.white, size: 24),
-                    SizedBox(width: 8),
-                    Text('Kontynuuj z Apple', style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w600)),
+                    Icon(CupertinoIcons.applelogo, color: AppColors.white, size: 24),
+                    SizedBox(width: 12),
+                    Text('Kontynuuj z Apple', style: TextStyle(color: AppColors.white, fontSize: 17, fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),

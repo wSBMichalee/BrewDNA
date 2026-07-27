@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import '../../domain/repositories/i_beer_repository.dart';
 import '../../domain/entities/beer.dart';
-import '../../domain/entities/checkin_record.dart';
 import 'beer_state.dart';
 
 @injectable
@@ -55,7 +54,7 @@ class BeerCubit extends Cubit<BeerState> {
   }
 
   void _emitLoaded({
-    List<CheckinRecord>? history,
+    List<Beer>? history,
     List<Beer>? recommendations,
     Beer? beerOfTheDay,
     Beer? selectedBeer,
