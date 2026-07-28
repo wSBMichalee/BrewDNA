@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
@@ -46,7 +45,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                   children: [
                     SizedBox(height: AppSpacings.s16),
                     Text(
-                      'HopIQ Premium',
+                      'BrewDNA Premium',
                       style: AppTypography.largeTitle.copyWith(color: AppColors.gold),
                       textAlign: TextAlign.center,
                     ),

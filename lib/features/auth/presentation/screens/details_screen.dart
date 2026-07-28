@@ -7,6 +7,7 @@ import '../../../../core/widgets/app_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/auth_cubit.dart';
 import '../bloc/auth_state.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
 class AuthDetailsScreen extends StatefulWidget {
   const AuthDetailsScreen({super.key});
@@ -17,6 +18,7 @@ class AuthDetailsScreen extends StatefulWidget {
 
 class _AuthDetailsScreenState extends State<AuthDetailsScreen> {
   final _nameController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -185,10 +187,49 @@ class _AuthDetailsScreenState extends State<AuthDetailsScreen> {
                   const Spacer(),
                   // Disabled button logic
                   Opacity(
-                    opacity: isValid ? 1.0 : 0.4,
+                    opacity: isValid && !_isLoading ? 1.0 : 0.4,
                     child: AppButton(
-                      text: 'Kontynuuj',
-                      onPressed: isValid ? () => context.go('/auth/welcome') : () {},
+                      text: _isLoading ? 'Rejestracja...' : 'Kontynuuj',
+                      onPressed: isValid && !_isLoading ? () async {
+                        setState(() => _isLoading = true);
+                        try {
+                          final authState = context.read<AuthCubit>().state;
+                          final response = await Supabase.instance.client.auth.signUp(
+                            email: authState.email,
+                            password: authState.password,
+                            data: {
+                              'display_name': authState.name,
+                            }
+                          );
+                          
+                          if (response.user != null) {
+                            // Update public.users table created by trigger
+                            await Supabase.instance.client.from('users').update({
+                              'display_name': authState.name,
+                            }).eq('id', response.user!.id);
+                            
+                            if (mounted) {
+                              context.go('/auth/welcome');
+                            }
+                          }
+                        } on AuthException catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Błąd rejestracji: ${e.message}')),
+                            );
+                          }
+                        } catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Wystąpił nieoczekiwany błąd')),
+                            );
+                          }
+                        } finally {
+                          if (mounted) {
+                            setState(() => _isLoading = false);
+                          }
+                        }
+                      } : () {},
                     ),
                   ),
                 ],

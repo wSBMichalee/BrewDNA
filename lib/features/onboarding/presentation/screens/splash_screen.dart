@@ -87,7 +87,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                   Opacity(
                     opacity: _outlineOpacity.value,
                     child: Text(
-                      'HopIQ',
+                      'BrewDNA',
                       style: AppTypography.largeTitle.copyWith(
                         fontSize: 64,
                         foreground: Paint()
@@ -115,7 +115,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                           child: Stack(
                             children: [
                               Text(
-                                'HopIQ',
+                                'BrewDNA',
                                 style: AppTypography.largeTitle.copyWith(
                                   fontSize: 64,
                                   color: AppColors.white,

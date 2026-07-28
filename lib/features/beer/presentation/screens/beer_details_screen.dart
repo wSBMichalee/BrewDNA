@@ -4,8 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/widgets/star_rating.dart';
-import '../../../../core/widgets/app_button.dart';
 import '../../../../core/di/injection.dart';
 import '../bloc/beer_cubit.dart';
 import '../bloc/beer_state.dart';

@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/app_theme.dart';
 import 'app_button.dart';
 
@@ -10,7 +9,7 @@ class AppEmptyState extends StatelessWidget {
   final String? buttonText;
   final VoidCallback? onButtonTap;
 
-  AppEmptyState({
+  const AppEmptyState({
     super.key,
     required this.icon,
     required this.title,
@@ -31,7 +30,7 @@ class AppEmptyState extends StatelessWidget {
           Icon(
             icon,
             size: 64,
-            color: AppColors.labelSecondary.withOpacity(0.5),
+            color: AppColors.labelSecondary.withValues(alpha: 0.5),
           ),
           SizedBox(height: AppSpacings.s16),
           Text(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/app_theme.dart';
 
 class BeerMugPainter extends CustomPainter {
@@ -199,6 +198,45 @@ class DnaHelixPainter extends CustomPainter {
     canvas.drawLine(Offset(size.width * 0.45, size.height * 0.35), Offset(size.width * 0.55, size.height * 0.35), paint);
     canvas.drawLine(Offset(size.width * 0.45, size.height * 0.65), Offset(size.width * 0.55, size.height * 0.65), paint);
     canvas.drawLine(Offset(size.width * 0.35, size.height * 0.8), Offset(size.width * 0.65, size.height * 0.8), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class AppleLogoPainter extends CustomPainter {
+  final Color color;
+  AppleLogoPainter({this.color = AppColors.white});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    // Body of the apple
+    final appleBody = Path()
+      ..moveTo(size.width * 0.5, size.height * 0.25)
+      ..quadraticBezierTo(size.width * 0.1, size.height * 0.2, size.width * 0.1, size.height * 0.6)
+      ..quadraticBezierTo(size.width * 0.1, size.height * 0.95, size.width * 0.45, size.height * 0.95)
+      ..quadraticBezierTo(size.width * 0.5, size.height * 0.95, size.width * 0.5, size.height * 0.88)
+      ..quadraticBezierTo(size.width * 0.5, size.height * 0.95, size.width * 0.55, size.height * 0.95)
+      ..quadraticBezierTo(size.width * 0.9, size.height * 0.95, size.width * 0.9, size.height * 0.6)
+      ..quadraticBezierTo(size.width * 0.9, size.height * 0.2, size.width * 0.5, size.height * 0.25);
+
+    final bite = Path()
+      ..addOval(Rect.fromCircle(center: Offset(size.width * 0.95, size.height * 0.5), radius: size.width * 0.22));
+
+    final finalApple = Path.combine(PathOperation.difference, appleBody, bite);
+    canvas.drawPath(finalApple, paint);
+
+    // Leaf
+    final leaf = Path()
+      ..moveTo(size.width * 0.55, size.height * 0.2)
+      ..quadraticBezierTo(size.width * 0.7, size.height * 0.2, size.width * 0.7, size.height * 0.02)
+      ..quadraticBezierTo(size.width * 0.55, size.height * 0.02, size.width * 0.55, size.height * 0.2);
+    
+    canvas.drawPath(leaf, paint);
   }
 
   @override

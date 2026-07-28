@@ -7,6 +7,8 @@ PODS:
   - gal (1.0.0):
     - Flutter
     - FlutterMacOS
+  - integration_test (0.0.1):
+    - Flutter
   - native_glass_navbar (0.0.1):
     - Flutter
   - share_plus (0.0.1):
@@ -25,6 +27,7 @@ DEPENDENCIES:
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
   - Flutter (from `Flutter`)
   - gal (from `.symlinks/plugins/gal/darwin`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - native_glass_navbar (from `.symlinks/plugins/native_glass_navbar/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -40,6 +43,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   gal:
     :path: ".symlinks/plugins/gal/darwin"
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
   native_glass_navbar:
     :path: ".symlinks/plugins/native_glass_navbar/ios"
   share_plus:
@@ -56,6 +61,7 @@ SPEC CHECKSUMS:
   camera_avfoundation: 968a9a5323c79a99c166ad9d7866bfd2047b5a9b
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   gal: baecd024ebfd13c441269ca7404792a7152fde89
+  integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
   native_glass_navbar: ca05c3855b2bcce8b117a6db54f51e63e149f032
   share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
   shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb

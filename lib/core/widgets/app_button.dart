@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/app_theme.dart';
 
 class AppButton extends StatelessWidget {
@@ -8,7 +7,7 @@ class AppButton extends StatelessWidget {
   final bool isPrimary;
   final bool isLoading;
 
-  AppButton({
+  const AppButton({
     super.key,
     required this.text,
     this.onPressed,

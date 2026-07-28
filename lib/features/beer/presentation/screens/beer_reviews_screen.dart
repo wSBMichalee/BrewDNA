@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/star_rating.dart';
 import '../../domain/entities/review.dart';
 import '../../domain/entities/rating_histogram.dart';
-import '../bloc/rating_cubit.dart';
-import 'rate_beer_screen.dart';
 
 class BeerReviewsScreen extends StatelessWidget {
   final String beerId;

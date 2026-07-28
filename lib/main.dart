@@ -5,6 +5,7 @@ import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,17 +13,28 @@ void main() async {
   // Initialize DI
   configureDependencies();
 
-  // Initialize Supabase (requires url and anonKey in .env or via config)
+  // Load environment variables
+  await dotenv.load(fileName: ".env");
+
+  // Initialize Supabase (requires url and publishableKey in .env)
   await Supabase.initialize(
-    url: 'YOUR_SUPABASE_URL',
-    anonKey: 'YOUR_SUPABASE_ANON_KEY',
+    url: dotenv.env['SUPABASE_URL'] ?? '',
+    publishableKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
   );
 
-  runApp(HopIqApp());
+  // Test query
+  try {
+    final res = await Supabase.instance.client.from('styles').select().limit(1);
+    debugPrint('TEST QUERY RESULT: $res');
+  } catch (e) {
+    debugPrint('TEST QUERY ERROR: $e');
+  }
+
+  runApp(const BrewDNAApp());
 }
 
-class HopIqApp extends StatelessWidget {
-  HopIqApp({super.key});
+class BrewDNAApp extends StatelessWidget {
+  const BrewDNAApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +44,7 @@ class HopIqApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp.router(
-          title: 'HopIQ',
+          title: 'BrewDNA',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
           routerConfig: appRouter,

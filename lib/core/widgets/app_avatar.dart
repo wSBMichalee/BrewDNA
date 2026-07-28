@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/app_theme.dart';
 
 class AppAvatar extends StatelessWidget {
   final String? url;
   final double size;
 
-  AppAvatar({
+  const AppAvatar({
     super.key,
     this.url,
     this.size = 48.0,

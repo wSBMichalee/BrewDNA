@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,7 +22,6 @@ import '../../features/main/presentation/screens/history_screen.dart';
 import '../../features/main/presentation/screens/map_screen.dart';
 import '../../features/main/presentation/screens/discover_screen.dart';
 import '../../features/main/presentation/screens/profile_screen.dart';
-import '../../features/main/presentation/screens/scan_screen.dart';
 import '../../features/main/presentation/screens/scanning_analyzing_screen.dart';
 import '../../features/beer/presentation/bloc/scan_cubit.dart';
 import '../../features/beer/presentation/screens/beer_details_screen.dart';
@@ -34,14 +32,29 @@ import 'main_shell.dart';
 import '../theme/app_theme.dart';
 import '../../core/di/injection.dart';
 import '../../features/auth/presentation/bloc/auth_cubit.dart';
+import '../../features/onboarding/presentation/bloc/onboarding_cubit.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _authShellNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> _onboardingShellNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _mainShellNavigatorKey = GlobalKey<NavigatorState>();
+
+class OnboardingShell extends StatelessWidget {
+  final Widget child;
+  const OnboardingShell({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => getIt<OnboardingCubit>(),
+      child: child,
+    );
+  }
+}
 
 class AuthShell extends StatelessWidget {
   final Widget child;
-  AuthShell({super.key, required this.child});
+  const AuthShell({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +97,7 @@ class AuthShell extends StatelessWidget {
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/',
+  initialLocation: '/main/discover',
   routes: [
     GoRoute(
       path: '/',
@@ -99,17 +112,23 @@ final GoRouter appRouter = GoRouter(
       navigatorKey: _authShellNavigatorKey,
       builder: (context, state, child) => AuthShell(child: child),
       routes: [
-        GoRoute(
-          path: '/onboarding/intro',
-          builder: (context, state) => IntroScreen(),
-        ),
-        GoRoute(
-          path: '/onboarding/quiz',
-          builder: (context, state) => OnboardingScreen(),
-        ),
-        GoRoute(
-          path: '/onboarding/hook',
-          builder: (context, state) => HookScreen(),
+        ShellRoute(
+          navigatorKey: _onboardingShellNavigatorKey,
+          builder: (context, state, child) => OnboardingShell(child: child),
+          routes: [
+            GoRoute(
+              path: '/onboarding/intro',
+              builder: (context, state) => const IntroScreen(),
+            ),
+            GoRoute(
+              path: '/onboarding/quiz',
+              builder: (context, state) => const OnboardingScreen(),
+            ),
+            GoRoute(
+              path: '/onboarding/hook',
+              builder: (context, state) => const HookScreen(),
+            ),
+          ],
         ),
         GoRoute(
           path: '/auth/start',

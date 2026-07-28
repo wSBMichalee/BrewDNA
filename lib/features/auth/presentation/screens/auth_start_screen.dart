@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/custom_icons.dart';
 
 class AuthStartScreen extends StatelessWidget {
   const AuthStartScreen({super.key});
@@ -49,12 +50,12 @@ class AuthStartScreen extends StatelessWidget {
                 color: AppColors.black,
                 borderRadius: BorderRadius.circular(12),
                 onPressed: () => _showComingSoon(context),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(CupertinoIcons.applelogo, color: AppColors.white, size: 24),
-                    SizedBox(width: 12),
-                    Text('Kontynuuj z Apple', style: TextStyle(color: AppColors.white, fontSize: 17, fontWeight: FontWeight.w600)),
+                    CustomPaint(size: const Size(24, 24), painter: AppleLogoPainter(color: AppColors.white)),
+                    const SizedBox(width: 12),
+                    const Text('Kontynuuj z Apple', style: TextStyle(color: AppColors.white, fontSize: 17, fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),

@@ -34,9 +34,11 @@ class ShareUtils {
   /// Shares the image via native share dialog.
   static Future<void> shareImage(String path) async {
     try {
-      await Share.shareXFiles(
-        [XFile(path)],
-        text: 'Sprawdź moje BrewDNA! 🍺',
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(path)],
+          text: 'Sprawdź moje BrewDNA! 🍺',
+        ),
       );
     } catch (e) {
       debugPrint('Error sharing image: $e');

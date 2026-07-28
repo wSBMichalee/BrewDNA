@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
@@ -10,7 +9,6 @@ import '../../../../core/widgets/star_rating.dart';
 import '../../../../core/widgets/taste_slider.dart';
 import '../../../../core/widgets/app_avatar.dart';
 import '../../../../core/widgets/app_empty_state.dart';
-import '../../../../core/widgets/app_tab_bar.dart';
 
 class WidgetGalleryScreen extends StatefulWidget {
   WidgetGalleryScreen({super.key});

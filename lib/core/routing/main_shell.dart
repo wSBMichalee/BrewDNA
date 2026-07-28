@@ -35,39 +35,15 @@ class MainShell extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         children: [
           child,
-          // Custom floating Scan button
-          Positioned(
-            bottom: MediaQuery.of(context).padding.bottom + 30.h,
-            child: GestureDetector(
-              onTap: () {
-                HapticFeedback.selectionClick();
-                context.go('/main/scan');
-              },
-              child: Container(
-                width: 64.w,
-                height: 64.w,
-                decoration: BoxDecoration(
-                  color: AppColors.accent,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.accent.withOpacity(0.3),
-                      blurRadius: 12.r,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Icon(
-                  CupertinoIcons.camera_fill,
-                  color: AppColors.white,
-                  size: 28.w,
-                ),
-              ),
-            ),
-          ),
         ],
       ),
-      bottomNavigationBar: NativeGlassNavBar(
+      bottomNavigationBar: SafeArea(
+        bottom: false,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: NativeGlassNavBar(
         currentIndex: currentIndex,
         onTap: (index) {
           HapticFeedback.selectionClick();
@@ -94,7 +70,7 @@ class MainShell extends StatelessWidget {
         ],
         tintColor: AppColors.accent,
         fallback: Padding(
-          padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 24.h),
+          padding: EdgeInsets.fromLTRB(16.w, 0, 8.w, 24.h + MediaQuery.of(context).padding.bottom),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(32.r),
             child: BackdropFilter(
@@ -137,17 +113,9 @@ class MainShell extends StatelessWidget {
                         icon = CupertinoIcons.circle;
                     }
                     
-                    // Insert a spacer in the middle of the Row to make room for the FAB
                     return Expanded(
                       flex: 1,
-                      child: i == 1 
-                        ? Row(
-                            children: [
-                              _buildFallbackTabItem(context, i, icon, isActive),
-                              SizedBox(width: 80.w), // Space for FAB
-                            ],
-                          )
-                        : _buildFallbackTabItem(context, i, icon, isActive),
+                      child: _buildFallbackTabItem(context, i, icon, isActive),
                     );
                   }),
                 ),
@@ -155,6 +123,39 @@ class MainShell extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    ),
+    Padding(
+      padding: EdgeInsets.only(right: 16.w, bottom: 24.h + MediaQuery.of(context).padding.bottom),
+      child: GestureDetector(
+        onTap: () {
+          HapticFeedback.selectionClick();
+          context.go('/main/scan');
+        },
+        child: Container(
+          width: 60.w,
+          height: 60.w,
+          decoration: BoxDecoration(
+            color: AppColors.accent,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.accent.withOpacity(0.3),
+                blurRadius: 12.r,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Icon(
+            CupertinoIcons.camera_fill,
+            color: AppColors.white,
+            size: 28.w,
+          ),
+        ),
+      ),
+    ),
+  ],
+),
       ),
     );
   }

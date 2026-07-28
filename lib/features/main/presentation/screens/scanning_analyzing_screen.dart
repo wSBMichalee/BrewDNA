@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/di/injection.dart';
 import '../../../beer/presentation/bloc/scan_cubit.dart';
 import '../../../beer/presentation/bloc/scan_state.dart';
 import 'scan_result_sheet.dart';

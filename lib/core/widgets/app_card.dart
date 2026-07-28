@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/app_theme.dart';
 
 class AppCard extends StatelessWidget {
@@ -26,7 +25,7 @@ class AppCard extends StatelessWidget {
         boxShadow: hasShadow
             ? [
                 BoxShadow(
-                  color: AppColors.black.withOpacity(0.05),
+                  color: AppColors.black.withValues(alpha: 0.05),
                   offset: Offset(0, 2),
                   blurRadius: 16,
                 )
