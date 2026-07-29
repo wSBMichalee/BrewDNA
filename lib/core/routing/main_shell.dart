@@ -118,38 +118,38 @@ class MainShell extends StatelessWidget {
                       child: _buildFallbackTabItem(context, i, icon, isActive),
                     );
                   }),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    ),
+                ), // 1. Row
+              ), // 2. Container
+            ), // 3. BackdropFilter
+          ), // 4. ClipRRect
+        ), // 5. Padding
+      ), // 6. NativeGlassNavBar
+    ), // 7. Expanded
     Padding(
       padding: EdgeInsets.only(right: 16.w, bottom: 24.h + MediaQuery.of(context).padding.bottom),
       child: GestureDetector(
-        onTap: () {
-          HapticFeedback.selectionClick();
-          context.go('/main/scan');
-        },
-        child: Container(
-          width: 60.w,
-          height: 60.w,
-          decoration: BoxDecoration(
-            color: AppColors.accent,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.accent.withOpacity(0.3),
-                blurRadius: 12.r,
-                offset: Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Icon(
-            CupertinoIcons.camera_fill,
-            color: AppColors.white,
-            size: 28.w,
+          onTap: () {
+            HapticFeedback.selectionClick();
+            context.go('/main/scan');
+          },
+          child: Container(
+            width: 60.w,
+            height: 60.w,
+            decoration: BoxDecoration(
+              color: AppColors.accent,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.accent.withOpacity(0.3),
+                  blurRadius: 12.r,
+                  offset: Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Icon(
+              CupertinoIcons.camera_fill,
+              color: AppColors.white,
+              size: 28.w,
           ),
         ),
       ),
