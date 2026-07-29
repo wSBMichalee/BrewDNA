@@ -23,8 +23,6 @@ class MainShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentIndex = _getCurrentIndex(context);
-    const double kNavHeight = 49.0;
-
     return Scaffold(
       extendBody: true,
       body: Stack(alignment: Alignment.bottomCenter, children: [child]),
@@ -35,132 +33,94 @@ class MainShell extends StatelessWidget {
             16.w,
             0,
             16.w,
-            2.h + MediaQuery.of(context).padding.bottom,
+            MediaQuery.of(context).padding.bottom,
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints.tightFor(height: kNavHeight),
-                  child: NativeGlassNavBar(
-                    currentIndex: currentIndex,
-                    onTap: (index) {
-                      HapticFeedback.selectionClick();
-                      switch (index) {
-                        case 0:
-                          context.go('/main/history');
-                          break;
-                        case 1:
-                          context.go('/main/map');
-                          break;
-                        case 2:
-                          context.go('/main/discover');
-                          break;
-                        case 3:
-                          context.go('/main/profile');
-                          break;
-                      }
-                    },
-                    tabs: [
-                      NativeGlassNavBarItem(
-                        label: 'Historia',
-                        symbol: 'clock.fill',
-                      ),
-                      NativeGlassNavBarItem(label: 'Mapa', symbol: 'map.fill'),
-                      NativeGlassNavBarItem(
-                        label: 'Odkryj',
-                        symbol: 'sparkles',
-                      ),
-                      NativeGlassNavBarItem(
-                        label: 'Profil',
-                        symbol: 'person.crop.circle.fill',
-                      ),
-                    ],
-                    tintColor: AppColors.accent,
-                    fallback: ClipRRect(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints.tightFor(height: 62),
+            child: NativeGlassNavBar(
+              currentIndex: currentIndex,
+              onTap: (index) {
+                HapticFeedback.selectionClick();
+                switch (index) {
+                  case 0:
+                    context.go('/main/history');
+                    break;
+                  case 1:
+                    context.go('/main/map');
+                    break;
+                  case 2:
+                    context.go('/main/discover');
+                    break;
+                  case 3:
+                    context.go('/main/profile');
+                    break;
+                }
+              },
+              tabs: [
+                NativeGlassNavBarItem(label: 'Historia', symbol: 'clock.fill'),
+                NativeGlassNavBarItem(label: 'Mapa', symbol: 'map.fill'),
+                NativeGlassNavBarItem(label: 'Odkryj', symbol: 'sparkles'),
+                NativeGlassNavBarItem(
+                  label: 'Profil',
+                  symbol: 'person.crop.circle.fill',
+                ),
+              ],
+              tintColor: AppColors.accent,
+              actionButton: TabBarActionButton(
+                symbol: 'camera.fill',
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  context.go('/main/scan');
+                },
+              ),
+              fallback: ClipRRect(
+                borderRadius: BorderRadius.circular(32.r),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.background.withValues(alpha: 0.85),
                       borderRadius: BorderRadius.circular(32.r),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
-                        child: Container(
-                          height: kNavHeight,
-                          decoration: BoxDecoration(
-                            color: AppColors.background.withValues(alpha: 0.85),
-                            borderRadius: BorderRadius.circular(32.r),
-                            border: Border.all(
-                              color: AppColors.black.withValues(alpha: 0.06),
-                              width: 0.5,
-                            ),
-                          ),
-                          child: Row(
-                            children: List.generate(4, (i) {
-                              final isActive = currentIndex == i;
-                              IconData icon;
-                              switch (i) {
-                                case 0:
-                                  icon = CupertinoIcons.clock_fill;
-                                  break;
-                                case 1:
-                                  icon = CupertinoIcons.map_fill;
-                                  break;
-                                case 2:
-                                  icon = CupertinoIcons.sparkles;
-                                  break;
-                                case 3:
-                                  icon = CupertinoIcons.person_solid;
-                                  break;
-                                default:
-                                  icon = CupertinoIcons.circle;
-                              }
-
-                              return Expanded(
-                                flex: 1,
-                                child: _buildFallbackTabItem(
-                                  context,
-                                  i,
-                                  icon,
-                                  isActive,
-                                ),
-                              );
-                            }),
-                          ),
-                        ),
+                      border: Border.all(
+                        color: AppColors.black.withValues(alpha: 0.06),
+                        width: 0.5,
                       ),
+                    ),
+                    child: Row(
+                      children: List.generate(4, (i) {
+                        final isActive = currentIndex == i;
+                        IconData icon;
+                        switch (i) {
+                          case 0:
+                            icon = CupertinoIcons.clock_fill;
+                            break;
+                          case 1:
+                            icon = CupertinoIcons.map_fill;
+                            break;
+                          case 2:
+                            icon = CupertinoIcons.sparkles;
+                            break;
+                          case 3:
+                            icon = CupertinoIcons.person_solid;
+                            break;
+                          default:
+                            icon = CupertinoIcons.circle;
+                        }
+                        return Expanded(
+                          flex: 1,
+                          child: _buildFallbackTabItem(
+                            context,
+                            i,
+                            icon,
+                            isActive,
+                          ),
+                        );
+                      }),
                     ),
                   ),
                 ),
               ),
-              SizedBox(width: 12.w),
-              Transform.translate(
-                offset: const Offset(0, -20),
-                child: GestureDetector(
-                  onTap: () {
-                    HapticFeedback.selectionClick();
-                    context.go('/main/scan');
-                  },
-                  child: ClipOval(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
-                      child: Container(
-                        width: kNavHeight,
-                        height: kNavHeight,
-                        decoration: BoxDecoration(
-                          color: AppColors.accent.withValues(alpha: 0.75),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            CupertinoIcons.camera_fill,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
