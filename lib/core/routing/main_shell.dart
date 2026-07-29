@@ -20,6 +20,24 @@ class MainShell extends StatelessWidget {
     return 0;
   }
 
+  void _navigate(BuildContext context, int i) {
+    HapticFeedback.selectionClick();
+    switch (i) {
+      case 0:
+        context.go('/main/history');
+        break;
+      case 1:
+        context.go('/main/map');
+        break;
+      case 2:
+        context.go('/main/discover');
+        break;
+      case 3:
+        context.go('/main/profile');
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentIndex = _getCurrentIndex(context);
@@ -35,143 +53,69 @@ class MainShell extends StatelessWidget {
             16.w,
             MediaQuery.of(context).padding.bottom,
           ),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints.tightFor(height: 62),
-            child: NativeGlassNavBar(
-              currentIndex: currentIndex,
-              onTap: (index) {
-                HapticFeedback.selectionClick();
-                switch (index) {
-                  case 0:
-                    context.go('/main/history');
-                    break;
-                  case 1:
-                    context.go('/main/map');
-                    break;
-                  case 2:
-                    context.go('/main/discover');
-                    break;
-                  case 3:
-                    context.go('/main/profile');
-                    break;
-                }
-              },
-              tabs: [
-                NativeGlassNavBarItem(label: 'Historia', symbol: 'clock.fill'),
-                NativeGlassNavBarItem(label: 'Mapa', symbol: 'map.fill'),
-                NativeGlassNavBarItem(label: 'Odkryj', symbol: 'sparkles'),
-                NativeGlassNavBarItem(
-                  label: 'Profil',
-                  symbol: 'person.crop.circle.fill',
-                ),
-              ],
-              tintColor: AppColors.accent,
-              actionButton: TabBarActionButton(
-                symbol: 'camera.fill',
-                onTap: () {
-                  HapticFeedback.selectionClick();
-                  context.go('/main/scan');
-                },
+          child: NativeGlassNavBar(
+            currentIndex: currentIndex,
+            onTap: (index) => _navigate(context, index),
+            tabs: [
+              NativeGlassNavBarItem(label: 'Historia', symbol: 'clock.fill'),
+              NativeGlassNavBarItem(label: 'Mapa', symbol: 'map.fill'),
+              NativeGlassNavBarItem(label: 'Odkryj', symbol: 'sparkles'),
+              NativeGlassNavBarItem(
+                label: 'Profil',
+                symbol: 'person.crop.circle.fill',
               ),
-              fallback: ClipRRect(
-                borderRadius: BorderRadius.circular(32.r),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.background.withValues(alpha: 0.85),
-                      borderRadius: BorderRadius.circular(32.r),
-                      border: Border.all(
-                        color: AppColors.black.withValues(alpha: 0.06),
-                        width: 0.5,
-                      ),
-                    ),
-                    child: Row(
-                      children: List.generate(4, (i) {
-                        final isActive = currentIndex == i;
-                        IconData icon;
-                        switch (i) {
-                          case 0:
-                            icon = CupertinoIcons.clock_fill;
-                            break;
-                          case 1:
-                            icon = CupertinoIcons.map_fill;
-                            break;
-                          case 2:
-                            icon = CupertinoIcons.sparkles;
-                            break;
-                          case 3:
-                            icon = CupertinoIcons.person_solid;
-                            break;
-                          default:
-                            icon = CupertinoIcons.circle;
-                        }
-                        return Expanded(
-                          flex: 1,
-                          child: _buildFallbackTabItem(
-                            context,
-                            i,
-                            icon,
-                            isActive,
-                          ),
-                        );
-                      }),
+            ],
+            tintColor: AppColors.accent,
+            actionButton: TabBarActionButton(
+              symbol: 'camera.fill',
+              onTap: () {
+                HapticFeedback.selectionClick();
+                context.go('/main/scan');
+              },
+            ),
+            fallback: ClipRRect(
+              borderRadius: BorderRadius.circular(32.r),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+                child: Container(
+                  height: 56, // roughly native height
+                  decoration: BoxDecoration(
+                    color: AppColors.background.withValues(alpha: 0.85),
+                    borderRadius: BorderRadius.circular(32.r),
+                    border: Border.all(
+                      color: AppColors.black.withValues(alpha: 0.06),
+                      width: 0.5,
                     ),
                   ),
+                  child: Row(
+                    children: List.generate(4, (i) {
+                      final isActive = currentIndex == i;
+                      const icons = [
+                        CupertinoIcons.clock_fill,
+                        CupertinoIcons.map_fill,
+                        CupertinoIcons.sparkles,
+                        CupertinoIcons.person_solid,
+                      ];
+                      return Expanded(
+                        child: GestureDetector(
+                          onTap: () => _navigate(context, i),
+                          behavior: HitTestBehavior.opaque,
+                          child: Center(
+                            child: Icon(
+                              icons[i],
+                              color: isActive
+                                  ? AppColors.accent
+                                  : AppColors.labelSecondary.withValues(
+                                      alpha: 0.4,
+                                    ),
+                              size: 24.r,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
                 ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFallbackTabItem(
-    BuildContext context,
-    int i,
-    IconData icon,
-    bool isActive,
-  ) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          HapticFeedback.selectionClick();
-          switch (i) {
-            case 0:
-              context.go('/main/history');
-              break;
-            case 1:
-              context.go('/main/map');
-              break;
-            case 2:
-              context.go('/main/discover');
-              break;
-            case 3:
-              context.go('/main/profile');
-              break;
-          }
-        },
-        behavior: HitTestBehavior.opaque,
-        child: SizedBox(
-          height: 60.h,
-          child: Center(
-            child: AnimatedContainer(
-              duration: Duration(milliseconds: 220),
-              curve: Curves.easeOutCubic,
-              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
-              decoration: BoxDecoration(
-                color: isActive
-                    ? AppColors.accent.withOpacity(0.12)
-                    : AppColors.transparent,
-                borderRadius: BorderRadius.circular(20.r),
-              ),
-              child: Icon(
-                icon,
-                size: 24.r,
-                color: isActive
-                    ? AppColors.accent
-                    : AppColors.labelSecondary.withOpacity(0.4),
               ),
             ),
           ),

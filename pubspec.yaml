@@ -42,8 +42,7 @@ dependencies:
   json_annotation: ^4.12.0
   supabase_flutter: ^2.16.0
   fpdart: ^1.2.0
-  native_glass_navbar:
-    path: packages/native_glass_navbar_local
+  native_glass_navbar: ^1.0.2
   flutter_screenutil: ^5.9.3
   cached_network_image: ^3.4.1
   camera: ^0.12.0+2
