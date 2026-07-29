@@ -3,10 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/di/injection.dart';
-import '../../../auth/presentation/bloc/auth_cubit.dart';
-import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../../beer/presentation/bloc/beer_cubit.dart';
 import '../../../beer/presentation/bloc/beer_state.dart';
 
@@ -50,16 +49,16 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
-                                child: BlocBuilder<AuthCubit, AuthState>(
-                                  builder: (context, authState) {
-                                    final name = authState.name;
+                                child: Builder(
+                                  builder: (context) {
+                                    final name = Supabase.instance.client.auth.currentUser?.userMetadata?['name'] as String? ?? '';
                                     return Text(
-                                      'Cześć, ${name.isNotEmpty ? name : 'Michał'}',
+                                      'Cześć, ${name.isNotEmpty ? name : 'Smakoszu'}',
                                       style: AppTypography.largeTitle,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     );
-                                  },
+                                  }
                                 ),
                               ),
                               Container(
@@ -108,7 +107,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                     // Image
                                     Positioned.fill(
                                       child: CachedNetworkImage(
-                                        imageUrl: 'https://images.unsplash.com/photo-1575037614876-c38556f86523?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                                        imageUrl: beerOfTheDay.imageUrl.isNotEmpty 
+                                            ? beerOfTheDay.imageUrl 
+                                            : 'https://media.screensdesign.com/image-placeholder.jpg',
                                         fit: BoxFit.cover,
                                         placeholder: (context, url) => Container(color: AppColors.accentTint),
                                         errorWidget: (context, url, error) => Container(color: AppColors.accentTint, child: const Icon(CupertinoIcons.drop, color: AppColors.accent)),
@@ -175,7 +176,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Polecane dla Ciebie', style: AppTypography.title2),
+                              Expanded(
+                                child: Text('Polecane dla Ciebie', style: AppTypography.title2, overflow: TextOverflow.ellipsis),
+                              ),
+                              SizedBox(width: 8),
                               Text('Zobacz wszystkie', style: AppTypography.subhead.copyWith(color: AppColors.accent)),
                             ],
                           ),
@@ -212,10 +216,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                     children: [
                                       Expanded(
                                         child: CachedNetworkImage(
-                                          // Placeholder images for recommendations
-                                          imageUrl: index % 2 == 0 
-                                              ? 'https://images.unsplash.com/photo-1566633806327-68e152aaf26d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'
-                                              : 'https://images.unsplash.com/photo-1582220107107-590dc8b0fad3?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+                                          imageUrl: recommendation.imageUrl.isNotEmpty 
+                                              ? recommendation.imageUrl 
+                                              : 'https://media.screensdesign.com/image-placeholder.jpg',
                                           fit: BoxFit.cover,
                                           placeholder: (context, url) => Container(color: AppColors.accentTint),
                                           errorWidget: (context, url, error) => Container(color: AppColors.accentTint, child: const Icon(CupertinoIcons.drop, color: AppColors.accent)),

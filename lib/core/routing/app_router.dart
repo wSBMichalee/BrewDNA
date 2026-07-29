@@ -158,10 +158,7 @@ final GoRouter appRouter = GoRouter(
       navigatorKey: _mainShellNavigatorKey,
       builder: (context, state, child) => MainShell(child: child),
       routes: [
-        GoRoute(
-          path: '/main/scan',
-          pageBuilder: (context, state) => NoTransitionPage(child: ScanScreen()),
-        ),
+
         GoRoute(
           path: '/main/history',
           pageBuilder: (context, state) => NoTransitionPage(child: HistoryScreen()),
@@ -179,6 +176,11 @@ final GoRouter appRouter = GoRouter(
           pageBuilder: (context, state) => NoTransitionPage(child: ProfileScreen()),
         ),
       ],
+    ),
+    // Scan Flow (Full screen, no bottom bar)
+    GoRoute(
+      path: '/main/scan',
+      builder: (context, state) => ScanScreen(),
     ),
     // Beer Details (Full screen, no bottom bar)
     GoRoute(

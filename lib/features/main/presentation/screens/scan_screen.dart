@@ -49,13 +49,16 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _initCamera() async {
+    debugPrint('--- CAMERA INIT START ---');
     try {
       _cameras = await availableCameras();
+      debugPrint('Available cameras count: ${_cameras.length}');
       if (_cameras.isNotEmpty) {
         final backCamera = _cameras.firstWhere(
           (c) => c.lensDirection == CameraLensDirection.back,
           orElse: () => _cameras.first,
         );
+        debugPrint('Selected camera: ${backCamera.name} (direction: ${backCamera.lensDirection})');
         
         _controller = CameraController(
           backCamera,
@@ -63,22 +66,32 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
           enableAudio: false,
         );
         
+        debugPrint('Initializing camera controller...');
         await _controller!.initialize();
+        debugPrint('Camera initialized successfully!');
         if (mounted) {
           setState(() {
             _isCameraInitialized = true;
           });
         }
+      } else {
+        debugPrint('No cameras found on device.');
       }
     } on CameraException catch (e) {
+      debugPrint('CameraException caught: code=${e.code}, description=${e.description}');
       if (e.code == 'cameraPermission') {
+        debugPrint('Camera permission denied.');
         if (mounted) {
           setState(() {
             _isCameraPermissionDenied = true;
           });
         }
       }
+    } catch (e) {
+      debugPrint('Unknown error during camera init: $e');
     }
+    debugPrint('Final state -> _isCameraInitialized: $_isCameraInitialized, _isCameraPermissionDenied: $_isCameraPermissionDenied');
+    debugPrint('--- CAMERA INIT END ---');
   }
 
   Future<void> _takePicture() async {
@@ -153,10 +166,35 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
           SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24, vertical: AppSpacings.s16),
-              child: AppSegmentedControl(
-                items: const {0: 'Etykieta', 1: 'Lista'},
-                groupValue: _segmentedIndex,
-                onValueChanged: (val) => setState(() => _segmentedIndex = val as int),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  AppSegmentedControl(
+                    items: const {0: 'Etykieta', 1: 'Lista'},
+                    groupValue: _segmentedIndex,
+                    onValueChanged: (val) => setState(() => _segmentedIndex = val as int),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: () {
+                        if (context.canPop()) {
+                          context.pop();
+                        } else {
+                          context.go('/main/discover');
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AppColors.background.withValues(alpha: 0.5),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(CupertinoIcons.xmark, color: AppColors.white, size: 24),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

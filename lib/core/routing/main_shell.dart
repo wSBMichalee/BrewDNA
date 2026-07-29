@@ -9,7 +9,7 @@ import '../theme/app_theme.dart';
 
 class MainShell extends StatelessWidget {
   final Widget child;
-  MainShell({super.key, required this.child});
+  const MainShell({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +28,8 @@ class MainShell extends StatelessWidget {
     }
     
     // We keep Scan separate from currentIndex to not affect the bar selection
+    
+    // We keep Scan separate from currentIndex to not affect the bar selection
 
     return Scaffold(
       extendBody: true,
@@ -39,123 +41,115 @@ class MainShell extends StatelessWidget {
       ),
       bottomNavigationBar: SafeArea(
         bottom: false,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: NativeGlassNavBar(
-        currentIndex: currentIndex,
-        onTap: (index) {
-          HapticFeedback.selectionClick();
-          switch (index) {
-            case 0:
-              context.go('/main/history');
-              break;
-            case 1:
-              context.go('/main/map');
-              break;
-            case 2:
-              context.go('/main/discover');
-              break;
-            case 3:
-              context.go('/main/profile');
-              break;
-          }
-        },
-        tabs: [
-          NativeGlassNavBarItem(label: 'Historia', symbol: 'clock.fill'),
-          NativeGlassNavBarItem(label: 'Mapa', symbol: 'map.fill'),
-          NativeGlassNavBarItem(label: 'Odkryj', symbol: 'sparkles'),
-          NativeGlassNavBarItem(label: 'Profil', symbol: 'person.crop.circle.fill'),
-        ],
-        tintColor: AppColors.accent,
-        fallback: Padding(
-          padding: EdgeInsets.fromLTRB(16.w, 0, 8.w, 24.h + MediaQuery.of(context).padding.bottom),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(32.r),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
-              child: Container(
-                height: 60.h,
-                decoration: BoxDecoration(
-                  color: AppColors.background.withOpacity(0.85),
-                  borderRadius: BorderRadius.circular(32.r),
-                  border: Border.all(
-                    color: AppColors.black.withOpacity(0.06),
-                    width: 0.5,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.black.withOpacity(0.4),
-                      blurRadius: 30.r,
-                      offset: Offset(0, 10),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 8.h + MediaQuery.of(context).padding.bottom),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints.tightFor(height: 49),
+                  child: NativeGlassNavBar(
+                    currentIndex: currentIndex,
+                    onTap: (index) {
+                      HapticFeedback.selectionClick();
+                      switch (index) {
+                        case 0:
+                          context.go('/main/history');
+                          break;
+                        case 1:
+                          context.go('/main/map');
+                          break;
+                        case 2:
+                          context.go('/main/discover');
+                          break;
+                        case 3:
+                          context.go('/main/profile');
+                          break;
+                      }
+                    },
+                    tabs: [
+                      NativeGlassNavBarItem(label: 'Historia', symbol: 'clock.fill'),
+                      NativeGlassNavBarItem(label: 'Mapa', symbol: 'map.fill'),
+                      NativeGlassNavBarItem(label: 'Odkryj', symbol: 'sparkles'),
+                      NativeGlassNavBarItem(label: 'Profil', symbol: 'person.crop.circle.fill'),
+                    ],
+                    tintColor: AppColors.accent,
+                    fallback: ClipRRect(
+                      borderRadius: BorderRadius.circular(32.r),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+                        child: Container(
+                          height: 49,
+                          decoration: BoxDecoration(
+                            color: AppColors.background.withValues(alpha: 0.85),
+                            borderRadius: BorderRadius.circular(32.r),
+                            border: Border.all(
+                              color: AppColors.black.withValues(alpha: 0.06),
+                              width: 0.5,
+                            ),
+                          ),
+                          child: Row(
+                            children: List.generate(4, (i) {
+                              final isActive = currentIndex == i;
+                              IconData icon;
+                              switch (i) {
+                                case 0:
+                                  icon = CupertinoIcons.clock_fill;
+                                  break;
+                                case 1:
+                                  icon = CupertinoIcons.map_fill;
+                                  break;
+                                case 2:
+                                  icon = CupertinoIcons.sparkles;
+                                  break;
+                                case 3:
+                                  icon = CupertinoIcons.person_solid;
+                                  break;
+                                default:
+                                  icon = CupertinoIcons.circle;
+                              }
+                              
+                              return Expanded(
+                                flex: 1,
+                                child: _buildFallbackTabItem(context, i, icon, isActive),
+                              );
+                            }),
+                          ),
+                        ),
+                      ),
                     ),
-                  ],
+                  ),
                 ),
-                child: Row(
-                  children: List.generate(4, (i) {
-                    final isActive = currentIndex == i;
-                    IconData icon;
-                    switch (i) {
-                      case 0:
-                        icon = CupertinoIcons.clock_fill;
-                        break;
-                      case 1:
-                        icon = CupertinoIcons.map_fill;
-                        break;
-                      case 2:
-                        icon = CupertinoIcons.sparkles;
-                        break;
-                      case 3:
-                        icon = CupertinoIcons.person_solid;
-                        break;
-                      default:
-                        icon = CupertinoIcons.circle;
-                    }
-                    
-                    return Expanded(
-                      flex: 1,
-                      child: _buildFallbackTabItem(context, i, icon, isActive),
-                    );
-                  }),
-                ), // 1. Row
-              ), // 2. Container
-            ), // 3. BackdropFilter
-          ), // 4. ClipRRect
-        ), // 5. Padding
-      ), // 6. NativeGlassNavBar
-    ), // 7. Expanded
-    Padding(
-      padding: EdgeInsets.only(right: 16.w, bottom: 24.h + MediaQuery.of(context).padding.bottom),
-      child: GestureDetector(
-          onTap: () {
-            HapticFeedback.selectionClick();
-            context.go('/main/scan');
-          },
-          child: Container(
-            width: 60.w,
-            height: 60.w,
-            decoration: BoxDecoration(
-              color: AppColors.accent,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.accent.withOpacity(0.3),
-                  blurRadius: 12.r,
-                  offset: Offset(0, 4),
+              ),
+              SizedBox(width: 12.w),
+              GestureDetector(
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  context.go('/main/scan');
+                },
+                child: Container(
+                  width: 49,
+                  height: 49,
+                  decoration: BoxDecoration(
+                    color: AppColors.accent,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.accent.withValues(alpha: 0.3),
+                        blurRadius: 15,
+                        offset: Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: const Center(
+                    child: Icon(CupertinoIcons.camera_fill, color: Colors.white, size: 24),
+                  ),
                 ),
-              ],
-            ),
-            child: Icon(
-              CupertinoIcons.camera_fill,
-              color: AppColors.white,
-              size: 28.w,
+              ),
+            ],
           ),
         ),
-      ),
-    ),
-  ],
-),
       ),
     );
   }

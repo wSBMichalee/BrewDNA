@@ -1,4 +1,6 @@
+import 'dart:ui';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
 class AppSegmentedControl<T extends Object> extends StatelessWidget {
@@ -17,11 +19,17 @@ class AppSegmentedControl<T extends Object> extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      child: CupertinoSlidingSegmentedControl<T>(
-        backgroundColor: AppColors.separator,
-        thumbColor: AppColors.background,
-        groupValue: groupValue,
-        onValueChanged: onValueChanged,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+          child: Container(
+            color: AppColors.background.withValues(alpha: 0.85),
+            child: CupertinoSlidingSegmentedControl<T>(
+              backgroundColor: Colors.transparent,
+              thumbColor: AppColors.separator,
+              groupValue: groupValue,
+              onValueChanged: onValueChanged,
         children: items.map(
           (key, value) => MapEntry(
             key,
@@ -38,6 +46,9 @@ class AppSegmentedControl<T extends Object> extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+        ),
+        ),
           ),
         ),
       ),
