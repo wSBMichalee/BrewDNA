@@ -11,44 +11,38 @@ class MainShell extends StatelessWidget {
   final Widget child;
   const MainShell({super.key, required this.child});
 
+  int _getCurrentIndex(BuildContext context) {
+    final location = GoRouterState.of(context).uri.toString();
+    if (location.startsWith('/main/history')) return 0;
+    if (location.startsWith('/main/map')) return 1;
+    if (location.startsWith('/main/discover')) return 2;
+    if (location.startsWith('/main/profile')) return 3;
+    return 0;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Determine the current index from the route location
-    final location = GoRouterState.of(context).uri.toString();
-    int currentIndex = 0; // Default to History
-    
-    if (location.startsWith('/main/history')) {
-      currentIndex = 0;
-    } else if (location.startsWith('/main/map')) {
-      currentIndex = 1;
-    } else if (location.startsWith('/main/discover')) {
-      currentIndex = 2;
-    } else if (location.startsWith('/main/profile')) {
-      currentIndex = 3;
-    }
-    
-    // We keep Scan separate from currentIndex to not affect the bar selection
-    
-    // We keep Scan separate from currentIndex to not affect the bar selection
+    final currentIndex = _getCurrentIndex(context);
+    const double kNavHeight = 49.0;
 
     return Scaffold(
       extendBody: true,
-      body: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          child,
-        ],
-      ),
+      body: Stack(alignment: Alignment.bottomCenter, children: [child]),
       bottomNavigationBar: SafeArea(
         bottom: false,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 8.h + MediaQuery.of(context).padding.bottom),
+          padding: EdgeInsets.fromLTRB(
+            16.w,
+            0,
+            16.w,
+            2.h + MediaQuery.of(context).padding.bottom,
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 child: ConstrainedBox(
-                  constraints: BoxConstraints.tightFor(height: 49),
+                  constraints: BoxConstraints.tightFor(height: kNavHeight),
                   child: NativeGlassNavBar(
                     currentIndex: currentIndex,
                     onTap: (index) {
@@ -69,10 +63,19 @@ class MainShell extends StatelessWidget {
                       }
                     },
                     tabs: [
-                      NativeGlassNavBarItem(label: 'Historia', symbol: 'clock.fill'),
+                      NativeGlassNavBarItem(
+                        label: 'Historia',
+                        symbol: 'clock.fill',
+                      ),
                       NativeGlassNavBarItem(label: 'Mapa', symbol: 'map.fill'),
-                      NativeGlassNavBarItem(label: 'Odkryj', symbol: 'sparkles'),
-                      NativeGlassNavBarItem(label: 'Profil', symbol: 'person.crop.circle.fill'),
+                      NativeGlassNavBarItem(
+                        label: 'Odkryj',
+                        symbol: 'sparkles',
+                      ),
+                      NativeGlassNavBarItem(
+                        label: 'Profil',
+                        symbol: 'person.crop.circle.fill',
+                      ),
                     ],
                     tintColor: AppColors.accent,
                     fallback: ClipRRect(
@@ -80,7 +83,7 @@ class MainShell extends StatelessWidget {
                       child: BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
                         child: Container(
-                          height: 49,
+                          height: kNavHeight,
                           decoration: BoxDecoration(
                             color: AppColors.background.withValues(alpha: 0.85),
                             borderRadius: BorderRadius.circular(32.r),
@@ -109,10 +112,15 @@ class MainShell extends StatelessWidget {
                                 default:
                                   icon = CupertinoIcons.circle;
                               }
-                              
+
                               return Expanded(
                                 flex: 1,
-                                child: _buildFallbackTabItem(context, i, icon, isActive),
+                                child: _buildFallbackTabItem(
+                                  context,
+                                  i,
+                                  icon,
+                                  isActive,
+                                ),
                               );
                             }),
                           ),
@@ -123,27 +131,32 @@ class MainShell extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 12.w),
-              GestureDetector(
-                onTap: () {
-                  HapticFeedback.selectionClick();
-                  context.go('/main/scan');
-                },
-                child: Container(
-                  width: 49,
-                  height: 49,
-                  decoration: BoxDecoration(
-                    color: AppColors.accent,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.accent.withValues(alpha: 0.3),
-                        blurRadius: 15,
-                        offset: Offset(0, 5),
+              Transform.translate(
+                offset: const Offset(0, -20),
+                child: GestureDetector(
+                  onTap: () {
+                    HapticFeedback.selectionClick();
+                    context.go('/main/scan');
+                  },
+                  child: ClipOval(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+                      child: Container(
+                        width: kNavHeight,
+                        height: kNavHeight,
+                        decoration: BoxDecoration(
+                          color: AppColors.accent.withValues(alpha: 0.75),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Center(
+                          child: Icon(
+                            CupertinoIcons.camera_fill,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                  child: const Center(
-                    child: Icon(CupertinoIcons.camera_fill, color: Colors.white, size: 24),
+                    ),
                   ),
                 ),
               ),
@@ -154,7 +167,12 @@ class MainShell extends StatelessWidget {
     );
   }
 
-  Widget _buildFallbackTabItem(BuildContext context, int i, IconData icon, bool isActive) {
+  Widget _buildFallbackTabItem(
+    BuildContext context,
+    int i,
+    IconData icon,
+    bool isActive,
+  ) {
     return Expanded(
       child: GestureDetector(
         onTap: () {
@@ -181,10 +199,7 @@ class MainShell extends StatelessWidget {
             child: AnimatedContainer(
               duration: Duration(milliseconds: 220),
               curve: Curves.easeOutCubic,
-              padding: EdgeInsets.symmetric(
-                horizontal: 14.w,
-                vertical: 6.h,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
               decoration: BoxDecoration(
                 color: isActive
                     ? AppColors.accent.withOpacity(0.12)
