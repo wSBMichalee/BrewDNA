@@ -29,7 +29,7 @@ class AuthCubit extends Cubit<AuthState> {
   void checkEmailExists(String email) {
     // TODO: Actual Supabase check goes here.
     // For UI demonstration, we assume any email with 'powrot' is a returning user.
-    final isReturning = email.contains('powrot'); 
+    final isReturning = email.contains('powrot');
     emit(state.copyWith(isReturningUser: isReturning));
   }
 }

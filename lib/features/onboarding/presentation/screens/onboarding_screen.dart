@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:hop_iq/l10n/app_localizations.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../bloc/onboarding_cubit.dart';
@@ -82,22 +82,27 @@ class _OnboardingViewState extends State<_OnboardingView> {
                 if (_showTopBar)
                   Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: AppSpacings.s16, vertical: AppSpacings.s16),
+                      horizontal: AppSpacings.s16,
+                      vertical: AppSpacings.s16,
+                    ),
                     child: Row(
                       children: [
                         CupertinoButton(
                           padding: EdgeInsets.zero,
                           onPressed: _previousPage,
-                          child: const Icon(CupertinoIcons.back,
-                              color: AppColors.label),
+                          child: const Icon(
+                            CupertinoIcons.back,
+                            color: AppColors.label,
+                          ),
                         ),
                         Expanded(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: List.generate(7, (index) {
                               return Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 4),
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 4,
+                                ),
                                 width: 24,
                                 height: 4,
                                 decoration: BoxDecoration(
@@ -130,85 +135,121 @@ class _OnboardingViewState extends State<_OnboardingView> {
                       // Page 0: Q1
                       QuizQuestionPage(
                         step: 1,
-                        question: 'Co powiesz na goryczkę?',
-                        subtitle: 'Pomyśl o czystym lagerze kontra mocnym west-coast IPA.',
-                        imageUrl: 'https://media.screensdesign.com/afprjsia/ef4321e8-c7db-4471-ba73-59f70ecf2758.png',
-                        leftLabel: 'Łagodne',
-                        rightLabel: 'Gorzkie',
+                        question: AppLocalizations.of(context)!.onboardingQ1Title,
+                        subtitle: AppLocalizations.of(context)!.onboardingQ1Subtitle,
+                        imageUrl:
+                            'https://media.screensdesign.com/afprjsia/ef4321e8-c7db-4471-ba73-59f70ecf2758.png',
+                        leftLabel: AppLocalizations.of(context)!.onboardingQ1Left,
+                        rightLabel: AppLocalizations.of(context)!.onboardingQ1Right,
                         sliderValue: state.bitterSweetValue,
-                        onSliderChanged: (v) => context.read<OnboardingCubit>().updateBitterSweet(v),
-                        buttonLabel: 'Następne pytanie',
+                        onSliderChanged: (v) => context
+                            .read<OnboardingCubit>()
+                            .updateBitterSweet(v),
+                        buttonLabel: AppLocalizations.of(context)!.onboardingNextQuestionButton,
                         onNext: _nextPage,
                       ),
                       // Page 1: Q2
                       QuizQuestionPage(
                         step: 2,
-                        question: 'Jak lubisz swoje piwo?',
-                        subtitle: 'Lekkie i orzeźwiające, czy mocne i rozgrzewające?',
-                        imageUrl: 'https://media.screensdesign.com/gasset/e280ab6f53ad40c79d472cafd60b9b97_screen_image_beer_droplet_icon_4ed73202b0.png',
-                        leftLabel: 'Lekkie',
-                        rightLabel: 'Mocne',
+                        question: AppLocalizations.of(context)!.onboardingQ2Title,
+                        subtitle: AppLocalizations.of(context)!.onboardingQ2Subtitle,
+                        imageUrl:
+                            'https://media.screensdesign.com/gasset/e280ab6f53ad40c79d472cafd60b9b97_screen_image_beer_droplet_icon_4ed73202b0.png',
+                        leftLabel: AppLocalizations.of(context)!.onboardingQ2Left,
+                        rightLabel: AppLocalizations.of(context)!.onboardingQ2Right,
                         sliderValue: state.lightStrongValue,
-                        onSliderChanged: (v) => context.read<OnboardingCubit>().updateLightStrong(v),
-                        buttonLabel: 'Następne pytanie',
+                        onSliderChanged: (v) => context
+                            .read<OnboardingCubit>()
+                            .updateLightStrong(v),
+                        buttonLabel: AppLocalizations.of(context)!.onboardingNextQuestionButton,
                         onNext: _nextPage,
                       ),
                       // Page 2: Q3
                       QuizQuestionPage(
                         step: 3,
-                        question: 'Owocowe czy wytrawne?',
-                        subtitle: 'Pomyśl o soczystym NEIPA kontra klasycznym, wytrawnym pilznerze.',
-                        imageUrl: 'https://media.screensdesign.com/gasset/a7a8bfb2bd8545cabebaf5c6701900e5_screen_image_citrus_icon_74e19ea847.png',
-                        leftLabel: 'Owocowe',
-                        rightLabel: 'Wytrawne',
+                        question: AppLocalizations.of(context)!.onboardingQ3Title,
+                        subtitle: AppLocalizations.of(context)!.onboardingQ3Subtitle,
+                        imageUrl:
+                            'https://media.screensdesign.com/gasset/a7a8bfb2bd8545cabebaf5c6701900e5_screen_image_citrus_icon_74e19ea847.png',
+                        leftLabel: AppLocalizations.of(context)!.onboardingQ3Left,
+                        rightLabel: AppLocalizations.of(context)!.onboardingQ3Right,
                         sliderValue: state.dryFruityValue,
-                        onSliderChanged: (v) => context.read<OnboardingCubit>().updateDryFruity(v),
-                        buttonLabel: 'Następne pytanie',
+                        onSliderChanged: (v) =>
+                            context.read<OnboardingCubit>().updateDryFruity(v),
+                        buttonLabel: AppLocalizations.of(context)!.onboardingNextQuestionButton,
                         onNext: _nextPage,
                       ),
                       // Page 3: Q4
                       QuizQuestionPage(
                         step: 4,
-                        question: 'A może coś słodowego?',
-                        subtitle: 'Chrupiące i suche, czy słodowe i pełne?',
-                        imageUrl: 'https://media.screensdesign.com/gasset/2481ee217f3f42989f7afa0f818186ed_screen_image_malt_icon_4562e687ca.png',
-                        leftLabel: 'Orzeźwiające',
-                        rightLabel: 'Słodowe',
+                        question: AppLocalizations.of(context)!.onboardingQ4Title,
+                        subtitle: AppLocalizations.of(context)!.onboardingQ4Subtitle,
+                        imageUrl:
+                            'https://media.screensdesign.com/gasset/2481ee217f3f42989f7afa0f818186ed_screen_image_malt_icon_4562e687ca.png',
+                        leftLabel: AppLocalizations.of(context)!.onboardingQ4Left,
+                        rightLabel: AppLocalizations.of(context)!.onboardingQ4Right,
                         sliderValue: state.crispMaltyValue,
-                        onSliderChanged: (v) => context.read<OnboardingCubit>().updateCrispMalty(v),
-                        buttonLabel: 'Dalej',
+                        onSliderChanged: (v) =>
+                            context.read<OnboardingCubit>().updateCrispMalty(v),
+                        buttonLabel: AppLocalizations.of(context)!.onboardingNextButton,
                         onNext: _nextPage,
                       ),
                       // Page 4: Interstitial
-                      InterstitialFactPage(
-                        onNext: _nextPage,
-                      ),
+                      InterstitialFactPage(onNext: _nextPage),
                       // Page 5: Styles
                       ChipSelectionPage(
                         step: 5,
                         totalSteps: 7,
-                        question: 'Jakie style już znasz i lubisz?',
-                        subtitle: 'Wybierz tyle, ile chcesz — to pomoże nam Cię lepiej poznać.',
-                        options: const ['IPA', 'Lager', 'Weizen', 'Stout', 'Sour', 'Belgijskie', 'Porter', 'Pils'],
+                        question: AppLocalizations.of(context)!.onboardingQ5Title,
+                        subtitle: AppLocalizations.of(context)!.onboardingQ5Subtitle,
+                        options: const [
+                          'IPA',
+                          'Lager',
+                          'Weizen',
+                          'Stout',
+                          'Sour',
+                          'Belgijskie',
+                          'Porter',
+                          'Pils',
+                        ],
                         selectedValues: state.selectedStyles,
-                        onToggle: (v) => context.read<OnboardingCubit>().toggleStyle(v),
+                        onToggle: (v) =>
+                            context.read<OnboardingCubit>().toggleStyle(v),
                         onNext: _nextPage,
                       ),
                       // Page 6: Countries
                       ChipSelectionPage(
                         step: 6,
                         totalSteps: 7,
-                        question: 'Skąd najchętniej sięgasz po piwo?',
-                        subtitle: 'Wybierz swoje ulubione kraje piwne.',
+                        question: AppLocalizations.of(context)!.onboardingQ6Title,
+                        subtitle: AppLocalizations.of(context)!.onboardingQ6Subtitle,
                         options: const [
-                          'Polska 🇵🇱', 'Belgia 🇧🇪', 'Niemcy 🇩🇪', 'Czechy 🇨🇿', 'USA 🇺🇸',
-                          'Wielka Brytania 🇬🇧', 'Irlandia 🇮🇪', 'Hiszpania 🇪🇸', 'Włochy 🇮🇹',
-                          'Holandia 🇳🇱', 'Austria 🇦🇹', 'Francja 🇫🇷', 'Dania 🇩🇰', 'Szwajcaria 🇨🇭',
-                          'Meksyk 🇲🇽', 'Brazylia 🇧🇷', 'Kanada 🇨🇦', 'Japonia 🇯🇵', 'Chiny 🇨🇳',
-                          'Korea Południowa 🇰🇷', 'Australia 🇦🇺', 'RPA 🇿🇦'
+                          'Polska 🇵🇱',
+                          'Belgia 🇧🇪',
+                          'Niemcy 🇩🇪',
+                          'Czechy 🇨🇿',
+                          'USA 🇺🇸',
+                          'Wielka Brytania 🇬🇧',
+                          'Irlandia 🇮🇪',
+                          'Hiszpania 🇪🇸',
+                          'Włochy 🇮🇹',
+                          'Holandia 🇳🇱',
+                          'Austria 🇦🇹',
+                          'Francja 🇫🇷',
+                          'Dania 🇩🇰',
+                          'Szwajcaria 🇨🇭',
+                          'Meksyk 🇲🇽',
+                          'Brazylia 🇧🇷',
+                          'Kanada 🇨🇦',
+                          'Japonia 🇯🇵',
+                          'Chiny 🇨🇳',
+                          'Korea Południowa 🇰🇷',
+                          'Australia 🇦🇺',
+                          'RPA 🇿🇦',
                         ],
                         selectedValues: state.selectedCountries,
-                        onToggle: (v) => context.read<OnboardingCubit>().toggleCountry(v),
+                        onToggle: (v) =>
+                            context.read<OnboardingCubit>().toggleCountry(v),
                         onNext: _nextPage,
                       ),
                       // Page 7: Experience Level
@@ -216,13 +257,13 @@ class _OnboardingViewState extends State<_OnboardingView> {
                         step: 7,
                         totalSteps: 7,
                         selectedLevel: state.experienceLevel,
-                        onSelect: (v) => context.read<OnboardingCubit>().setExperienceLevel(v),
+                        onSelect: (v) => context
+                            .read<OnboardingCubit>()
+                            .setExperienceLevel(v),
                         onNext: _nextPage,
                       ),
                       // Page 8: Analyzing Loading
-                      AnalyzingPage(
-                        onComplete: _nextPage,
-                      ),
+                      AnalyzingPage(onComplete: _nextPage),
                       // Page 9: Hook Result
                       const HookScreen(),
                     ],

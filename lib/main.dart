@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/di/injection.dart';
 import 'core/routing/app_router.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hop_iq/l10n/app_localizations.dart';
 import 'core/theme/app_theme.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,6 +50,16 @@ class BrewDNAApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
           routerConfig: appRouter,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('pl'),
+            Locale('en'),
+          ],
         );
       },
     );

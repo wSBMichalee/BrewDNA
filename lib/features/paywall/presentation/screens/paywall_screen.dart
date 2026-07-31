@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
 
@@ -36,7 +38,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                 },
               ),
             ),
-            
+
             Expanded(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24),
@@ -45,35 +47,59 @@ class _PaywallScreenState extends State<PaywallScreen> {
                   children: [
                     SizedBox(height: AppSpacings.s16),
                     Text(
-                      'BrewDNA Premium',
-                      style: AppTypography.largeTitle.copyWith(color: AppColors.gold),
+                      AppLocalizations.of(context)!.paywallTitle,
+                      style: AppTypography.largeTitle.copyWith(
+                        color: AppColors.gold,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: AppSpacings.s12),
                     Text(
-                      'Odblokuj pełny potencjał swojego profilu piwnego',
-                      style: AppTypography.body.copyWith(color: AppColors.labelSecondary),
+                      AppLocalizations.of(context)!.paywallSubtitle,
+                      style: AppTypography.body.copyWith(
+                        color: AppColors.labelSecondary,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: AppSpacings.s48),
-                    
+
                     // Features List
-                    _buildFeatureItem(CupertinoIcons.sparkles, 'AI bez limitu', 'Nielimitowane skany i BeerDNA'),
-                    _buildFeatureItem(CupertinoIcons.chart_bar_fill, 'Zaawansowane statystyki', 'Odkryj ukryte wzorce w swoich ocenach'),
-                    _buildFeatureItem(CupertinoIcons.doc_text_fill, 'Eksport kolekcji', 'Pobierz swoje dane do CSV lub PDF'),
-                    _buildFeatureItem(CupertinoIcons.cloud_fill, 'Backup w chmurze', 'Nigdy nie trać swojej kolekcji'),
-                    _buildFeatureItem(CupertinoIcons.rosette, 'Ekskluzywne odznaki', 'Zdobądź profil premium na platformie'),
-                    
+                    _buildFeatureItem(
+                      CupertinoIcons.sparkles,
+                      AppLocalizations.of(context)!.paywallFeature1Title,
+                      AppLocalizations.of(context)!.paywallFeature1Desc,
+                    ),
+                    _buildFeatureItem(
+                      CupertinoIcons.chart_bar_fill,
+                      AppLocalizations.of(context)!.paywallFeature2Title,
+                      AppLocalizations.of(context)!.paywallFeature2Desc,
+                    ),
+                    _buildFeatureItem(
+                      CupertinoIcons.doc_text_fill,
+                      AppLocalizations.of(context)!.paywallFeature3Title,
+                      AppLocalizations.of(context)!.paywallFeature3Desc,
+                    ),
+                    _buildFeatureItem(
+                      CupertinoIcons.cloud_fill,
+                      AppLocalizations.of(context)!.paywallFeature4Title,
+                      AppLocalizations.of(context)!.paywallFeature4Desc,
+                    ),
+                    _buildFeatureItem(
+                      CupertinoIcons.rosette,
+                      AppLocalizations.of(context)!.paywallFeature5Title,
+                      AppLocalizations.of(context)!.paywallFeature5Desc,
+                    ),
+
                     SizedBox(height: AppSpacings.s48),
-                    
+
                     // Plan Selector
                     Row(
                       children: [
                         Expanded(
                           child: _buildPlanCard(
-                            title: 'Miesięcznie',
+                            title: AppLocalizations.of(context)!.paywallPlanMonthly,
                             price: '14,99 zł',
-                            subtitle: 'Rozliczenie co miesiąc',
+                            subtitle: AppLocalizations.of(context)!.paywallPlanMonthlyDesc,
                             isSelected: !_isYearly,
                             onTap: () => setState(() => _isYearly = false),
                           ),
@@ -81,22 +107,22 @@ class _PaywallScreenState extends State<PaywallScreen> {
                         SizedBox(width: AppSpacings.s16),
                         Expanded(
                           child: _buildPlanCard(
-                            title: 'Rocznie',
+                            title: AppLocalizations.of(context)!.paywallPlanYearly,
                             price: '149,99 zł',
-                            subtitle: '3 dni za darmo, potem 149,99 zł/rok',
-                            badge: 'Oszczędzasz 16%',
+                            subtitle: AppLocalizations.of(context)!.paywallPlanYearlyDesc,
+                            badge: AppLocalizations.of(context)!.paywallPlanYearlyBadge,
                             isSelected: _isYearly,
                             onTap: () => setState(() => _isYearly = true),
                           ),
                         ),
                       ],
                     ),
-                    
+
                     SizedBox(height: AppSpacings.s32),
-                    
+
                     // CTA Button
                     AppButton(
-                      text: 'Kup',
+                      text: AppLocalizations.of(context)!.paywallBuyButton,
                       onPressed: () {
                         // Mock purchase
                         if (context.canPop()) {
@@ -106,12 +132,12 @@ class _PaywallScreenState extends State<PaywallScreen> {
                         }
                       },
                     ),
-                    
+
                     SizedBox(height: AppSpacings.s16),
-                    
+
                     // Fine Print (App Store compliance)
                     Text(
-                      'Płatność pobierana przy zakupie. Subskrypcja odnawia się automatycznie, chyba że zostanie anulowana 24h przed końcem bieżącego okresu. Możesz zarządzać subskrypcjami w Ustawieniach Konta.',
+                      AppLocalizations.of(context)!.paywallDisclaimer,
                       style: AppTypography.caption.copyWith(
                         color: AppColors.labelSecondary,
                         fontSize: 10,
@@ -143,7 +169,12 @@ class _PaywallScreenState extends State<PaywallScreen> {
               children: [
                 Text(title, style: AppTypography.subhead),
                 SizedBox(height: 2),
-                Text(subtitle, style: AppTypography.caption.copyWith(color: AppColors.labelSecondary)),
+                Text(
+                  subtitle,
+                  style: AppTypography.caption.copyWith(
+                    color: AppColors.labelSecondary,
+                  ),
+                ),
               ],
             ),
           ),
@@ -185,14 +216,24 @@ class _PaywallScreenState extends State<PaywallScreen> {
                 ),
                 child: Text(
                   badge,
-                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.white),
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.white,
+                  ),
                 ),
               ),
             Text(title, style: AppTypography.body),
             SizedBox(height: AppSpacings.s8),
             Text(price, style: AppTypography.title2),
             SizedBox(height: AppSpacings.s4),
-            Text(subtitle, style: AppTypography.caption.copyWith(color: AppColors.labelSecondary, fontSize: 11)),
+            Text(
+              subtitle,
+              style: AppTypography.caption.copyWith(
+                color: AppColors.labelSecondary,
+                fontSize: 11,
+              ),
+            ),
           ],
         ),
       ),

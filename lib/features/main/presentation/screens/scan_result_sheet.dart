@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../beer/domain/entities/beer.dart';
 
 class ScanResultSheet extends StatelessWidget {
   final Beer beer;
-  
+
   const ScanResultSheet({super.key, required this.beer});
 
   @override
@@ -35,7 +36,7 @@ class ScanResultSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            
+
             // Header: Image + Title/Subtitle
             Row(
               children: [
@@ -46,11 +47,17 @@ class ScanResultSheet extends StatelessWidget {
                     color: AppColors.card,
                     borderRadius: BorderRadius.circular(8),
                     image: beer.imageUrl.isNotEmpty
-                        ? DecorationImage(image: NetworkImage(beer.imageUrl), fit: BoxFit.cover)
+                        ? DecorationImage(
+                            image: NetworkImage(beer.imageUrl),
+                            fit: BoxFit.cover,
+                          )
                         : null,
                   ),
                   child: beer.imageUrl.isEmpty
-                      ? const Icon(CupertinoIcons.photo, color: AppColors.separator)
+                      ? const Icon(
+                          CupertinoIcons.photo,
+                          color: AppColors.separator,
+                        )
                       : null,
                 ),
                 const SizedBox(width: 16),
@@ -59,18 +66,27 @@ class ScanResultSheet extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(beer.name, style: AppTypography.title2),
-                      Text(beer.brewery, style: AppTypography.subhead.copyWith(color: AppColors.labelSecondary)),
+                      Text(
+                        beer.brewery,
+                        style: AppTypography.subhead.copyWith(
+                          color: AppColors.labelSecondary,
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 24),
-            
+
             // Detection info
             Row(
               children: [
-                const Icon(CupertinoIcons.sparkles, color: AppColors.gold, size: 16),
+                const Icon(
+                  CupertinoIcons.sparkles,
+                  color: AppColors.gold,
+                  size: 16,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   'WYKRYTO AUTOMATYCZNIE W 1.2S',
@@ -83,21 +99,27 @@ class ScanResultSheet extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            
+
             // Chips
             Wrap(
               spacing: 8,
               runSpacing: 8,
               children: [
                 _buildChip(CupertinoIcons.drop, beer.style.toUpperCase()),
-                _buildChip(CupertinoIcons.drop_fill, '${beer.abv}% ABV'), // placeholder for ABV icon
-                _buildChip(CupertinoIcons.location_solid, beer.country.toUpperCase()),
+                _buildChip(
+                  CupertinoIcons.drop_fill,
+                  '${beer.abv}% ABV',
+                ), // placeholder for ABV icon
+                _buildChip(
+                  CupertinoIcons.location_solid,
+                  beer.country.toUpperCase(),
+                ),
                 _buildChip(CupertinoIcons.time, 'LEŻAKOWANIE: 2 TYG.'),
               ],
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             AppButton(
               text: 'Tak, to ono',
               isPrimary: true,
@@ -110,13 +132,20 @@ class ScanResultSheet extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   context.pop();
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Otwieram ręczne wyszukiwanie...')));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(AppLocalizations.of(context)!.scanResultManualSearchDesc),
+                    ),
+                  );
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     'To nie to piwo, szukaj ręcznie',
-                    style: AppTypography.subhead.copyWith(fontWeight: FontWeight.w600, color: AppColors.labelSecondary),
+                    style: AppTypography.subhead.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.labelSecondary,
+                    ),
                   ),
                 ),
               ),
@@ -141,7 +170,10 @@ class ScanResultSheet extends StatelessWidget {
           const SizedBox(width: 6),
           Text(
             label,
-            style: AppTypography.caption.copyWith(fontWeight: FontWeight.bold, color: AppColors.black),
+            style: AppTypography.caption.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppColors.black,
+            ),
           ),
         ],
       ),

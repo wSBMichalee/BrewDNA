@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/star_rating.dart';
 
@@ -53,13 +54,19 @@ class ShareCard extends StatelessWidget {
                     placeholder: (context, url) => Container(
                       color: AppColors.card,
                       child: const Center(
-                        child: Icon(CupertinoIcons.photo, color: AppColors.separator),
+                        child: Icon(
+                          CupertinoIcons.photo,
+                          color: AppColors.separator,
+                        ),
                       ),
                     ),
                     errorWidget: (context, url, error) => Container(
                       color: AppColors.card,
                       child: const Center(
-                        child: Icon(CupertinoIcons.photo, color: AppColors.separator),
+                        child: Icon(
+                          CupertinoIcons.photo,
+                          color: AppColors.separator,
+                        ),
                       ),
                     ),
                   ),
@@ -74,10 +81,7 @@ class ShareCard extends StatelessWidget {
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            AppColors.background,
-                          ],
+                          colors: [Colors.transparent, AppColors.background],
                           stops: [0.0, 1.0],
                         ),
                       ),
@@ -131,32 +135,32 @@ class ShareCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                     ),
-                    
+
                     SizedBox(height: 16.h),
-                    
+
                     // Stars
-                    StarRating(
-                      rating: rating,
-                      size: 32.sp,
-                    ),
-                    
+                    StarRating(rating: rating, size: 32.sp),
+
                     SizedBox(height: 4.h),
-                    
+
                     // MOJA OCENA label
                     Text(
-                      'MOJA OCENA',
+                      AppLocalizations.of(context)!.shareCardMyRatingLabel,
                       style: AppTypography.caption.copyWith(
                         color: AppColors.labelSecondary,
                         letterSpacing: 2.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    
+
                     SizedBox(height: 16.h),
-                    
+
                     // Match Badge
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 8.h,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.background,
                         borderRadius: BorderRadius.circular(24.r),
@@ -172,7 +176,7 @@ class ShareCard extends StatelessWidget {
                           ),
                           SizedBox(width: 8.w),
                           Text(
-                            '$matchPercentage% zgodności z Twoim gustem',
+                            '$matchPercentage${AppLocalizations.of(context)!.shareCardMatchSuffix}',
                             style: AppTypography.subhead.copyWith(
                               color: AppColors.label, // Dark text, NOT amber
                               fontWeight: FontWeight.w600,
@@ -181,9 +185,9 @@ class ShareCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    
+
                     const Spacer(),
-                    
+
                     // Bottom Row (Zapisz / BrewDNA)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -195,7 +199,10 @@ class ShareCard extends StatelessWidget {
                           child: GestureDetector(
                             onTap: isCapturing ? null : onSaveTap,
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16.w,
+                                vertical: 8.h,
+                              ),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20.r),
                                 border: Border.all(color: AppColors.label),
@@ -210,7 +217,7 @@ class ShareCard extends StatelessWidget {
                                   ),
                                   SizedBox(width: 8.w),
                                   Text(
-                                    'Zapisz',
+                                    AppLocalizations.of(context)!.shareCardSave,
                                     style: AppTypography.subhead.copyWith(
                                       color: AppColors.label,
                                       fontWeight: FontWeight.w600,
@@ -221,7 +228,7 @@ class ShareCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                        
+
                         // BrewDNA Logo/Text
                         Row(
                           mainAxisSize: MainAxisSize.min,

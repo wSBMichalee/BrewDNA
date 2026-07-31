@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,17 +42,22 @@ class _AuthEmailScreenState extends State<AuthEmailScreen> {
                     padding: EdgeInsets.zero,
                     alignment: Alignment.centerLeft,
                     onPressed: () => context.pop(),
-                    child: const Icon(CupertinoIcons.back, color: AppColors.label),
+                    child: const Icon(
+                      CupertinoIcons.back,
+                      color: AppColors.label,
+                    ),
                   ),
                   SizedBox(height: AppSpacings.s24),
-                  Text('Jaki jest Twój e-mail?', style: AppTypography.title1),
+                  Text(AppLocalizations.of(context)!.emailTitle, style: AppTypography.title1),
                   SizedBox(height: AppSpacings.s12),
                   Text(
-                    'Użyjemy go do logowania i ważnych powiadomień.',
-                    style: AppTypography.body.copyWith(color: AppColors.labelSecondary),
+                    AppLocalizations.of(context)!.emailSubtitle,
+                    style: AppTypography.body.copyWith(
+                      color: AppColors.labelSecondary,
+                    ),
                   ),
                   SizedBox(height: AppSpacings.s48),
-                  
+
                   // Image Card
                   Align(
                     alignment: Alignment.center,
@@ -70,18 +77,34 @@ class _AuthEmailScreenState extends State<AuthEmailScreen> {
                       ),
                       child: Center(
                         child: CachedNetworkImage(
-                          imageUrl: 'https://media.screensdesign.com/gasset/446a88c2bc4346fc946cc0eba790b7cc_screen_image_email_card_image_ad69bca432.png',
+                          imageUrl:
+                              'https://media.screensdesign.com/gasset/446a88c2bc4346fc946cc0eba790b7cc_screen_image_email_card_image_ad69bca432.png',
                           width: 140,
                           height: 140,
                           fit: BoxFit.contain,
-                          placeholder: (context, url) => const CupertinoActivityIndicator(),
-                          errorWidget: (context, url, error) => const Icon(CupertinoIcons.drop, size: 64, color: AppColors.accentTint),
+                          placeholder: (context, url) => Shimmer.fromColors(
+                            baseColor: AppColors.separator,
+                            highlightColor: AppColors.background,
+                            child: Container(
+                              width: 140,
+                              height: 140,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(32),
+                              ),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => const Icon(
+                            CupertinoIcons.drop,
+                            size: 64,
+                            color: AppColors.accentTint,
+                          ),
                         ),
                       ),
                     ),
                   ),
                   SizedBox(height: AppSpacings.s48),
-                  
+
                   TextField(
                     controller: _controller,
                     autofocus: true,
@@ -91,26 +114,37 @@ class _AuthEmailScreenState extends State<AuthEmailScreen> {
                       context.read<AuthCubit>().checkEmailExists(val);
                     },
                     decoration: InputDecoration(
-                      hintText: 'twoj@email.com',
-                      contentPadding: EdgeInsets.symmetric(horizontal: AppSpacings.s24, vertical: AppSpacings.s16),
+                      hintText: AppLocalizations.of(context)!.emailHint,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: AppSpacings.s24,
+                        vertical: AppSpacings.s16,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppRadius.button),
-                        borderSide: const BorderSide(color: AppColors.separator),
+                        borderSide: const BorderSide(
+                          color: AppColors.separator,
+                        ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppRadius.button),
-                        borderSide: const BorderSide(color: AppColors.separator),
+                        borderSide: const BorderSide(
+                          color: AppColors.separator,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppRadius.button),
-                        borderSide: const BorderSide(color: AppColors.accent, width: 2),
+                        borderSide: const BorderSide(
+                          color: AppColors.accent,
+                          width: 2,
+                        ),
                       ),
                     ),
                   ),
                   const Spacer(),
                   AppButton(
-                    text: 'Dalej',
-                    onPressed: state.email.contains('@') && state.email.contains('.')
+                    text: AppLocalizations.of(context)!.emailNext,
+                    onPressed:
+                        state.email.contains('@') && state.email.contains('.')
                         ? () => context.go('/auth/password')
                         : () {},
                   ),

@@ -1,9 +1,7 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:injectable/injectable.dart';
 import '../../domain/entities/beer.dart';
 import '../../domain/repositories/i_beer_repository.dart';
 
-@LazySingleton(as: IBeerRepository)
 class MockBeerRepository implements IBeerRepository {
   final Beer _mockBeer = Beer(
     id: '1',
@@ -59,7 +57,26 @@ class MockBeerRepository implements IBeerRepository {
   @override
   Future<Either<String, List<Beer>>> getRecommendations() async {
     await Future.delayed(Duration(milliseconds: 500));
-    return right([_mockBeer2, _mockBeer3, _mockBeer]);
+    return right([_mockBeer3, _mockBeer, _mockBeer2]);
+  }
+
+  @override
+  Future<Either<String, List<Map<String, dynamic>>>> getTopCountries() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    return right([
+      {'name': 'Polska', 'count': 120, 'flag': '🇵🇱'},
+      {'name': 'Niemcy', 'count': 85, 'flag': '🇩🇪'},
+      {'name': 'Belgia', 'count': 42, 'flag': '🇧🇪'},
+      {'name': 'Czechy', 'count': 38, 'flag': '🇨🇿'},
+      {'name': 'USA', 'count': 25, 'flag': '🇺🇸'},
+      {'name': 'Wielka Brytania', 'count': 15, 'flag': '🇬🇧'},
+    ]);
+  }
+
+  @override
+  Future<Either<String, List<Beer>>> getTopRatedBeers() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    return right([_mockBeer2, _mockBeer, _mockBeer3]);
   }
 
   @override

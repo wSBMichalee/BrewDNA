@@ -12,15 +12,15 @@ class ScanCubit extends Cubit<ScanState> {
 
   Future<void> analyzeImage(Uint8List imageBytes) async {
     emit(const ScanState.analyzing());
-    
+
     final result = await _repository.scanBeer(imageBytes);
-    
+
     result.fold(
       (error) => emit(ScanState.error(error)),
       (beer) => emit(ScanState.success(beer)),
     );
   }
-  
+
   void reset() {
     emit(const ScanState.initial());
   }

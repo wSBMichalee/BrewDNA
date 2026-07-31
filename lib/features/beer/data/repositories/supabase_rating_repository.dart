@@ -12,37 +12,53 @@ class SupabaseRatingRepository implements IRatingRepository {
   SupabaseRatingRepository(this._supabase);
 
   @override
-  Future<Either<String, RatingHistogram>> getRatingHistogram(String beerId) async {
+  Future<Either<String, RatingHistogram>> getRatingHistogram(
+    String beerId,
+  ) async {
     try {
       // Zgodnie z wytycznymi - nie pobieramy wszystkich wierszy do klienta.
       // Używamy funkcji RPC po stronie bazy, która zwraca od razu podsumowanie.
-      final response = await _supabase
-          .rpc('get_rating_histogram', params: {'p_beer_id': beerId});
-          
+      final response = await _supabase.rpc(
+        'get_rating_histogram',
+        params: {'p_beer_id': beerId},
+      );
+
       // TODO: Upewnij się, że funkcja RPC istnieje w Supabase i zwraca dane w tym formacie.
-      // Oczekiwany format odpowiedzi: 
+      // Oczekiwany format odpowiedzi:
       // { 'count5': int, 'count4': int, 'count3': int, 'count2': int, 'count1': int, 'total': int, 'average': double }
-      
-      return right(RatingHistogram(
-        count5: response['count5'] as int? ?? 0,
-        count4: response['count4'] as int? ?? 0,
-        count3: response['count3'] as int? ?? 0,
-        count2: response['count2'] as int? ?? 0,
-        count1: response['count1'] as int? ?? 0,
-        totalCount: response['total'] as int? ?? 0,
-        averageRating: (response['average'] as num?)?.toDouble() ?? 0.0,
-      ));
+
+      return right(
+        RatingHistogram(
+          count5: response['count5'] as int? ?? 0,
+          count4: response['count4'] as int? ?? 0,
+          count3: response['count3'] as int? ?? 0,
+          count2: response['count2'] as int? ?? 0,
+          count1: response['count1'] as int? ?? 0,
+          totalCount: response['total'] as int? ?? 0,
+          averageRating: (response['average'] as num?)?.toDouble() ?? 0.0,
+        ),
+      );
     } catch (e) {
       // W przypadku błędu (np. bazy) zwracamy prawdziwe 0, a nie fake-owe dane.
-      return right(const RatingHistogram(
-        count5: 0, count4: 0, count3: 0, count2: 0, count1: 0,
-        totalCount: 0, averageRating: 0.0,
-      ));
+      return right(
+        const RatingHistogram(
+          count5: 0,
+          count4: 0,
+          count3: 0,
+          count2: 0,
+          count1: 0,
+          totalCount: 0,
+          averageRating: 0.0,
+        ),
+      );
     }
   }
 
   @override
-  Future<Either<String, List<Review>>> getReviews(String beerId, {int limit = 20}) async {
+  Future<Either<String, List<Review>>> getReviews(
+    String beerId, {
+    int limit = 20,
+  }) async {
     try {
       final response = await _supabase
           .from('ratings')
@@ -69,7 +85,9 @@ class SupabaseRatingRepository implements IRatingRepository {
           userAvatarUrl: user?['avatar_url'] as String? ?? '',
           overallRating: (row['overall'] as num?)?.round() ?? 0,
           note: row['note'] as String? ?? '',
-          createdAt: DateTime.tryParse(row['created_at']?.toString() ?? '') ?? DateTime.now(),
+          createdAt:
+              DateTime.tryParse(row['created_at']?.toString() ?? '') ??
+              DateTime.now(),
         );
       }).toList();
 
@@ -82,7 +100,8 @@ class SupabaseRatingRepository implements IRatingRepository {
           userName: 'Marek S.',
           userAvatarUrl: '',
           overallRating: 5,
-          note: 'Absolutny klasyk w swoim stylu. Niesamowicie pijalne, aromat uderza od razu po otwarciu puszki. Soczystość na najwyższym poziomie!',
+          note:
+              'Absolutny klasyk w swoim stylu. Niesamowicie pijalne, aromat uderza od razu po otwarciu puszki. Soczystość na najwyższym poziomie!',
           createdAt: DateTime.now().subtract(const Duration(days: 2)),
         ),
         Review(
@@ -90,9 +109,10 @@ class SupabaseRatingRepository implements IRatingRepository {
           userName: 'Alicja W.',
           userAvatarUrl: '',
           overallRating: 4,
-          note: 'Dobra goryczka, chociaż spodziewałam się czegoś bardziej wytrawnego. Mimo to, świetne piwo na lato. Bardzo orzeźwiające.',
+          note:
+              'Dobra goryczka, chociaż spodziewałam się czegoś bardziej wytrawnego. Mimo to, świetne piwo na lato. Bardzo orzeźwiające.',
           createdAt: DateTime.now().subtract(const Duration(days: 4)),
-        )
+        ),
       ]);
     }
   }

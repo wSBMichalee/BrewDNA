@@ -2,12 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/auth_cubit.dart';
 import '../bloc/auth_state.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
+import '../../../../core/di/injection.dart';
+import '../../../onboarding/presentation/bloc/onboarding_cubit.dart';
 
 class AuthDetailsScreen extends StatefulWidget {
   const AuthDetailsScreen({super.key});
@@ -38,15 +42,21 @@ class _AuthDetailsScreenState extends State<AuthDetailsScreen> {
             backgroundColor: AppColors.background,
             itemExtent: 32.0,
             onSelectedItemChanged: (int index) {
-              final country = ['Polska', 'Niemcy', 'Czechy', 'Wielka Brytania', 'USA'][index];
+              final country = [
+                'Polska',
+                'Niemcy',
+                'Czechy',
+                'Wielka Brytania',
+                'USA',
+              ][index];
               context.read<AuthCubit>().updateCountry(country);
             },
-            children: const [
-              Text('Polska'),
-              Text('Niemcy'),
-              Text('Czechy'),
-              Text('Wielka Brytania'),
-              Text('USA'),
+            children: [
+              Text(AppLocalizations.of(context)!.detailsCountryPoland),
+              Text(AppLocalizations.of(context)!.detailsCountryGermany),
+              Text(AppLocalizations.of(context)!.detailsCountryCzech),
+              Text(AppLocalizations.of(context)!.detailsCountryUK),
+              Text(AppLocalizations.of(context)!.detailsCountryUSA),
             ],
           ),
         ),
@@ -71,12 +81,15 @@ class _AuthDetailsScreenState extends State<AuthDetailsScreen> {
                     padding: EdgeInsets.zero,
                     alignment: Alignment.centerLeft,
                     onPressed: () => context.pop(),
-                    child: const Icon(CupertinoIcons.back, color: AppColors.label),
+                    child: const Icon(
+                      CupertinoIcons.back,
+                      color: AppColors.label,
+                    ),
                   ),
                   SizedBox(height: AppSpacings.s24),
-                  Text('Ostatni krok', style: AppTypography.title1),
+                  Text(AppLocalizations.of(context)!.detailsTitle, style: AppTypography.title1),
                   SizedBox(height: AppSpacings.s48),
-                  
+
                   // Image Card
                   Align(
                     alignment: Alignment.center,
@@ -96,44 +109,74 @@ class _AuthDetailsScreenState extends State<AuthDetailsScreen> {
                       ),
                       child: Center(
                         child: CachedNetworkImage(
-                          imageUrl: 'https://media.screensdesign.com/gasset/4d547d2fafc349af8e93a6ac2e8406cd_screen_image_final_step_card_image_ccc796a7e7.png',
+                          imageUrl:
+                              'https://media.screensdesign.com/gasset/4d547d2fafc349af8e93a6ac2e8406cd_screen_image_final_step_card_image_ccc796a7e7.png',
                           width: 140,
                           height: 140,
                           fit: BoxFit.contain,
-                          placeholder: (context, url) => const CupertinoActivityIndicator(),
-                          errorWidget: (context, url, error) => const Icon(CupertinoIcons.person, size: 64, color: AppColors.accentTint),
+                          placeholder: (context, url) => Shimmer.fromColors(
+                            baseColor: AppColors.separator,
+                            highlightColor: AppColors.background,
+                            child: Container(
+                              width: 140,
+                              height: 140,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(32),
+                              ),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => const Icon(
+                            CupertinoIcons.person,
+                            size: 64,
+                            color: AppColors.accentTint,
+                          ),
                         ),
                       ),
                     ),
                   ),
                   SizedBox(height: AppSpacings.s48),
-                  
+
                   TextField(
                     controller: _nameController,
-                    onChanged: (val) => context.read<AuthCubit>().updateName(val),
+                    onChanged: (val) =>
+                        context.read<AuthCubit>().updateName(val),
                     decoration: InputDecoration(
-                      hintText: 'Imię',
-                      contentPadding: EdgeInsets.symmetric(horizontal: AppSpacings.s24, vertical: AppSpacings.s16),
+                      hintText: AppLocalizations.of(context)!.detailsHint,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: AppSpacings.s24,
+                        vertical: AppSpacings.s16,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppRadius.button),
-                        borderSide: const BorderSide(color: AppColors.separator),
+                        borderSide: const BorderSide(
+                          color: AppColors.separator,
+                        ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppRadius.button),
-                        borderSide: const BorderSide(color: AppColors.separator),
+                        borderSide: const BorderSide(
+                          color: AppColors.separator,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppRadius.button),
-                        borderSide: const BorderSide(color: AppColors.accent, width: 2),
+                        borderSide: const BorderSide(
+                          color: AppColors.accent,
+                          width: 2,
+                        ),
                       ),
                     ),
                   ),
                   SizedBox(height: AppSpacings.s16),
-                  
+
                   GestureDetector(
                     onTap: () => _showCountryPicker(context),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24, vertical: AppSpacings.s16),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSpacings.s24,
+                        vertical: AppSpacings.s16,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.white,
                         border: Border.all(color: AppColors.separator),
@@ -143,40 +186,53 @@ class _AuthDetailsScreenState extends State<AuthDetailsScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            state.country.isEmpty ? 'Kraj' : state.country,
+                            state.country.isEmpty ? AppLocalizations.of(context)!.detailsCountryPlaceholder : state.country,
                             style: AppTypography.body.copyWith(
-                              color: state.country.isEmpty ? AppColors.labelSecondary : AppColors.label,
+                              color: state.country.isEmpty
+                                  ? AppColors.labelSecondary
+                                  : AppColors.label,
                             ),
                           ),
-                          const Icon(CupertinoIcons.chevron_down, color: AppColors.labelSecondary, size: 20),
+                          const Icon(
+                            CupertinoIcons.chevron_down,
+                            color: AppColors.labelSecondary,
+                            size: 20,
+                          ),
                         ],
                       ),
                     ),
                   ),
                   SizedBox(height: AppSpacings.s32),
-                  
+
                   Row(
                     children: [
                       CupertinoSwitch(
                         value: state.acceptedTerms,
                         activeColor: AppColors.accent,
-                        onChanged: (val) => context.read<AuthCubit>().toggleTerms(val),
+                        onChanged: (val) =>
+                            context.read<AuthCubit>().toggleTerms(val),
                       ),
                       SizedBox(width: AppSpacings.s12),
                       Expanded(
                         child: RichText(
                           text: TextSpan(
-                            style: AppTypography.subhead.copyWith(color: AppColors.label),
-                            children: const [
-                              TextSpan(text: 'Akceptuję '),
+                            style: AppTypography.subhead.copyWith(
+                              color: AppColors.label,
+                            ),
+                            children: [
+                              TextSpan(text: AppLocalizations.of(context)!.detailsTermsAccept),
                               TextSpan(
-                                text: 'Regulamin',
-                                style: TextStyle(decoration: TextDecoration.underline),
+                                text: AppLocalizations.of(context)!.detailsTermsLink,
+                                style: const TextStyle(
+                                  decoration: TextDecoration.underline,
+                                ),
                               ),
-                              TextSpan(text: ' i '),
+                              TextSpan(text: AppLocalizations.of(context)!.detailsTermsAnd),
                               TextSpan(
-                                text: 'Politykę Prywatności',
-                                style: TextStyle(decoration: TextDecoration.underline),
+                                text: AppLocalizations.of(context)!.detailsPrivacyLink,
+                                style: const TextStyle(
+                                  decoration: TextDecoration.underline,
+                                ),
                               ),
                             ],
                           ),
@@ -189,47 +245,78 @@ class _AuthDetailsScreenState extends State<AuthDetailsScreen> {
                   Opacity(
                     opacity: isValid && !_isLoading ? 1.0 : 0.4,
                     child: AppButton(
-                      text: _isLoading ? 'Rejestracja...' : 'Kontynuuj',
-                      onPressed: isValid && !_isLoading ? () async {
-                        setState(() => _isLoading = true);
-                        try {
-                          final authState = context.read<AuthCubit>().state;
-                          final response = await Supabase.instance.client.auth.signUp(
-                            email: authState.email,
-                            password: authState.password,
-                            data: {
-                              'display_name': authState.name,
+                      text: _isLoading ? AppLocalizations.of(context)!.detailsRegistering : AppLocalizations.of(context)!.detailsContinue,
+                      onPressed: isValid && !_isLoading
+                          ? () async {
+                              setState(() => _isLoading = true);
+                              try {
+                                final authState = context
+                                    .read<AuthCubit>()
+                                    .state;
+                                final response = await Supabase
+                                    .instance
+                                    .client
+                                    .auth
+                                    .signUp(
+                                      email: authState.email,
+                                      password: authState.password,
+                                      data: {'display_name': authState.name},
+                                    );
+
+                                if (response.user != null) {
+                                  // Update public.users table created by trigger
+                                  await Supabase.instance.client
+                                      .from('users')
+                                      .update({'display_name': authState.name})
+                                      .eq('id', response.user!.id);
+
+                                  try {
+                                    final onboardingState = getIt<OnboardingCubit>().state;
+                                    await Supabase.instance.client
+                                        .from('taste_profiles')
+                                        .upsert({
+                                          'user_id': response.user!.id,
+                                          'axis_strength': onboardingState.lightStrongValue,
+                                          'axis_bitterness': onboardingState.bitterSweetValue,
+                                          'axis_fruitiness': onboardingState.dryFruityValue,
+                                          'axis_maltiness': onboardingState.crispMaltyValue,
+                                          'preferred_styles': onboardingState.selectedStyles.toList(),
+                                          'preferred_countries': onboardingState.selectedCountries.toList(),
+                                          'experience_level': onboardingState.experienceLevel,
+                                        });
+                                  } catch (e) {
+                                    debugPrint('Failed to save taste profile: $e');
+                                  }
+
+                                  if (mounted) {
+                                    context.go('/auth/welcome');
+                                  }
+                                }
+                              } on AuthException catch (e) {
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(AppLocalizations.of(context)!.detailsErrorGeneric),
+                                    ),
+                                  );
+                                }
+                              } catch (e) {
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Wystąpił nieoczekiwany błąd',
+                                      ),
+                                    ),
+                                  );
+                                }
+                              } finally {
+                                if (mounted) {
+                                  setState(() => _isLoading = false);
+                                }
+                              }
                             }
-                          );
-                          
-                          if (response.user != null) {
-                            // Update public.users table created by trigger
-                            await Supabase.instance.client.from('users').update({
-                              'display_name': authState.name,
-                            }).eq('id', response.user!.id);
-                            
-                            if (mounted) {
-                              context.go('/auth/welcome');
-                            }
-                          }
-                        } on AuthException catch (e) {
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Błąd rejestracji: ${e.message}')),
-                            );
-                          }
-                        } catch (e) {
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Wystąpił nieoczekiwany błąd')),
-                            );
-                          }
-                        } finally {
-                          if (mounted) {
-                            setState(() => _isLoading = false);
-                          }
-                        }
-                      } : () {},
+                          : () {},
                     ),
                   ),
                 ],

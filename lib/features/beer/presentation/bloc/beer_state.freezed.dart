@@ -128,12 +128,12 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<Beer> history,  List<Beer> recommendations,  Beer? beerOfTheDay,  Beer? selectedBeer)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<Beer> history,  List<Beer> recommendations,  List<Map<String, dynamic>> topCountries,  List<Beer> topRatedBeers,  Beer? beerOfTheDay,  Beer? selectedBeer,  List<Beer> matchedBeers)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Loaded() when loaded != null:
-return loaded(_that.history,_that.recommendations,_that.beerOfTheDay,_that.selectedBeer);case _Error() when error != null:
+return loaded(_that.history,_that.recommendations,_that.topCountries,_that.topRatedBeers,_that.beerOfTheDay,_that.selectedBeer,_that.matchedBeers);case _Error() when error != null:
 return error(_that.message);case _:
   return orElse();
 
@@ -152,12 +152,12 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<Beer> history,  List<Beer> recommendations,  Beer? beerOfTheDay,  Beer? selectedBeer)  loaded,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<Beer> history,  List<Beer> recommendations,  List<Map<String, dynamic>> topCountries,  List<Beer> topRatedBeers,  Beer? beerOfTheDay,  Beer? selectedBeer,  List<Beer> matchedBeers)  loaded,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _Loaded():
-return loaded(_that.history,_that.recommendations,_that.beerOfTheDay,_that.selectedBeer);case _Error():
+return loaded(_that.history,_that.recommendations,_that.topCountries,_that.topRatedBeers,_that.beerOfTheDay,_that.selectedBeer,_that.matchedBeers);case _Error():
 return error(_that.message);case _:
   throw StateError('Unexpected subclass');
 
@@ -175,12 +175,12 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<Beer> history,  List<Beer> recommendations,  Beer? beerOfTheDay,  Beer? selectedBeer)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<Beer> history,  List<Beer> recommendations,  List<Map<String, dynamic>> topCountries,  List<Beer> topRatedBeers,  Beer? beerOfTheDay,  Beer? selectedBeer,  List<Beer> matchedBeers)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Loaded() when loaded != null:
-return loaded(_that.history,_that.recommendations,_that.beerOfTheDay,_that.selectedBeer);case _Error() when error != null:
+return loaded(_that.history,_that.recommendations,_that.topCountries,_that.topRatedBeers,_that.beerOfTheDay,_that.selectedBeer,_that.matchedBeers);case _Error() when error != null:
 return error(_that.message);case _:
   return null;
 
@@ -257,7 +257,7 @@ String toString() {
 
 
 class _Loaded implements BeerState {
-  const _Loaded({final  List<Beer> history = const [], final  List<Beer> recommendations = const [], this.beerOfTheDay, this.selectedBeer}): _history = history,_recommendations = recommendations;
+  const _Loaded({final  List<Beer> history = const [], final  List<Beer> recommendations = const [], final  List<Map<String, dynamic>> topCountries = const [], final  List<Beer> topRatedBeers = const [], this.beerOfTheDay, this.selectedBeer, final  List<Beer> matchedBeers = const []}): _history = history,_recommendations = recommendations,_topCountries = topCountries,_topRatedBeers = topRatedBeers,_matchedBeers = matchedBeers;
   
 
  final  List<Beer> _history;
@@ -274,8 +274,29 @@ class _Loaded implements BeerState {
   return EqualUnmodifiableListView(_recommendations);
 }
 
+ final  List<Map<String, dynamic>> _topCountries;
+@JsonKey() List<Map<String, dynamic>> get topCountries {
+  if (_topCountries is EqualUnmodifiableListView) return _topCountries;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_topCountries);
+}
+
+ final  List<Beer> _topRatedBeers;
+@JsonKey() List<Beer> get topRatedBeers {
+  if (_topRatedBeers is EqualUnmodifiableListView) return _topRatedBeers;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_topRatedBeers);
+}
+
  final  Beer? beerOfTheDay;
  final  Beer? selectedBeer;
+ final  List<Beer> _matchedBeers;
+@JsonKey() List<Beer> get matchedBeers {
+  if (_matchedBeers is EqualUnmodifiableListView) return _matchedBeers;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_matchedBeers);
+}
+
 
 /// Create a copy of BeerState
 /// with the given fields replaced by the non-null parameter values.
@@ -287,16 +308,16 @@ _$LoadedCopyWith<_Loaded> get copyWith => __$LoadedCopyWithImpl<_Loaded>(this, _
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loaded&&const DeepCollectionEquality().equals(other._history, _history)&&const DeepCollectionEquality().equals(other._recommendations, _recommendations)&&(identical(other.beerOfTheDay, beerOfTheDay) || other.beerOfTheDay == beerOfTheDay)&&(identical(other.selectedBeer, selectedBeer) || other.selectedBeer == selectedBeer));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loaded&&const DeepCollectionEquality().equals(other._history, _history)&&const DeepCollectionEquality().equals(other._recommendations, _recommendations)&&const DeepCollectionEquality().equals(other._topCountries, _topCountries)&&const DeepCollectionEquality().equals(other._topRatedBeers, _topRatedBeers)&&(identical(other.beerOfTheDay, beerOfTheDay) || other.beerOfTheDay == beerOfTheDay)&&(identical(other.selectedBeer, selectedBeer) || other.selectedBeer == selectedBeer)&&const DeepCollectionEquality().equals(other._matchedBeers, _matchedBeers));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_history),const DeepCollectionEquality().hash(_recommendations),beerOfTheDay,selectedBeer);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_history),const DeepCollectionEquality().hash(_recommendations),const DeepCollectionEquality().hash(_topCountries),const DeepCollectionEquality().hash(_topRatedBeers),beerOfTheDay,selectedBeer,const DeepCollectionEquality().hash(_matchedBeers));
 
 @override
 String toString() {
-  return 'BeerState.loaded(history: $history, recommendations: $recommendations, beerOfTheDay: $beerOfTheDay, selectedBeer: $selectedBeer)';
+  return 'BeerState.loaded(history: $history, recommendations: $recommendations, topCountries: $topCountries, topRatedBeers: $topRatedBeers, beerOfTheDay: $beerOfTheDay, selectedBeer: $selectedBeer, matchedBeers: $matchedBeers)';
 }
 
 
@@ -307,7 +328,7 @@ abstract mixin class _$LoadedCopyWith<$Res> implements $BeerStateCopyWith<$Res> 
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) = __$LoadedCopyWithImpl;
 @useResult
 $Res call({
- List<Beer> history, List<Beer> recommendations, Beer? beerOfTheDay, Beer? selectedBeer
+ List<Beer> history, List<Beer> recommendations, List<Map<String, dynamic>> topCountries, List<Beer> topRatedBeers, Beer? beerOfTheDay, Beer? selectedBeer, List<Beer> matchedBeers
 });
 
 
@@ -324,13 +345,16 @@ class __$LoadedCopyWithImpl<$Res>
 
 /// Create a copy of BeerState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? history = null,Object? recommendations = null,Object? beerOfTheDay = freezed,Object? selectedBeer = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? history = null,Object? recommendations = null,Object? topCountries = null,Object? topRatedBeers = null,Object? beerOfTheDay = freezed,Object? selectedBeer = freezed,Object? matchedBeers = null,}) {
   return _then(_Loaded(
 history: null == history ? _self._history : history // ignore: cast_nullable_to_non_nullable
 as List<Beer>,recommendations: null == recommendations ? _self._recommendations : recommendations // ignore: cast_nullable_to_non_nullable
+as List<Beer>,topCountries: null == topCountries ? _self._topCountries : topCountries // ignore: cast_nullable_to_non_nullable
+as List<Map<String, dynamic>>,topRatedBeers: null == topRatedBeers ? _self._topRatedBeers : topRatedBeers // ignore: cast_nullable_to_non_nullable
 as List<Beer>,beerOfTheDay: freezed == beerOfTheDay ? _self.beerOfTheDay : beerOfTheDay // ignore: cast_nullable_to_non_nullable
 as Beer?,selectedBeer: freezed == selectedBeer ? _self.selectedBeer : selectedBeer // ignore: cast_nullable_to_non_nullable
-as Beer?,
+as Beer?,matchedBeers: null == matchedBeers ? _self._matchedBeers : matchedBeers // ignore: cast_nullable_to_non_nullable
+as List<Beer>,
   ));
 }
 

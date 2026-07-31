@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
 
@@ -32,7 +33,7 @@ class ChipSelectionPage extends StatelessWidget {
         children: [
           SizedBox(height: AppSpacings.s32),
           Text(
-            'STEP $step OF $totalSteps',
+            AppLocalizations.of(context)!.onboardingStep(step.toString(), totalSteps.toString()),
             style: AppTypography.caption.copyWith(
               color: AppColors.accent,
               fontWeight: FontWeight.w700,
@@ -80,7 +81,9 @@ class ChipSelectionPage extends StatelessWidget {
                             ? []
                             : [
                                 BoxShadow(
-                                  color: AppColors.black.withValues(alpha: 0.02),
+                                  color: AppColors.black.withValues(
+                                    alpha: 0.02,
+                                  ),
                                   blurRadius: 4,
                                   offset: const Offset(0, 2),
                                 ),
@@ -100,10 +103,7 @@ class ChipSelectionPage extends StatelessWidget {
             ),
           ),
           SizedBox(height: AppSpacings.s16),
-          AppButton(
-            text: 'Dalej',
-            onPressed: onNext,
-          ),
+          AppButton(text: AppLocalizations.of(context)!.onboardingNextButton, onPressed: onNext),
           SizedBox(height: AppSpacings.s16),
         ],
       ),

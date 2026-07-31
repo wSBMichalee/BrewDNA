@@ -40,6 +40,12 @@ class AppRadius {
 class AppTypography {
   static const String fontFamily = 'Inter';
 
+  static TextStyle get brandDisplay => TextStyle(
+    fontFamily: 'Fraunces',
+    fontWeight: FontWeight.w700,
+    fontSize: 40.sp,
+  );
+
   static TextStyle get largeTitle => TextStyle(
     fontFamily: fontFamily,
     fontSize: 34.sp,

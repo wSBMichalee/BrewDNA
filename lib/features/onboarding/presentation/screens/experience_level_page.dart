@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
 
@@ -48,12 +49,16 @@ class ExperienceLevelPage extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTypography.body.copyWith(fontWeight: FontWeight.w700),
+                    style: AppTypography.body.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   SizedBox(height: AppSpacings.s4),
                   Text(
                     subtitle,
-                    style: AppTypography.subhead.copyWith(color: AppColors.labelSecondary),
+                    style: AppTypography.subhead.copyWith(
+                      color: AppColors.labelSecondary,
+                    ),
                   ),
                 ],
               ),
@@ -67,8 +72,11 @@ class ExperienceLevelPage extends StatelessWidget {
                   color: AppColors.accent,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(CupertinoIcons.checkmark_alt,
-                    color: AppColors.accent, size: 16),
+                child: Icon(
+                  CupertinoIcons.checkmark_alt,
+                  color: AppColors.accent,
+                  size: 16,
+                ),
               ),
             ],
           ],
@@ -85,7 +93,7 @@ class ExperienceLevelPage extends StatelessWidget {
         children: [
           SizedBox(height: AppSpacings.s32),
           Text(
-            'STEP $step OF $totalSteps',
+            AppLocalizations.of(context)!.onboardingStep(step.toString(), totalSteps.toString()),
             style: AppTypography.caption.copyWith(
               color: AppColors.accent,
               fontWeight: FontWeight.w700,
@@ -94,7 +102,7 @@ class ExperienceLevelPage extends StatelessWidget {
           ),
           SizedBox(height: AppSpacings.s16),
           Text(
-            'Jak dobrze znasz świat piwa?',
+            AppLocalizations.of(context)!.onboardingExpTitle,
             style: AppTypography.title2.copyWith(fontSize: 28),
             textAlign: TextAlign.center,
           ),
@@ -103,16 +111,25 @@ class ExperienceLevelPage extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  _buildCard('Dopiero zaczynam', 'Odkrywam nowe smaki krok po kroku'),
-                  _buildCard('Znam się nieźle', 'Mam swoje ulubione style i szukam więcej'),
-                  _buildCard('Jestem hobbystą', 'Piwo to moja pasja, chcę odkrywać rzadkości'),
+                  _buildCard(
+                    AppLocalizations.of(context)!.onboardingExpLevel1Title,
+                    AppLocalizations.of(context)!.onboardingExpLevel1Subtitle,
+                  ),
+                  _buildCard(
+                    AppLocalizations.of(context)!.onboardingExpLevel2Title,
+                    AppLocalizations.of(context)!.onboardingExpLevel2Subtitle,
+                  ),
+                  _buildCard(
+                    AppLocalizations.of(context)!.onboardingExpLevel3Title,
+                    AppLocalizations.of(context)!.onboardingExpLevel3Subtitle,
+                  ),
                 ],
               ),
             ),
           ),
           SizedBox(height: AppSpacings.s16),
           AppButton(
-            text: 'Zobacz mój profil',
+            text: AppLocalizations.of(context)!.onboardingExpSeeProfileButton,
             onPressed: () {
               if (selectedLevel != null) onNext();
             },

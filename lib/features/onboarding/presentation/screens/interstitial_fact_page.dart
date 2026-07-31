@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
 
@@ -28,7 +29,7 @@ class InterstitialFactPage extends StatelessWidget {
           ),
           SizedBox(height: AppSpacings.s24),
           Text(
-            'Twój profil smakowy zaczyna nabierać kształtu',
+            AppLocalizations.of(context)!.onboardingFactTitle,
             style: AppTypography.title2.copyWith(fontSize: 28),
             textAlign: TextAlign.center,
           ),
@@ -50,7 +51,7 @@ class InterstitialFactPage extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'CZY WIESZ, ŻE?',
+                  AppLocalizations.of(context)!.onboardingFactBadge,
                   style: AppTypography.caption.copyWith(
                     color: AppColors.accent,
                     fontWeight: FontWeight.w700,
@@ -59,7 +60,7 @@ class InterstitialFactPage extends StatelessWidget {
                 ),
                 SizedBox(height: AppSpacings.s16),
                 Text(
-                  'Chmiel należy do tej samej rodziny roślin co konopie — to dlatego niektóre piwa mają tak wyraziste, ziołowe aromaty.',
+                  AppLocalizations.of(context)!.onboardingFactContent,
                   style: AppTypography.body,
                   textAlign: TextAlign.center,
                 ),
@@ -67,10 +68,7 @@ class InterstitialFactPage extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          AppButton(
-            text: 'Dalej',
-            onPressed: onNext,
-          ),
+          AppButton(text: AppLocalizations.of(context)!.onboardingNextButton, onPressed: onNext),
           SizedBox(height: AppSpacings.s16),
         ],
       ),

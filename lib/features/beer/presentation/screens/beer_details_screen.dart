@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/di/injection.dart';
 import '../bloc/beer_cubit.dart';
@@ -24,22 +26,33 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => getIt<BeerCubit>()..loadBeerById(widget.id)),
-        BlocProvider(create: (context) => getIt<RatingCubit>()..loadBeerRatings(widget.id)),
+        BlocProvider(
+          create: (context) => getIt<BeerCubit>()..loadBeerById(widget.id),
+        ),
+        BlocProvider(
+          create: (context) => getIt<RatingCubit>()..loadBeerRatings(widget.id),
+        ),
       ],
       child: Scaffold(
         backgroundColor: AppColors.background,
         body: BlocBuilder<BeerCubit, BeerState>(
           builder: (context, beerState) {
             return beerState.maybeWhen(
-              loading: () => const Center(child: CupertinoActivityIndicator()),
-              error: (msg) => Center(child: Text(msg, style: AppTypography.body.copyWith(color: Colors.red))),
-              loaded: (_, __, ___, selectedBeer) {
+              loading: () => _buildSkeleton(),
+              error: (msg) => Center(
+                child: Text(
+                  msg,
+                  style: AppTypography.body.copyWith(color: Colors.red),
+                ),
+              ),
+                loaded: (history, recommendations, _, __, beerOfTheDay, selectedBeer, matchedBeers) {
                 if (selectedBeer == null) {
-                  return Center(child: Text('Brak danych piwa', style: AppTypography.body));
+                  return Center(
+                    child: Text(AppLocalizations.of(context)!.beerDetailsEmpty, style: AppTypography.body),
+                  );
                 }
                 final beer = selectedBeer;
-                
+
                 return CustomScrollView(
                   slivers: [
                     SliverAppBar(
@@ -49,9 +62,14 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                       leading: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: CircleAvatar(
-                          backgroundColor: AppColors.black.withValues(alpha: 0.3),
+                          backgroundColor: AppColors.black.withValues(
+                            alpha: 0.3,
+                          ),
                           child: IconButton(
-                            icon: const Icon(CupertinoIcons.back, color: AppColors.white),
+                            icon: const Icon(
+                              CupertinoIcons.back,
+                              color: AppColors.white,
+                            ),
                             onPressed: () {
                               if (context.canPop()) {
                                 context.pop();
@@ -66,9 +84,14 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: CircleAvatar(
-                            backgroundColor: AppColors.black.withValues(alpha: 0.3),
+                            backgroundColor: AppColors.black.withValues(
+                              alpha: 0.3,
+                            ),
                             child: IconButton(
-                              icon: const Icon(CupertinoIcons.share, color: AppColors.white),
+                              icon: const Icon(
+                                CupertinoIcons.share,
+                                color: AppColors.white,
+                              ),
                               onPressed: () {},
                             ),
                           ),
@@ -76,9 +99,14 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: CircleAvatar(
-                            backgroundColor: AppColors.black.withValues(alpha: 0.3),
+                            backgroundColor: AppColors.black.withValues(
+                              alpha: 0.3,
+                            ),
                             child: IconButton(
-                              icon: const Icon(CupertinoIcons.bookmark, color: AppColors.white),
+                              icon: const Icon(
+                                CupertinoIcons.bookmark,
+                                color: AppColors.white,
+                              ),
                               onPressed: () {},
                             ),
                           ),
@@ -89,12 +117,24 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                           fit: StackFit.expand,
                           children: [
                             CachedNetworkImage(
-                              imageUrl: beer.imageUrl.isNotEmpty ? beer.imageUrl : 'https://media.screensdesign.com/afprjsia/3cefb0eb-c967-466d-88f5-373b5f92debb.png', // Temporary placeholder matching reference
+                              imageUrl: beer.imageUrl.isNotEmpty
+                                  ? beer.imageUrl
+                                  : 'https://media.screensdesign.com/afprjsia/3cefb0eb-c967-466d-88f5-373b5f92debb.png', // Temporary placeholder matching reference
                               fit: BoxFit.cover,
-                              placeholder: (context, url) => const Center(child: CupertinoActivityIndicator()),
+                              placeholder: (context, url) => Shimmer.fromColors(
+                                baseColor: AppColors.separator,
+                                highlightColor: AppColors.background,
+                                child: Container(color: Colors.white),
+                              ),
                               errorWidget: (context, url, error) => Container(
                                 color: AppColors.card,
-                                child: const Center(child: Icon(CupertinoIcons.photo, size: 100, color: AppColors.separator)),
+                                child: const Center(
+                                  child: Icon(
+                                    CupertinoIcons.photo,
+                                    size: 100,
+                                    color: AppColors.separator,
+                                  ),
+                                ),
                               ),
                             ),
                             Container(
@@ -126,99 +166,192 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                         ),
                         transform: Matrix4.translationValues(0, -32, 0),
                         child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24, vertical: AppSpacings.s32),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: AppSpacings.s24,
+                            vertical: AppSpacings.s32,
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               // Badges
                               Row(
                                 children: [
-                                  _buildBadge(CupertinoIcons.circle_fill, 'TOP 2% W STYLU', AppColors.accent),
+                                  _buildBadge(
+                                    CupertinoIcons.circle_fill,
+                                    AppLocalizations.of(context)!.beerDetailsTopStyle,
+                                    AppColors.accent,
+                                  ),
                                   SizedBox(width: AppSpacings.s8),
-                                  _buildBadge(CupertinoIcons.circle_fill, 'TOP 1% W POLSCE', Colors.blue),
+                                  _buildBadge(
+                                    CupertinoIcons.circle_fill,
+                                    AppLocalizations.of(context)!.beerDetailsTopCountry,
+                                    Colors.blue,
+                                  ),
                                 ],
                               ),
                               SizedBox(height: AppSpacings.s16),
-                              
+
                               Text(beer.name, style: AppTypography.largeTitle),
                               SizedBox(height: AppSpacings.s8),
                               Row(
                                 children: [
-                                  Text('🍺 ${beer.style} z ${beer.country}', style: AppTypography.title2.copyWith(color: AppColors.labelSecondary, fontWeight: FontWeight.normal)),
+                                  Text(
+                                    AppLocalizations.of(context)!.beerDetailsStyleCountry(beer.style, beer.country),
+                                    style: AppTypography.title2.copyWith(
+                                      color: AppColors.labelSecondary,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
                                 ],
                               ),
-                              
+
                               SizedBox(height: AppSpacings.s24),
                               const Divider(color: AppColors.separator),
                               SizedBox(height: AppSpacings.s24),
-                              
+
                               // Rating Section
                               BlocBuilder<RatingCubit, RatingState>(
                                 builder: (context, ratingState) {
                                   return ratingState.maybeWhen(
                                     loaded: (histogram, reviews, userRating) {
                                       return Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Row(
                                             children: [
                                               _buildPillButton(
                                                 icon: CupertinoIcons.star,
-                                                label: 'Oceń',
-                                                onTap: () => _showRateBeerSheet(context, beer.id, beer.name, beer.brewery, beer.imageUrl),
+                                                label: AppLocalizations.of(context)!.beerDetailsRate,
+                                                onTap: () => _showRateBeerSheet(
+                                                  context,
+                                                  beer.id,
+                                                  beer.name,
+                                                  beer.brewery,
+                                                  beer.imageUrl,
+                                                ),
                                               ),
                                               SizedBox(width: AppSpacings.s8),
                                               _buildPillButton(
                                                 icon: CupertinoIcons.ellipsis,
                                                 onTap: () {
-                                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Więcej opcji...')));
+                                                  ScaffoldMessenger.of(
+                                                    context,
+                                                  ).showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        AppLocalizations.of(context)!.beerDetailsMoreOptions,
+                                                      ),
+                                                    ),
+                                                  );
                                                 },
                                               ),
                                               const Spacer(),
                                               if (userRating != null)
                                                 _buildPillButton(
-                                                  avatarUrl: 'https://media.screensdesign.com/gasset/b187515082164f9b884126bfdbaf486c_screen_image_michal_c009d732c4.png',
-                                                  label: 'Oceniłeś: ${userRating.toDouble()}',
+                                                  avatarUrl:
+                                                      'https://media.screensdesign.com/gasset/b187515082164f9b884126bfdbaf486c_screen_image_michal_c009d732c4.png',
+                                                  label:
+                                                      AppLocalizations.of(context)!.beerDetailsRated(userRating.toDouble().toString()),
                                                   highlightLabel: true,
-                                                  onTap: () => _showRateBeerSheet(context, beer.id, beer.name, beer.brewery, beer.imageUrl),
+                                                  onTap: () =>
+                                                      _showRateBeerSheet(
+                                                        context,
+                                                        beer.id,
+                                                        beer.name,
+                                                        beer.brewery,
+                                                        beer.imageUrl,
+                                                      ),
                                                 ),
                                             ],
                                           ),
                                           SizedBox(height: AppSpacings.s32),
-                                          Text(beer.name, style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, height: 1.1)),
+                                          Text(
+                                            beer.name,
+                                            style: const TextStyle(
+                                              fontSize: 40,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1.1,
+                                            ),
+                                          ),
                                           SizedBox(height: AppSpacings.s8),
                                           Text(
-                                            '🍺 ${beer.style} z ${beer.country}',
-                                            style: AppTypography.title2.copyWith(color: AppColors.labelSecondary, fontWeight: FontWeight.normal),
+                                            AppLocalizations.of(context)!.beerDetailsStyleCountry(beer.style, beer.country),
+                                            style: AppTypography.title2
+                                                .copyWith(
+                                                  color:
+                                                      AppColors.labelSecondary,
+                                                  fontWeight: FontWeight.normal,
+                                                ),
                                           ),
-                                          
+
                                           SizedBox(height: AppSpacings.s32),
-                                          Text('Wgląd w piwo', style: AppTypography.title2),
+                                          Text(
+                                            AppLocalizations.of(context)!.beerDetailsInsightsTitle,
+                                            style: AppTypography.title2,
+                                          ),
                                           SizedBox(height: AppSpacings.s4),
-                                          Text('Czy to piwo Ci zasmakuje?', style: AppTypography.body.copyWith(color: AppColors.labelSecondary)),
+                                          Text(
+                                            AppLocalizations.of(context)!.beerDetailsInsightsSubtitle,
+                                            style: AppTypography.body.copyWith(
+                                              color: AppColors.labelSecondary,
+                                            ),
+                                          ),
                                           SizedBox(height: AppSpacings.s16),
-                                          
+
                                           Container(
-                                            padding: EdgeInsets.all(AppSpacings.s16),
+                                            padding: EdgeInsets.all(
+                                              AppSpacings.s16,
+                                            ),
                                             decoration: BoxDecoration(
                                               color: AppColors.white,
-                                              borderRadius: BorderRadius.circular(24),
-                                              border: Border.all(color: AppColors.separator.withValues(alpha: 0.5)),
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                              border: Border.all(
+                                                color: AppColors.separator
+                                                    .withValues(alpha: 0.5),
+                                              ),
                                             ),
                                             child: Row(
                                               children: [
                                                 CircleAvatar(
-                                                  backgroundColor: AppColors.gold.withValues(alpha: 0.2),
+                                                  backgroundColor: AppColors
+                                                      .gold
+                                                      .withValues(alpha: 0.2),
                                                   radius: 24,
-                                                  child: Icon(CupertinoIcons.drop_fill, color: AppColors.gold), // Zastępcza ikona szklanki
+                                                  child: Icon(
+                                                    CupertinoIcons.drop_fill,
+                                                    color: AppColors.gold,
+                                                  ), // Zastępcza ikona szklanki
                                                 ),
-                                                SizedBox(width: AppSpacings.s16),
+                                                SizedBox(
+                                                  width: AppSpacings.s16,
+                                                ),
                                                 Expanded(
                                                   child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
-                                                      Text(beer.style, style: AppTypography.subhead.copyWith(fontWeight: FontWeight.bold)),
-                                                      Text('Prawdopodobnie polubisz ten styl', style: AppTypography.caption.copyWith(color: AppColors.labelSecondary)),
+                                                      Text(
+                                                        beer.style,
+                                                        style: AppTypography
+                                                            .subhead
+                                                            .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                      ),
+                                                      Text(
+                                                        AppLocalizations.of(context)!.beerDetailsStyleMatch,
+                                                        style: AppTypography
+                                                            .caption
+                                                            .copyWith(
+                                                              color: AppColors
+                                                                  .labelSecondary,
+                                                            ),
+                                                      ),
                                                     ],
                                                   ),
                                                 ),
@@ -228,11 +361,76 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                                         ],
                                       );
                                     },
-                                    orElse: () => const Center(child: CupertinoActivityIndicator()),
+                                    orElse: () => Shimmer.fromColors(
+                                      baseColor: AppColors.separator,
+                                      highlightColor: AppColors.background,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Container(
+                                                width: 80,
+                                                height: 36,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(18),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Container(
+                                                width: 50,
+                                                height: 36,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(18),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 32),
+                                          Container(
+                                            width: 200,
+                                            height: 40,
+                                            color: Colors.white,
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Container(
+                                            width: 150,
+                                            height: 24,
+                                            color: Colors.white,
+                                          ),
+                                          const SizedBox(height: 32),
+                                          Container(
+                                            width: 120,
+                                            height: 24,
+                                            color: Colors.white,
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Container(
+                                            width: 180,
+                                            height: 16,
+                                            color: Colors.white,
+                                          ),
+                                          const SizedBox(height: 16),
+                                          Container(
+                                            height: 80,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   );
                                 },
                               ),
-                              
+
                               const SizedBox(height: 100),
                             ],
                           ),
@@ -271,7 +469,7 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
       ),
     );
   }
-  
+
   Widget _buildPillButton({
     IconData? icon,
     String? avatarUrl,
@@ -315,15 +513,130 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
       ),
     );
   }
-  
-  void _showRateBeerSheet(BuildContext parentContext, String beerId, String beerName, String breweryName, String imageUrl) {
+
+  void _showRateBeerSheet(
+    BuildContext parentContext,
+    String beerId,
+    String beerName,
+    String breweryName,
+    String imageUrl,
+  ) {
     showModalBottomSheet(
       context: parentContext,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => BlocProvider.value(
         value: parentContext.read<RatingCubit>(),
-        child: RateBeerScreen(beerId: beerId, beerName: beerName, breweryName: breweryName, imageUrl: imageUrl),
+        child: RateBeerScreen(
+          beerId: beerId,
+          beerName: beerName,
+          breweryName: breweryName,
+          imageUrl: imageUrl,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSkeleton() {
+    return Shimmer.fromColors(
+      baseColor: AppColors.separator,
+      highlightColor: AppColors.background,
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 450,
+            pinned: true,
+            backgroundColor: AppColors.background,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(color: Colors.white),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              decoration: const BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(32),
+                  topRight: Radius.circular(32),
+                ),
+              ),
+              transform: Matrix4.translationValues(0, -32, 0),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacings.s24,
+                  vertical: AppSpacings.s32,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 120,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          width: 120,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      width: double.infinity,
+                      height: 40,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(height: 8),
+                    Container(width: 200, height: 24, color: Colors.white),
+                    const SizedBox(height: 24),
+                    Container(
+                      width: double.infinity,
+                      height: 1,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        Container(
+                          width: 80,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          width: 50,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 32),
+                    Container(width: 250, height: 40, color: Colors.white),
+                    const SizedBox(height: 8),
+                    Container(width: 200, height: 24, color: Colors.white),
+                    const SizedBox(height: 100),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -15,5 +15,6 @@ abstract class RatingHistogram with _$RatingHistogram {
     required double averageRating,
   }) = _RatingHistogram;
 
-  factory RatingHistogram.fromJson(Map<String, dynamic> json) => _$RatingHistogramFromJson(json);
+  factory RatingHistogram.fromJson(Map<String, dynamic> json) =>
+      _$RatingHistogramFromJson(json);
 }

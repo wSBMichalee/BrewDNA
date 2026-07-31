@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_segmented_control.dart';
 
@@ -14,7 +15,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   int _selectedTasteTab = 0;
   String _brewDnaSummary = "Analizowanie Twojego DNA smakowego...";
-  
+
   @override
   void initState() {
     super.initState();
@@ -25,21 +26,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       final user = Supabase.instance.client.auth.currentUser;
       if (user == null) return;
-      
+
       final response = await Supabase.instance.client
           .from('taste_profiles')
           .select('insights_json')
           .eq('user_id', user.id)
           .maybeSingle();
-          
+
       if (response != null && response['insights_json'] != null) {
         setState(() {
           // Parse summary or fallback
-          _brewDnaSummary = response['insights_json']['summary'] ?? "Twoje DNA smakowe jest już gotowe. Kliknij, by je poznać.";
+          _brewDnaSummary =
+              response['insights_json']['summary'] ??
+              "Twoje DNA smakowe jest już gotowe. Kliknij, by je poznać.";
         });
       } else {
         setState(() {
-          _brewDnaSummary = "Jesteś na dobrej drodze. Spróbuj więcej piw, by wygenerować swój profil.";
+          _brewDnaSummary =
+              "Jesteś na dobrej drodze. Spróbuj więcej piw, by wygenerować swój profil.";
         });
       }
     } catch (e) {
@@ -62,36 +66,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               // Header
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24, vertical: AppSpacings.s24),
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacings.s24,
+                  vertical: AppSpacings.s24,
+                ),
                 child: Row(
                   children: [
                     CircleAvatar(
                       radius: 40,
                       backgroundColor: AppColors.separator,
-                      backgroundImage: const NetworkImage('https://media.screensdesign.com/gasset/b187515082164f9b884126bfdbaf486c_screen_image_michal_c009d732c4.png'), // Mock matching reference
+                      backgroundImage: const NetworkImage(
+                        'https://media.screensdesign.com/gasset/b187515082164f9b884126bfdbaf486c_screen_image_michal_c009d732c4.png',
+                      ), // Mock matching reference
                     ),
                     SizedBox(width: AppSpacings.s16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Michał', style: AppTypography.title1),
+                          Text(AppLocalizations.of(context)!.profileDummyName, style: AppTypography.title1),
                           SizedBox(height: AppSpacings.s4),
                           // TODO: Aggregated stats from checkins/ratings
-                          Text('68 piw · 31 browarów · 12 krajów', style: AppTypography.subhead.copyWith(color: AppColors.labelSecondary)),
+                          Text(
+                            AppLocalizations.of(context)!.profileDummyStats,
+                            style: AppTypography.subhead.copyWith(
+                              color: AppColors.labelSecondary,
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
-              
+
               SizedBox(height: AppSpacings.s16),
-              
+
               // Osiągnięcia (Placeholder)
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24),
-                child: Text('Osiągnięcia', style: AppTypography.title2),
+                child: Text(AppLocalizations.of(context)!.profileAchievementsTitle, style: AppTypography.title2),
               ),
               SizedBox(height: AppSpacings.s16),
               SingleChildScrollView(
@@ -99,27 +113,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24),
                 child: Row(
                   children: [
-                    _buildAchievementCard(CupertinoIcons.leaf_arrow_circlepath, 'Odkrywca', '19 stylów'),
+                    _buildAchievementCard(
+                      CupertinoIcons.leaf_arrow_circlepath,
+                      AppLocalizations.of(context)!.profileAchievement1Title,
+                      AppLocalizations.of(context)!.profileAchievement1Subtitle,
+                    ),
                     SizedBox(width: AppSpacings.s16),
-                    _buildAchievementCard(CupertinoIcons.rosette, 'Top 10', 'w Polsce'),
+                    _buildAchievementCard(
+                      CupertinoIcons.rosette,
+                      AppLocalizations.of(context)!.profileAchievement2Title,
+                      AppLocalizations.of(context)!.profileAchievement2Subtitle,
+                    ),
                     SizedBox(width: AppSpacings.s16),
-                    _buildAchievementCard(CupertinoIcons.star, 'Koneser', '100+ ocen'),
+                    _buildAchievementCard(
+                      CupertinoIcons.star,
+                      AppLocalizations.of(context)!.profileAchievement3Title,
+                      AppLocalizations.of(context)!.profileAchievement3Subtitle,
+                    ),
                   ],
                 ),
               ),
-              
+
               SizedBox(height: AppSpacings.s32),
-              
+
               // Profil smakowy
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24),
-                child: Text('Profil smakowy', style: AppTypography.title2),
+                child: Text(AppLocalizations.of(context)!.profileTasteProfileTitle, style: AppTypography.title2),
               ),
               SizedBox(height: AppSpacings.s16),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24),
                 child: AppSegmentedControl<int>(
-                  items: const {0: 'Style', 1: 'Kraje'},
+                  items: {0: AppLocalizations.of(context)!.profileTasteTabStyles, 1: AppLocalizations.of(context)!.profileTasteTabCountries},
                   groupValue: _selectedTasteTab,
                   onValueChanged: (index) {
                     if (index != null) {
@@ -128,9 +154,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                 ),
               ),
-              
+
               SizedBox(height: AppSpacings.s24),
-              
+
               // Progress Card
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24),
@@ -139,7 +165,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: AppColors.separator.withValues(alpha: 0.5)),
+                    border: Border.all(
+                      color: AppColors.separator.withValues(alpha: 0.5),
+                    ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,8 +175,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Spróbowano 19 z 42 stylów', style: AppTypography.subhead.copyWith(fontWeight: FontWeight.bold)),
-                          Text('45%', style: AppTypography.subhead.copyWith(color: AppColors.accent, fontWeight: FontWeight.bold)),
+                          Text(
+                            AppLocalizations.of(context)!.profileTasteProgressText,
+                            style: AppTypography.subhead.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.profileTasteProgressPercent,
+                            style: AppTypography.subhead.copyWith(
+                              color: AppColors.accent,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(height: AppSpacings.s16),
@@ -183,24 +222,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           children: [
                             CircleAvatar(
                               backgroundColor: AppColors.white,
-                              child: Icon(CupertinoIcons.drop, color: AppColors.accent),
+                              child: Icon(
+                                CupertinoIcons.drop,
+                                color: AppColors.accent,
+                              ),
                             ),
                             SizedBox(width: AppSpacings.s16),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('West Coast IPA', style: AppTypography.body.copyWith(fontWeight: FontWeight.bold)),
-                                  Text('Ulubiony styl', style: AppTypography.caption.copyWith(color: AppColors.labelSecondary)),
+                                  Text(
+                                    AppLocalizations.of(context)!.profileTasteFavStyle,
+                                    style: AppTypography.body.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    AppLocalizations.of(context)!.profileTasteFavStyleLabel,
+                                    style: AppTypography.caption.copyWith(
+                                      color: AppColors.labelSecondary,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
                             Row(
-                              children: List.generate(5, (index) => Icon(
-                                index < 4 ? CupertinoIcons.star_fill : CupertinoIcons.star_lefthalf_fill, 
-                                size: 14, 
-                                color: AppColors.accent,
-                              )),
+                              children: List.generate(
+                                5,
+                                (index) => Icon(
+                                  index < 4
+                                      ? CupertinoIcons.star_fill
+                                      : CupertinoIcons.star_lefthalf_fill,
+                                  size: 14,
+                                  color: AppColors.accent,
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -209,9 +266,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ),
-              
+
               SizedBox(height: AppSpacings.s32),
-              
+
               // BrewDNA Card
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24),
@@ -223,12 +280,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   child: Row(
                     children: [
-                      Icon(CupertinoIcons.hare, color: AppColors.accent, size: 32), // Placeholder DNA icon
+                      Icon(
+                        CupertinoIcons.hare,
+                        color: AppColors.accent,
+                        size: 32,
+                      ), // Placeholder DNA icon
                       SizedBox(width: AppSpacings.s16),
                       Expanded(
                         child: Text(
-                          'Twoje BrewDNA',
-                          style: AppTypography.title2.copyWith(color: AppColors.white),
+                          AppLocalizations.of(context)!.profileBrewDnaTitle,
+                          style: AppTypography.title2.copyWith(
+                            color: AppColors.white,
+                          ),
                         ),
                       ),
                     ],
@@ -256,9 +319,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           Icon(icon, color: AppColors.accent, size: 32),
           SizedBox(height: AppSpacings.s16),
-          Text(title, style: AppTypography.subhead.copyWith(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+          Text(
+            title,
+            style: AppTypography.subhead.copyWith(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
           SizedBox(height: 4),
-          Text(subtitle, style: AppTypography.caption.copyWith(color: AppColors.labelSecondary), textAlign: TextAlign.center),
+          Text(
+            subtitle,
+            style: AppTypography.caption.copyWith(
+              color: AppColors.labelSecondary,
+            ),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

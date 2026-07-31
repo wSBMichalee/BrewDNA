@@ -25,18 +25,18 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     _initCamera();
   }
-  
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _controller?.dispose();
     super.dispose();
   }
-  
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final CameraController? cameraController = _controller;
-    
+
     if (cameraController == null || !cameraController.value.isInitialized) {
       return;
     }
@@ -58,14 +58,16 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
           (c) => c.lensDirection == CameraLensDirection.back,
           orElse: () => _cameras.first,
         );
-        debugPrint('Selected camera: ${backCamera.name} (direction: ${backCamera.lensDirection})');
-        
+        debugPrint(
+          'Selected camera: ${backCamera.name} (direction: ${backCamera.lensDirection})',
+        );
+
         _controller = CameraController(
           backCamera,
           ResolutionPreset.high,
           enableAudio: false,
         );
-        
+
         debugPrint('Initializing camera controller...');
         await _controller!.initialize();
         debugPrint('Camera initialized successfully!');
@@ -78,7 +80,9 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
         debugPrint('No cameras found on device.');
       }
     } on CameraException catch (e) {
-      debugPrint('CameraException caught: code=${e.code}, description=${e.description}');
+      debugPrint(
+        'CameraException caught: code=${e.code}, description=${e.description}',
+      );
       if (e.code == 'cameraPermission') {
         debugPrint('Camera permission denied.');
         if (mounted) {
@@ -90,12 +94,16 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
     } catch (e) {
       debugPrint('Unknown error during camera init: $e');
     }
-    debugPrint('Final state -> _isCameraInitialized: $_isCameraInitialized, _isCameraPermissionDenied: $_isCameraPermissionDenied');
+    debugPrint(
+      'Final state -> _isCameraInitialized: $_isCameraInitialized, _isCameraPermissionDenied: $_isCameraPermissionDenied',
+    );
     debugPrint('--- CAMERA INIT END ---');
   }
 
   Future<void> _takePicture() async {
-    if (_controller == null || !_controller!.value.isInitialized || _controller!.value.isTakingPicture) {
+    if (_controller == null ||
+        !_controller!.value.isInitialized ||
+        _controller!.value.isTakingPicture) {
       return;
     }
     try {
@@ -116,10 +124,8 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
       body: Stack(
         children: [
           // Camera Preview
-          Positioned.fill(
-            child: _buildCameraPreview(),
-          ),
-          
+          Positioned.fill(child: _buildCameraPreview()),
+
           // Overlays
           if (_isCameraInitialized) ...[
             // Viewfinder corners
@@ -128,15 +134,12 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
                 width: 250,
                 height: 350,
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: AppColors.accent,
-                    width: 2,
-                  ),
+                  border: Border.all(color: AppColors.accent, width: 2),
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
             ),
-            
+
             // Shutter Button
             Positioned(
               bottom: 40,
@@ -154,25 +157,33 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
                       color: AppColors.accent.withValues(alpha: 0.8),
                     ),
                     child: const Center(
-                      child: Icon(CupertinoIcons.camera, color: AppColors.white, size: 32),
+                      child: Icon(
+                        CupertinoIcons.camera,
+                        color: AppColors.white,
+                        size: 32,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
           ],
-          
+
           // Header / Segmented Control
           SafeArea(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24, vertical: AppSpacings.s16),
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSpacings.s24,
+                vertical: AppSpacings.s16,
+              ),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
                   AppSegmentedControl(
                     items: const {0: 'Etykieta', 1: 'Lista'},
                     groupValue: _segmentedIndex,
-                    onValueChanged: (val) => setState(() => _segmentedIndex = val as int),
+                    onValueChanged: (val) =>
+                        setState(() => _segmentedIndex = val as int),
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -190,7 +201,11 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
                           color: AppColors.background.withValues(alpha: 0.5),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(CupertinoIcons.xmark, color: AppColors.white, size: 24),
+                        child: const Icon(
+                          CupertinoIcons.xmark,
+                          color: AppColors.white,
+                          size: 24,
+                        ),
                       ),
                     ),
                   ),
@@ -211,7 +226,11 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(CupertinoIcons.camera_fill, color: AppColors.separator, size: 64),
+              const Icon(
+                CupertinoIcons.camera_fill,
+                color: AppColors.separator,
+                size: 64,
+              ),
               const SizedBox(height: 16),
               Text(
                 'Brak dostępu do aparatu',
@@ -221,7 +240,9 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
               const SizedBox(height: 8),
               Text(
                 'Aby zeskanować etykietę, zezwól aplikacji na dostęp do aparatu w ustawieniach urządzenia.',
-                style: AppTypography.body.copyWith(color: AppColors.labelSecondary),
+                style: AppTypography.body.copyWith(
+                  color: AppColors.labelSecondary,
+                ),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -229,11 +250,13 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
         ),
       );
     }
-    
+
     if (!_isCameraInitialized || _controller == null) {
-      return const Center(child: CupertinoActivityIndicator(color: AppColors.white));
+      return const Center(
+        child: CupertinoActivityIndicator(color: AppColors.white),
+      );
     }
-    
+
     return CameraPreview(_controller!);
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,8 +32,8 @@ class _AuthPasswordScreenState extends State<AuthPasswordScreen> {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         final isValid = state.password.length >= 8;
-        final title = state.isReturningUser ? 'Podaj hasło' : 'Ustaw hasło';
-        
+        final title = state.isReturningUser ? AppLocalizations.of(context)!.passwordTitleLogin : AppLocalizations.of(context)!.passwordTitleRegister;
+
         return Scaffold(
           backgroundColor: AppColors.background,
           body: SafeArea(
@@ -44,17 +46,22 @@ class _AuthPasswordScreenState extends State<AuthPasswordScreen> {
                     padding: EdgeInsets.zero,
                     alignment: Alignment.centerLeft,
                     onPressed: () => context.pop(),
-                    child: const Icon(CupertinoIcons.back, color: AppColors.label),
+                    child: const Icon(
+                      CupertinoIcons.back,
+                      color: AppColors.label,
+                    ),
                   ),
                   SizedBox(height: AppSpacings.s24),
                   Text(title, style: AppTypography.title1),
                   SizedBox(height: AppSpacings.s12),
                   Text(
-                    'Minimum 8 znaków.',
-                    style: AppTypography.body.copyWith(color: AppColors.labelSecondary),
+                    AppLocalizations.of(context)!.passwordSubtitle,
+                    style: AppTypography.body.copyWith(
+                      color: AppColors.labelSecondary,
+                    ),
                   ),
                   SizedBox(height: AppSpacings.s48),
-                  
+
                   // Image Card
                   Align(
                     alignment: Alignment.center,
@@ -74,37 +81,64 @@ class _AuthPasswordScreenState extends State<AuthPasswordScreen> {
                       ),
                       child: Center(
                         child: CachedNetworkImage(
-                          imageUrl: 'https://media.screensdesign.com/gasset/f80559df338e476881bb1c0e745eb8a4_screen_image_password_card_image_f5537453ac.png',
+                          imageUrl:
+                              'https://media.screensdesign.com/gasset/f80559df338e476881bb1c0e745eb8a4_screen_image_password_card_image_f5537453ac.png',
                           width: 140,
                           height: 140,
                           fit: BoxFit.contain,
-                          placeholder: (context, url) => const CupertinoActivityIndicator(),
-                          errorWidget: (context, url, error) => const Icon(CupertinoIcons.lock, size: 64, color: AppColors.accentTint),
+                          placeholder: (context, url) => Shimmer.fromColors(
+                            baseColor: AppColors.separator,
+                            highlightColor: AppColors.background,
+                            child: Container(
+                              width: 140,
+                              height: 140,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(32),
+                              ),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => const Icon(
+                            CupertinoIcons.lock,
+                            size: 64,
+                            color: AppColors.accentTint,
+                          ),
                         ),
                       ),
                     ),
                   ),
                   SizedBox(height: AppSpacings.s48),
-                  
+
                   TextField(
                     controller: _controller,
                     autofocus: true,
                     obscureText: _obscure,
-                    onChanged: (val) => context.read<AuthCubit>().updatePassword(val),
+                    onChanged: (val) =>
+                        context.read<AuthCubit>().updatePassword(val),
                     decoration: InputDecoration(
-                      hintText: 'Hasło',
-                      contentPadding: EdgeInsets.symmetric(horizontal: AppSpacings.s24, vertical: AppSpacings.s16),
+                      hintText: AppLocalizations.of(context)!.passwordHint,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: AppSpacings.s24,
+                        vertical: AppSpacings.s16,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppRadius.button),
-                        borderSide: const BorderSide(color: AppColors.separator),
+                        borderSide: const BorderSide(
+                          color: AppColors.separator,
+                        ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppRadius.button),
-                        borderSide: const BorderSide(color: AppColors.separator),
+                        borderSide: const BorderSide(
+                          color: AppColors.separator,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppRadius.button),
-                        borderSide: const BorderSide(color: AppColors.accent, width: 2),
+                        borderSide: const BorderSide(
+                          color: AppColors.accent,
+                          width: 2,
+                        ),
                       ),
                       suffixIcon: Padding(
                         padding: EdgeInsets.only(right: AppSpacings.s8),
@@ -123,7 +157,7 @@ class _AuthPasswordScreenState extends State<AuthPasswordScreen> {
                     ),
                   ),
                   SizedBox(height: AppSpacings.s16),
-                  
+
                   // Inline validation
                   Row(
                     children: [
@@ -135,14 +169,16 @@ class _AuthPasswordScreenState extends State<AuthPasswordScreen> {
                       SizedBox(width: AppSpacings.s8),
                       Text(
                         'co najmniej 8 znaków',
-                        style: AppTypography.subhead.copyWith(color: AppColors.labelSecondary),
+                        style: AppTypography.subhead.copyWith(
+                          color: AppColors.labelSecondary,
+                        ),
                       ),
                     ],
                   ),
-                  
+
                   const Spacer(),
                   AppButton(
-                    text: 'Dalej',
+                    text: AppLocalizations.of(context)!.passwordNext,
                     onPressed: isValid
                         ? () {
                             if (state.isReturningUser) {

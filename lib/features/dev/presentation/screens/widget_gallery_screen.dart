@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hop_iq/l10n/app_localizations.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
@@ -32,87 +33,103 @@ class _WidgetGalleryScreenState extends State<WidgetGalleryScreen> {
         elevation: 0,
       ),
       // bottomNavigationBar: AppTabBar(
-        // currentIndex: 0,
-        // onTap: (_) {},
-        // items: [
-          // BottomNavigationBarItem(icon: Icon(CupertinoIcons.camera), label: 'Skanuj'),
-          // BottomNavigationBarItem(icon: Icon(CupertinoIcons.heart), label: 'Moje Piwa'),
+      // currentIndex: 0,
+      // onTap: (_) {},
+      // items: [
+      // BottomNavigationBarItem(icon: Icon(CupertinoIcons.camera), label: 'Skanuj'),
+      // BottomNavigationBarItem(icon: Icon(CupertinoIcons.heart), label: 'Moje Piwa'),
       //  ],
       // ),
       body: ListView(
         padding: EdgeInsets.all(AppSpacings.s16),
         children: [
-          _buildSection('AppButton (Primary)', AppButton(
-            text: 'Zapisz ocenę',
-            onPressed: () {},
-          )),
-          _buildSection('AppButton (Secondary)', AppButton(
-            text: 'Anuluj',
-            isPrimary: false,
-            onPressed: () {},
-          )),
-          _buildSection('AppButton (Loading)', AppButton(
-            text: 'Zapisz',
-            isLoading: true,
-            onPressed: () {},
-          )),
-          _buildSection('AppCard', AppCard(
-            hasShadow: true,
-            child: Column(
+          _buildSection(
+            'AppButton (Primary)',
+            AppButton(text: 'Zapisz ocenę', onPressed: () {}),
+          ),
+          _buildSection(
+            'AppButton (Secondary)',
+            AppButton(text: 'Anuluj', isPrimary: false, onPressed: () {}),
+          ),
+          _buildSection(
+            'AppButton (Loading)',
+            AppButton(text: 'Zapisz', isLoading: true, onPressed: () {}),
+          ),
+          _buildSection(
+            'AppCard',
+            AppCard(
+              hasShadow: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Karta z cieniem', style: AppTypography.title3),
+                  SizedBox(height: AppSpacings.s8),
+                  Text(AppLocalizations.of(context)!.devWidgetGalleryCardDesc, style: AppTypography.body),
+                ],
+              ),
+            ),
+          ),
+          _buildSection(
+            'AppSegmentedControl',
+            AppSegmentedControl<String>(
+              items: const {
+                'oceny': 'Oceny',
+                'wishlista': 'Wishlista',
+                'piwniczka': 'Piwniczka',
+              },
+              groupValue: _segmentValue,
+              onValueChanged: (v) {
+                if (v != null) setState(() => _segmentValue = v);
+              },
+            ),
+          ),
+          _buildSection(
+            'StarRating',
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Karta z cieniem', style: AppTypography.title3),
+                Text('Tylko do odczytu (4.5):', style: AppTypography.caption),
+                StarRating(rating: 4.5),
                 SizedBox(height: AppSpacings.s8),
-                Text('Przykładowy opis karty.', style: AppTypography.body),
+                Text('Interaktywny:', style: AppTypography.caption),
+                StarRating(
+                  rating: _rating,
+                  onRatingChanged: (v) => setState(() => _rating = v),
+                ),
               ],
             ),
-          )),
-          _buildSection('AppSegmentedControl', AppSegmentedControl<String>(
-            items: const {
-              'oceny': 'Oceny',
-              'wishlista': 'Wishlista',
-              'piwniczka': 'Piwniczka',
-            },
-            groupValue: _segmentValue,
-            onValueChanged: (v) {
-              if (v != null) setState(() => _segmentValue = v);
-            },
-          )),
-          _buildSection('StarRating', Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Tylko do odczytu (4.5):', style: AppTypography.caption),
-              StarRating(rating: 4.5),
-              SizedBox(height: AppSpacings.s8),
-              Text('Interaktywny:', style: AppTypography.caption),
-              StarRating(
-                rating: _rating,
-                onRatingChanged: (v) => setState(() => _rating = v),
-              ),
-            ],
-          )),
-          _buildSection('TasteSlider', TasteSlider(
-            leftLabel: 'Lekkie',
-            rightLabel: 'Intensywne',
-            value: _tasteValue,
-            onChanged: (v) => setState(() => _tasteValue = v),
-          )),
-          _buildSection('AppAvatar', Row(
-            children: [
-              AppAvatar(url: 'https://i.pravatar.cc/150?img=11', size: 64),
-              SizedBox(width: AppSpacings.s16),
-              AppAvatar(size: 64), // placeholder
-            ],
-          )),
-          _buildSection('AppEmptyState', AppCard(
-            child: AppEmptyState(
-              icon: CupertinoIcons.heart_slash,
-              title: 'Brak ocen',
-              description: 'Twoja wishlista jest pusta.',
-              buttonText: 'Odkryj piwa',
-              onButtonTap: () {},
+          ),
+          _buildSection(
+            'TasteSlider',
+            TasteSlider(
+              leftLabel: 'Lekkie',
+              rightLabel: 'Intensywne',
+              value: _tasteValue,
+              onChanged: (v) => setState(() => _tasteValue = v),
             ),
-          )),
+          ),
+          _buildSection(
+            'AppAvatar',
+            Row(
+              children: [
+                AppAvatar(url: 'https://i.pravatar.cc/150?img=11', size: 64),
+                SizedBox(width: AppSpacings.s16),
+                AppAvatar(size: 64), // placeholder
+              ],
+            ),
+          ),
+          _buildSection(
+            'AppEmptyState',
+            AppCard(
+              child: AppEmptyState(
+                icon: CupertinoIcons.heart_slash,
+                title: 'Brak ocen',
+                description: 'Twoja wishlista jest pusta.',
+                buttonText: 'Odkryj piwa',
+                onButtonTap: () {},
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -126,7 +143,9 @@ class _WidgetGalleryScreenState extends State<WidgetGalleryScreen> {
         children: [
           Text(
             title.toUpperCase(),
-            style: AppTypography.caption.copyWith(color: AppColors.labelSecondary),
+            style: AppTypography.caption.copyWith(
+              color: AppColors.labelSecondary,
+            ),
           ),
           SizedBox(height: AppSpacings.s12),
           child,

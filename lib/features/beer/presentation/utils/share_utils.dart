@@ -11,17 +11,20 @@ class ShareUtils {
   /// Returns the path to the temporary file.
   static Future<String?> captureWidget(GlobalKey key) async {
     try {
-      final RenderRepaintBoundary? boundary = key.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+      final RenderRepaintBoundary? boundary =
+          key.currentContext?.findRenderObject() as RenderRepaintBoundary?;
       if (boundary == null) return null;
-      
+
       final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
       final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       if (byteData == null) return null;
-      
+
       final pngBytes = byteData.buffer.asUint8List();
 
       final tempDir = await getTemporaryDirectory();
-      final file = File('${tempDir.path}/beer_share_${DateTime.now().millisecondsSinceEpoch}.png');
+      final file = File(
+        '${tempDir.path}/beer_share_${DateTime.now().millisecondsSinceEpoch}.png',
+      );
       await file.writeAsBytes(pngBytes);
 
       return file.path;
@@ -35,10 +38,7 @@ class ShareUtils {
   static Future<void> shareImage(String path) async {
     try {
       await SharePlus.instance.share(
-        ShareParams(
-          files: [XFile(path)],
-          text: 'Sprawdź moje BrewDNA! 🍺',
-        ),
+        ShareParams(files: [XFile(path)], text: 'Sprawdź moje BrewDNA! 🍺'),
       );
     } catch (e) {
       debugPrint('Error sharing image: $e');

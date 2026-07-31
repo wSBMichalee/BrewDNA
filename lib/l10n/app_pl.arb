@@ -1,0 +1,275 @@
+{
+  "@@locale": "pl",
+  "tabHistory": "Historia",
+  "tabMap": "Mapa",
+  "tabDiscover": "Odkryj",
+  "tabProfile": "Profil",
+  "tabScan": "Skanuj",
+  "authStartTitle": "Zacznij budować swoją kolekcję",
+  "authStartApple": "Kontynuuj z Apple",
+  "authStartGoogle": "Kontynuuj z Google",
+  "authStartOr": "lub",
+  "authStartEmail": "Kontynuuj emailem",
+  "authStartAlreadyHaveAccount": "Masz już konto? ",
+  "authStartLogin": "Zaloguj się",
+  "authStartComingSoonTitle": "Wkrótce dostępne",
+  "authStartComingSoonContent": "Ta metoda logowania będzie dostępna w przyszłych wersjach.",
+  "authStartComingSoonOk": "OK",
+  "welcomeTitle": "Witaj w BrewDNA, {name}!",
+  "welcomeSubtitle": "Zeskanuj swoje pierwsze piwo, żeby zacząć budować swoją kolekcję.",
+  "welcomeScanButton": "Zeskanuj pierwsze piwo",
+  "welcomeMaybeLater": "Może później",
+  "emailTitle": "Jaki jest Twój e-mail?",
+  "emailSubtitle": "Użyjemy go do logowania i ważnych powiadomień.",
+  "emailHint": "adres@email.com",
+  "emailNext": "Dalej",
+  "passwordTitleLogin": "Podaj hasło",
+  "passwordTitleRegister": "Ustaw hasło",
+  "passwordSubtitle": "Minimum 8 znaków.",
+  "passwordHint": "Wpisz hasło",
+  "passwordNext": "Dalej",
+  "detailsTitle": "Ostatni krok",
+  "detailsHint": "Imię",
+  "detailsCountryPoland": "Polska",
+  "detailsCountryGermany": "Niemcy",
+  "detailsCountryCzech": "Czechy",
+  "detailsCountryUK": "Wielka Brytania",
+  "detailsCountryUSA": "USA",
+  "detailsCountryPlaceholder": "Kraj",
+  "detailsTermsAccept": "Akceptuję ",
+  "detailsTermsLink": "Regulamin",
+  "detailsTermsAnd": " i ",
+  "detailsPrivacyLink": "Politykę Prywatności",
+  "detailsRegistering": "Rejestracja...",
+  "detailsContinue": "Kontynuuj",
+  "detailsErrorGeneric": "Wystąpił błąd podczas rejestracji. Spróbuj ponownie.",
+  "detailsErrorTitle": "Błąd",
+  "historyTabRatings": "Oceny",
+  "historyTabWishlist": "Wishlista",
+  "historyTabCellar": "Piwniczka",
+  "historyTabHistory": "Historia",
+  "historyEmptyState": "Brak danych",
+  "mapTitle": "Mapa świata",
+  "mapCountriesDiscovered": "12 z 195 krajów odkrytych",
+  "@mapCountriesDiscovered": {
+    "description": "TEMP - mock data, replace when real backend wired up"
+  },
+  "mapPercentDiscovered": "6% ODKRYTE",
+  "@mapPercentDiscovered": {
+    "description": "TEMP - mock data, replace when real backend wired up"
+  },
+  "mapRecentlyDiscovered": "Ostatnio odkryte",
+  "mapEmptyState": "Brak odkrytych piw.",
+  "mapDummyCzech": "Czechy",
+  "@mapDummyCzech": {
+    "description": "TEMP - mock data, replace when real backend wired up"
+  },
+  "mapDummyCzechCount": "12 piw",
+  "@mapDummyCzechCount": {
+    "description": "TEMP - mock data, replace when real backend wired up"
+  },
+  "mapDummyGermany": "Niemcy",
+  "@mapDummyGermany": {
+    "description": "TEMP - mock data, replace when real backend wired up"
+  },
+  "mapDummyGermanyCount": "8 piw",
+  "@mapDummyGermanyCount": {
+    "description": "TEMP - mock data, replace when real backend wired up"
+  },
+  "mapDummyBelgium": "Belgia",
+  "@mapDummyBelgium": {
+    "description": "TEMP - mock data, replace when real backend wired up"
+  },
+  "mapDummyBelgiumCount": "5 piw",
+  "@mapDummyBelgiumCount": {
+    "description": "TEMP - mock data, replace when real backend wired up"
+  },
+  "discoverGreetingHello": "Cześć, ",
+  "discoverGreetingDefaultName": "Smakoszu",
+  "discoverSubtitle": "Oto piwa, które mogą Ci podejść",
+  "discoverBeerOfTheDayLabel": "PIWO DNIA",
+  "discoverRecommendedTitle": "Polecane dla Ciebie",
+  "discoverSeeAll": "Zobacz wszystkie",
+  "profileDnaAnalyzing": "Analizowanie Twojego DNA smakowego...",
+  "profileDnaReady": "Twoje DNA smakowe jest już gotowe. Kliknij, by je poznać.",
+  "profileDnaMoreBeers": "Jesteś na dobrej drodze. Spróbuj więcej piw, by wygenerować swój profil.",
+  "profileDnaError": "Błąd pobierania DNA smakowego.",
+  "profileDummyName": "Michał",
+  "@profileDummyName": {
+    "description": "TEMP - mock data, replace when real backend wired up"
+  },
+  "profileDummyStats": "68 piw · 31 browarów · 12 krajów",
+  "@profileDummyStats": {
+    "description": "TEMP - mock data, replace when real backend wired up"
+  },
+  "profileAchievementsTitle": "Osiągnięcia",
+  "profileAchievement1Title": "Odkrywca",
+  "profileAchievement1Subtitle": "19 stylów",
+  "profileAchievement2Title": "Top 10",
+  "profileAchievement2Subtitle": "w Polsce",
+  "profileAchievement3Title": "Koneser",
+  "profileAchievement3Subtitle": "100+ ocen",
+  "profileTasteProfileTitle": "Profil smakowy",
+  "profileTasteTabStyles": "Style",
+  "profileTasteTabCountries": "Kraje",
+  "profileTasteProgressText": "Spróbowano 19 z 42 stylów",
+  "profileTasteProgressPercent": "45%",
+  "profileTasteFavStyle": "West Coast IPA",
+  "profileTasteFavStyleLabel": "Ulubiony styl",
+  "profileBrewDnaTitle": "Twoje BrewDNA",
+  "beerDetailsEmpty": "Brak danych piwa",
+  "beerDetailsTopStyle": "TOP 2% W STYLU",
+  "beerDetailsTopCountry": "TOP 1% W POLSCE",
+  "beerDetailsStyleCountry": "🍺 {style} z {country}",
+  "@beerDetailsStyleCountry": {
+    "placeholders": {
+      "style": {},
+      "country": {}
+    }
+  },
+  "beerDetailsRate": "Oceń",
+  "beerDetailsMoreOptions": "Więcej opcji...",
+  "beerDetailsRated": "Oceniłeś: {rating}",
+  "@beerDetailsRated": {
+    "placeholders": {
+      "rating": {}
+    }
+  },
+  "beerDetailsInsightsTitle": "Wgląd w piwo",
+  "beerDetailsInsightsSubtitle": "Czy to piwo Ci zasmakuje?",
+  "beerDetailsStyleMatch": "Prawdopodobnie polubisz ten styl",
+  "rateBeerSavedSuccess": "Ocena zapisana!",
+  "rateBeerOverallLabel": "TWOJA OGÓLNA OCENA",
+  "rateBeerTaste": "Smak",
+  "rateBeerAroma": "Aromat",
+  "rateBeerBitterness": "Gorycz",
+  "rateBeerAppearance": "Wygląd",
+  "rateBeerDrinkability": "Pijalność",
+  "rateBeerNoteLabel": "Notatka (opcjonalnie)",
+  "rateBeerNotePlaceholder": "Co Ci się podobało?",
+  "rateBeerPhotoLabel": "Zdjęcie",
+  "rateBeerPhotoAdd": "Dodaj zdjęcie",
+  "rateBeerSaving": "Zapisywanie...",
+  "rateBeerSaveButton": "Zapisz ocenę",
+  "rateBeerYourRating": "Twoja ocena",
+  "rateBeerShareButton": "Udostępnij ocenę",
+  "rateBeerClose": "Zamknij",
+  "rateBeerGallerySavedSuccess": "Zapisano w galerii!",
+  "rateBeerGallerySavedError": "Błąd zapisu.",
+  "beerReviewsTitle": "Recenzje",
+  "beerReviewsRatingsCountLabel": "OCEN",
+  "beerReviewsWriteReviewButton": "Napisz recenzję",
+  "beerReviewsUseCardButtonNotice": "Użyj przycisku na karcie piwa aby ocenić",
+  "beerReviewsDaysAgo": "{days} dni temu",
+  "@beerReviewsDaysAgo": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "beerReviewsHoursAgo": "{hours} godz temu",
+  "@beerReviewsHoursAgo": {
+    "placeholders": {
+      "hours": {}
+    }
+  },
+  "beerReviewsMinsAgo": "{mins} min temu",
+  "@beerReviewsMinsAgo": {
+    "placeholders": {
+      "mins": {}
+    }
+  },
+  "shareCardMyRatingLabel": "MOJA OCENA",
+  "shareCardMatchSuffix": "% zgodności z Twoim gustem",
+  "shareCardSave": "Zapisz",
+  "onboardingQ1Title": "Co powiesz na goryczkę?",
+  "onboardingQ1Subtitle": "Pomyśl o czystym lagerze kontra mocnym west-coast IPA.",
+  "onboardingQ1Left": "Łagodne",
+  "onboardingQ1Right": "Gorzkie",
+  "onboardingNextQuestionButton": "Następne pytanie",
+  "onboardingQ2Title": "Jak lubisz swoje piwo?",
+  "onboardingQ2Subtitle": "Lekkie i orzeźwiające, czy mocne i rozgrzewające?",
+  "onboardingQ2Left": "Lekkie",
+  "onboardingQ2Right": "Mocne",
+  "onboardingQ3Title": "Owocowe czy wytrawne?",
+  "onboardingQ3Subtitle": "Pomyśl o soczystym NEIPA kontra klasycznym, wytrawnym pilznerze.",
+  "onboardingQ3Left": "Owocowe",
+  "onboardingQ3Right": "Wytrawne",
+  "onboardingQ4Title": "A może coś słodowego?",
+  "onboardingQ4Subtitle": "Chrupiące i suche, czy słodowe i pełne?",
+  "onboardingQ4Left": "Orzeźwiające",
+  "onboardingQ4Right": "Słodowe",
+  "onboardingNextButton": "Dalej",
+  "onboardingQ5Title": "Jakie style już znasz i lubisz?",
+  "onboardingQ5Subtitle": "Wybierz tyle, ile chcesz — to pomoże nam Cię lepiej poznać.",
+  "onboardingQ6Title": "Skąd najchętniej sięgasz po piwo?",
+  "onboardingQ6Subtitle": "Wybierz swoje ulubione kraje piwne.",
+  "onboardingStep": "STEP {step} OF {totalSteps}",
+  "@onboardingStep": {
+    "placeholders": {
+      "step": {},
+      "totalSteps": {}
+    }
+  },
+  "onboardingExpTitle": "Jak dobrze znasz świat piwa?",
+  "onboardingExpLevel1Title": "Dopiero zaczynam",
+  "onboardingExpLevel1Subtitle": "Odkrywam nowe smaki krok po kroku",
+  "onboardingExpLevel2Title": "Znam się nieźle",
+  "onboardingExpLevel2Subtitle": "Mam swoje ulubione style i szukam więcej",
+  "onboardingExpLevel3Title": "Jestem hobbystą",
+  "onboardingExpLevel3Subtitle": "Piwo to moja pasja, chcę odkrywać rzadkości",
+  "onboardingExpSeeProfileButton": "Zobacz mój profil",
+  "onboardingAnalyzingTitle": "Analizujemy Twój gust...",
+  "onboardingAnalyzingFact": "IPA zawdzięcza swoją moc kolonialnej historii Anglii — warzono je mocniej, by przetrwały rejs do Indii.",
+  "onboardingAnalyzingWait": "Chwileczkę...",
+  "onboardingFactTitle": "Twój profil smakowy zaczyna nabierać kształtu",
+  "onboardingFactBadge": "CZY WIESZ, ŻE?",
+  "onboardingFactContent": "Chmiel należy do tej samej rodziny roślin co konopie — to dlatego niektóre piwa mają tak wyraziste, ziołowe aromaty.",
+  "onboardingHookTitle": "Świetnie!",
+  "onboardingHookSubtitle": "Na podstawie Twoich odpowiedzi prawdopodobnie polubisz",
+  "onboardingHookDescription": "SOCZYSTE, OWOCOWE, Z NUTĄ CYTRUSÓW",
+  "@onboardingHookDescription": {
+    "description": "TEMP - mock data, replace when real backend wired up"
+  },
+  "onboardingHookFooter": "Twoje DNA piwne jest unikalne. Odkryliśmy Twój idealny punkt startowy.",
+  "onboardingHookRegisterButton": "Załóż konto, by zapisać profil",
+  "onboardingIntroSubtitle": "Twój osobisty przewodnik po piwie",
+  "onboardingIntroFeature1Title": "Inteligentne skanowanie etykiet",
+  "onboardingIntroFeature1Desc": "Błyskawicznie rozpoznawaj piwa dzięki AI.",
+  "onboardingIntroFeature2Title": "Dopasowanie smaku",
+  "onboardingIntroFeature2Desc": "Znajdź piwa idealnie dopasowane do Twojego profilu.",
+  "onboardingIntroStartButton": "Odkryj swój gust",
+  "onboardingIntroLoginButton": "Zaloguj się",
+  "paywallTitle": "BrewDNA Premium",
+  "paywallSubtitle": "Odblokuj pełny potencjał swojego profilu piwnego",
+  "paywallFeature1Title": "AI bez limitu",
+  "paywallFeature1Desc": "Nielimitowane skany i BeerDNA",
+  "paywallFeature2Title": "Zaawansowane statystyki",
+  "paywallFeature2Desc": "Odkryj ukryte wzorce w swoich ocenach",
+  "paywallFeature3Title": "Eksport kolekcji",
+  "paywallFeature3Desc": "Pobierz swoje dane do CSV lub PDF",
+  "paywallFeature4Title": "Backup w chmurze",
+  "paywallFeature4Desc": "Nigdy nie trać swojej kolekcji",
+  "paywallFeature5Title": "Ekskluzywne odznaki",
+  "paywallFeature5Desc": "Zdobądź profil premium na platformie",
+  "paywallPlanMonthly": "Miesięcznie",
+  "paywallPlanMonthlyDesc": "Rozliczenie co miesiąc",
+  "paywallPlanYearly": "Rocznie",
+  "paywallPlanYearlyDesc": "3 dni za darmo, potem 149,99 zł/rok",
+  "paywallPlanYearlyBadge": "Oszczędzasz 16%",
+  "paywallBuyButton": "Kup",
+  "paywallDisclaimer": "Płatność pobierana przy zakupie. Subskrypcja odnawia się automatycznie, chyba że zostanie anulowana 24h przed końcem bieżącego okresu. Możesz zarządzać subskrypcjami w Ustawieniach Konta.",
+  "devWidgetGalleryCardDesc": "Przykładowy opis karty.",
+  "scanResultManualSearchDesc": "Otwieram ręczne wyszukiwanie...",
+  "scanningAnalyzingTryAgain": "Spróbuj ponownie",
+  "discoverTopCountries": "Odkryj smaki z różnych krajów",
+  "discoverTopRated": "Najlepiej oceniane",
+  "discoverMatchedDna": "Dopasowane do Twojego DNA smakowego",
+  "beersCount": "{count} piw",
+  "@beersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}

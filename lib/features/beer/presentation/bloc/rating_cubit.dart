@@ -19,27 +19,27 @@ class RatingCubit extends Cubit<RatingState> {
     final reviewsResult = await _ratingRepository.getReviews(beerId);
 
     // Combine results (simplistic approach for now)
-    histogramResult.fold(
-      (String error) => emit(RatingState.error(error)),
-      (RatingHistogram histogram) {
-        reviewsResult.fold(
-          (String error) => emit(RatingState.error(error)),
-          (List<Review> reviews) {
-            int? userRating;
-            userRatingResult.fold(
-              (String _) {}, 
-              (int? rating) => userRating = rating,
-            );
-
-            emit(RatingState.loaded(
-              histogram: histogram,
-              reviews: reviews,
-              userRating: userRating,
-            ));
-          },
+    histogramResult.fold((String error) => emit(RatingState.error(error)), (
+      RatingHistogram histogram,
+    ) {
+      reviewsResult.fold((String error) => emit(RatingState.error(error)), (
+        List<Review> reviews,
+      ) {
+        int? userRating;
+        userRatingResult.fold(
+          (String _) {},
+          (int? rating) => userRating = rating,
         );
-      },
-    );
+
+        emit(
+          RatingState.loaded(
+            histogram: histogram,
+            reviews: reviews,
+            userRating: userRating,
+          ),
+        );
+      });
+    });
   }
 
   Future<void> submitRating({
@@ -64,13 +64,10 @@ class RatingCubit extends Cubit<RatingState> {
       note: note,
     );
 
-    result.fold(
-      (error) => emit(RatingState.error(error)),
-      (_) {
-        emit(const RatingState.submitted());
-        // Reload ratings to reflect the new state
-        loadBeerRatings(beerId);
-      },
-    );
+    result.fold((error) => emit(RatingState.error(error)), (_) {
+      emit(const RatingState.submitted());
+      // Reload ratings to reflect the new state
+      loadBeerRatings(beerId);
+    });
   }
 }

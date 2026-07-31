@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:ui' show lerpDouble;
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:hop_iq/l10n/app_localizations.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
@@ -39,7 +43,7 @@ class QuizQuestionPage extends StatelessWidget {
         children: [
           SizedBox(height: AppSpacings.s32),
           Text(
-            'STEP $step OF 4',
+            AppLocalizations.of(context)!.onboardingStep(step.toString(), '4'),
             style: AppTypography.caption.copyWith(
               color: AppColors.accent,
               fontWeight: FontWeight.w700,
@@ -75,14 +79,29 @@ class QuizQuestionPage extends StatelessWidget {
               ],
             ),
             child: Center(
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                width: 140,
-                height: 140,
-                fit: BoxFit.contain,
-                placeholder: (context, url) =>
-                    const CupertinoActivityIndicator(),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
+              child: ColorFiltered(
+                colorFilter: ColorFilter.matrix(_saturationMatrix(
+                  lerpDouble(0.35, 1.6, sliderValue / 100)!
+                )),
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  width: 140,
+                  height: 140,
+                  fit: BoxFit.contain,
+                  placeholder: (context, url) => Shimmer.fromColors(
+                    baseColor: AppColors.separator,
+                    highlightColor: AppColors.background,
+                    child: Container(
+                      width: 140,
+                      height: 140,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(32),
+                      ),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
               ),
             ),
           ),
@@ -125,13 +144,20 @@ class QuizQuestionPage extends StatelessWidget {
             ],
           ),
           SizedBox(height: AppSpacings.s48),
-          AppButton(
-            text: buttonLabel,
-            onPressed: onNext,
-          ),
+          AppButton(text: buttonLabel, onPressed: onNext),
           SizedBox(height: AppSpacings.s16),
         ],
       ),
     );
   }
+}
+
+List<double> _saturationMatrix(double s) {
+  const lumR = 0.213, lumG = 0.715, lumB = 0.072;
+  return [
+    lumR + (1 - lumR) * s, lumG - lumG * s,       lumB - lumB * s,       0, 0,
+    lumR - lumR * s,       lumG + (1 - lumG) * s, lumB - lumB * s,       0, 0,
+    lumR - lumR * s,       lumG - lumG * s,       lumB + (1 - lumB) * s, 0, 0,
+    0, 0, 0, 1, 0,
+  ];
 }

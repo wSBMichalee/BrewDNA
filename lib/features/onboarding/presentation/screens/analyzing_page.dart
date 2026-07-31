@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 
 class AnalyzingPage extends StatefulWidget {
@@ -42,27 +43,25 @@ class _AnalyzingPageState extends State<AnalyzingPage> {
                   color: AppColors.accent,
                   backgroundColor: AppColors.separator,
                 ),
-                Center(
-                  child: Text('🍺', style: TextStyle(fontSize: 40)),
-                ),
+                Center(child: Text('🍺', style: TextStyle(fontSize: 40))),
               ],
             ),
           ),
           SizedBox(height: AppSpacings.s48),
           Text(
-            'Analizujemy Twój gust...',
+            AppLocalizations.of(context)!.onboardingAnalyzingTitle,
             style: AppTypography.title2.copyWith(fontSize: 28),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: AppSpacings.s16),
           Text(
-            'IPA zawdzięcza swoją moc kolonialnej historii Anglii — warzono je mocniej, by przetrwały rejs do Indii.',
+            AppLocalizations.of(context)!.onboardingAnalyzingFact,
             style: AppTypography.body.copyWith(color: AppColors.labelSecondary),
             textAlign: TextAlign.center,
           ),
           const Spacer(),
           Text(
-            'Chwileczkę...',
+            AppLocalizations.of(context)!.onboardingAnalyzingWait,
             style: AppTypography.body.copyWith(color: AppColors.labelSecondary),
           ),
           SizedBox(height: AppSpacings.s32),

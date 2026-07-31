@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:hop_iq/l10n/app_localizations.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
@@ -29,18 +30,18 @@ class HookScreen extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: const Center(
-              child: Icon(CupertinoIcons.checkmark_alt,
-                  color: AppColors.accent, size: 32),
+              child: Icon(
+                CupertinoIcons.checkmark_alt,
+                color: AppColors.accent,
+                size: 32,
+              ),
             ),
           ),
           SizedBox(height: AppSpacings.s24),
-          Text(
-            'Świetnie!',
-            style: AppTypography.title2.copyWith(fontSize: 28),
-          ),
+          Text(AppLocalizations.of(context)!.onboardingHookTitle, style: AppTypography.title2.copyWith(fontSize: 28)),
           SizedBox(height: AppSpacings.s12),
           Text(
-            'Na podstawie Twoich odpowiedzi prawdopodobnie polubisz',
+            AppLocalizations.of(context)!.onboardingHookSubtitle,
             style: AppTypography.body.copyWith(color: AppColors.labelSecondary),
             textAlign: TextAlign.center,
           ),
@@ -50,7 +51,9 @@ class HookScreen extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(
-                vertical: AppSpacings.s32, horizontal: AppSpacings.s24),
+              vertical: AppSpacings.s32,
+              horizontal: AppSpacings.s24,
+            ),
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(AppRadius.card),
@@ -89,7 +92,7 @@ class HookScreen extends StatelessWidget {
                 ),
                 SizedBox(height: AppSpacings.s8),
                 Text(
-                  'SOCZYSTE, OWOCOWE, Z NUTĄ CYTRUSÓW',
+                  AppLocalizations.of(context)!.onboardingHookDescription,
                   style: AppTypography.caption.copyWith(
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.0,
@@ -103,7 +106,7 @@ class HookScreen extends StatelessWidget {
           SizedBox(height: AppSpacings.s32),
 
           Text(
-            'Twoje DNA piwne jest unikalne. Odkryliśmy Twój idealny punkt startowy.',
+            AppLocalizations.of(context)!.onboardingHookFooter,
             style: AppTypography.body.copyWith(
               fontStyle: FontStyle.italic,
               color: AppColors.labelSecondary,
@@ -112,7 +115,7 @@ class HookScreen extends StatelessWidget {
           ),
           const Spacer(),
           AppButton(
-            text: 'Załóż konto, by zapisać profil',
+            text: AppLocalizations.of(context)!.onboardingHookRegisterButton,
             onPressed: () => context.go('/auth/start'),
           ),
           SizedBox(height: AppSpacings.s16),
