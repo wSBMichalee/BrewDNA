@@ -59,7 +59,7 @@ class AuthShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).uri.toString();
-    final hideBack = location == '/' || location == '/onboarding/intro' || location == '/auth/welcome' || location == '/auth/start';
+    final hideBack = location == '/' || location.startsWith('/onboarding') || location == '/auth/welcome' || location == '/auth/start';
 
     return BlocProvider.value(
       value: getIt<AuthCubit>(),
@@ -97,7 +97,7 @@ class AuthShell extends StatelessWidget {
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/main/discover',
+  initialLocation: '/',
   routes: [
     GoRoute(
       path: '/',
