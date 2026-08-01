@@ -42,7 +42,6 @@ extension GetItInjectableX on _i174.GetIt {
     final appModule = _$AppModule();
     gh.factory<_i52.AuthCubit>(() => _i52.AuthCubit());
     gh.lazySingleton<_i454.SupabaseClient>(() => appModule.supabase);
-    gh.lazySingleton<_i153.OnboardingCubit>(() => _i153.OnboardingCubit());
     gh.lazySingleton<_i425.IBeerRepository>(
       () => _i812.SupabaseBeerRepository(gh<_i454.SupabaseClient>()),
     );
@@ -51,6 +50,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i100.IRatingRepository>(
       () => _i51.SupabaseRatingRepository(gh<_i454.SupabaseClient>()),
+    );
+    gh.lazySingleton<_i153.OnboardingCubit>(
+      () => _i153.OnboardingCubit(gh<_i425.IBeerRepository>()),
     );
     gh.factory<_i378.BeerCubit>(
       () => _i378.BeerCubit(gh<_i425.IBeerRepository>()),

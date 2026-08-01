@@ -4,8 +4,13 @@ import '../../../../core/theme/app_theme.dart';
 
 class AnalyzingPage extends StatefulWidget {
   final VoidCallback onComplete;
+  final double dryFruityValue;
 
-  const AnalyzingPage({super.key, required this.onComplete});
+  const AnalyzingPage({
+    super.key, 
+    required this.onComplete,
+    required this.dryFruityValue,
+  });
 
   @override
   State<AnalyzingPage> createState() => _AnalyzingPageState();
@@ -15,7 +20,7 @@ class _AnalyzingPageState extends State<AnalyzingPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
         widget.onComplete();
       }
@@ -38,10 +43,9 @@ class _AnalyzingPageState extends State<AnalyzingPage> {
               fit: StackFit.expand,
               children: [
                 CircularProgressIndicator(
-                  value: 0.65,
                   strokeWidth: 6,
                   color: AppColors.accent,
-                  backgroundColor: AppColors.separator,
+                  backgroundColor: AppColors.separator.withValues(alpha: 0.3),
                 ),
                 Center(child: Text('🍺', style: TextStyle(fontSize: 40))),
               ],
@@ -55,7 +59,9 @@ class _AnalyzingPageState extends State<AnalyzingPage> {
           ),
           SizedBox(height: AppSpacings.s16),
           Text(
-            AppLocalizations.of(context)!.onboardingAnalyzingFact,
+            widget.dryFruityValue < 50
+                ? AppLocalizations.of(context)!.onboardingFactContentFruity
+                : AppLocalizations.of(context)!.onboardingFactContentDry,
             style: AppTypography.body.copyWith(color: AppColors.labelSecondary),
             textAlign: TextAlign.center,
           ),

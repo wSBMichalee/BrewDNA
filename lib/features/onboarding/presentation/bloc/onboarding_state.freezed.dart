@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OnboardingState {
 
- int get currentStep; double get lightStrongValue; double get bitterSweetValue; double get dryFruityValue; double get crispMaltyValue; Set<String> get selectedStyles; Set<String> get selectedCountries; String? get experienceLevel;
+ int get currentStep; double get lightStrongValue; double get bitterSweetValue; double get dryFruityValue; Set<String> get selectedStyles; Set<String> get selectedCountries; String? get experienceLevel; List<String> get availableStyles; bool get isStylesLoading;
 /// Create a copy of OnboardingState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $OnboardingStateCopyWith<OnboardingState> get copyWith => _$OnboardingStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OnboardingState&&(identical(other.currentStep, currentStep) || other.currentStep == currentStep)&&(identical(other.lightStrongValue, lightStrongValue) || other.lightStrongValue == lightStrongValue)&&(identical(other.bitterSweetValue, bitterSweetValue) || other.bitterSweetValue == bitterSweetValue)&&(identical(other.dryFruityValue, dryFruityValue) || other.dryFruityValue == dryFruityValue)&&(identical(other.crispMaltyValue, crispMaltyValue) || other.crispMaltyValue == crispMaltyValue)&&const DeepCollectionEquality().equals(other.selectedStyles, selectedStyles)&&const DeepCollectionEquality().equals(other.selectedCountries, selectedCountries)&&(identical(other.experienceLevel, experienceLevel) || other.experienceLevel == experienceLevel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OnboardingState&&(identical(other.currentStep, currentStep) || other.currentStep == currentStep)&&(identical(other.lightStrongValue, lightStrongValue) || other.lightStrongValue == lightStrongValue)&&(identical(other.bitterSweetValue, bitterSweetValue) || other.bitterSweetValue == bitterSweetValue)&&(identical(other.dryFruityValue, dryFruityValue) || other.dryFruityValue == dryFruityValue)&&const DeepCollectionEquality().equals(other.selectedStyles, selectedStyles)&&const DeepCollectionEquality().equals(other.selectedCountries, selectedCountries)&&(identical(other.experienceLevel, experienceLevel) || other.experienceLevel == experienceLevel)&&const DeepCollectionEquality().equals(other.availableStyles, availableStyles)&&(identical(other.isStylesLoading, isStylesLoading) || other.isStylesLoading == isStylesLoading));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentStep,lightStrongValue,bitterSweetValue,dryFruityValue,crispMaltyValue,const DeepCollectionEquality().hash(selectedStyles),const DeepCollectionEquality().hash(selectedCountries),experienceLevel);
+int get hashCode => Object.hash(runtimeType,currentStep,lightStrongValue,bitterSweetValue,dryFruityValue,const DeepCollectionEquality().hash(selectedStyles),const DeepCollectionEquality().hash(selectedCountries),experienceLevel,const DeepCollectionEquality().hash(availableStyles),isStylesLoading);
 
 @override
 String toString() {
-  return 'OnboardingState(currentStep: $currentStep, lightStrongValue: $lightStrongValue, bitterSweetValue: $bitterSweetValue, dryFruityValue: $dryFruityValue, crispMaltyValue: $crispMaltyValue, selectedStyles: $selectedStyles, selectedCountries: $selectedCountries, experienceLevel: $experienceLevel)';
+  return 'OnboardingState(currentStep: $currentStep, lightStrongValue: $lightStrongValue, bitterSweetValue: $bitterSweetValue, dryFruityValue: $dryFruityValue, selectedStyles: $selectedStyles, selectedCountries: $selectedCountries, experienceLevel: $experienceLevel, availableStyles: $availableStyles, isStylesLoading: $isStylesLoading)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $OnboardingStateCopyWith<$Res>  {
   factory $OnboardingStateCopyWith(OnboardingState value, $Res Function(OnboardingState) _then) = _$OnboardingStateCopyWithImpl;
 @useResult
 $Res call({
- int currentStep, double lightStrongValue, double bitterSweetValue, double dryFruityValue, double crispMaltyValue, Set<String> selectedStyles, Set<String> selectedCountries, String? experienceLevel
+ int currentStep, double lightStrongValue, double bitterSweetValue, double dryFruityValue, Set<String> selectedStyles, Set<String> selectedCountries, String? experienceLevel, List<String> availableStyles, bool isStylesLoading
 });
 
 
@@ -62,17 +62,18 @@ class _$OnboardingStateCopyWithImpl<$Res>
 
 /// Create a copy of OnboardingState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? currentStep = null,Object? lightStrongValue = null,Object? bitterSweetValue = null,Object? dryFruityValue = null,Object? crispMaltyValue = null,Object? selectedStyles = null,Object? selectedCountries = null,Object? experienceLevel = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? currentStep = null,Object? lightStrongValue = null,Object? bitterSweetValue = null,Object? dryFruityValue = null,Object? selectedStyles = null,Object? selectedCountries = null,Object? experienceLevel = freezed,Object? availableStyles = null,Object? isStylesLoading = null,}) {
   return _then(_self.copyWith(
 currentStep: null == currentStep ? _self.currentStep : currentStep // ignore: cast_nullable_to_non_nullable
 as int,lightStrongValue: null == lightStrongValue ? _self.lightStrongValue : lightStrongValue // ignore: cast_nullable_to_non_nullable
 as double,bitterSweetValue: null == bitterSweetValue ? _self.bitterSweetValue : bitterSweetValue // ignore: cast_nullable_to_non_nullable
 as double,dryFruityValue: null == dryFruityValue ? _self.dryFruityValue : dryFruityValue // ignore: cast_nullable_to_non_nullable
-as double,crispMaltyValue: null == crispMaltyValue ? _self.crispMaltyValue : crispMaltyValue // ignore: cast_nullable_to_non_nullable
 as double,selectedStyles: null == selectedStyles ? _self.selectedStyles : selectedStyles // ignore: cast_nullable_to_non_nullable
 as Set<String>,selectedCountries: null == selectedCountries ? _self.selectedCountries : selectedCountries // ignore: cast_nullable_to_non_nullable
 as Set<String>,experienceLevel: freezed == experienceLevel ? _self.experienceLevel : experienceLevel // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,availableStyles: null == availableStyles ? _self.availableStyles : availableStyles // ignore: cast_nullable_to_non_nullable
+as List<String>,isStylesLoading: null == isStylesLoading ? _self.isStylesLoading : isStylesLoading // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -157,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int currentStep,  double lightStrongValue,  double bitterSweetValue,  double dryFruityValue,  double crispMaltyValue,  Set<String> selectedStyles,  Set<String> selectedCountries,  String? experienceLevel)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int currentStep,  double lightStrongValue,  double bitterSweetValue,  double dryFruityValue,  Set<String> selectedStyles,  Set<String> selectedCountries,  String? experienceLevel,  List<String> availableStyles,  bool isStylesLoading)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OnboardingState() when $default != null:
-return $default(_that.currentStep,_that.lightStrongValue,_that.bitterSweetValue,_that.dryFruityValue,_that.crispMaltyValue,_that.selectedStyles,_that.selectedCountries,_that.experienceLevel);case _:
+return $default(_that.currentStep,_that.lightStrongValue,_that.bitterSweetValue,_that.dryFruityValue,_that.selectedStyles,_that.selectedCountries,_that.experienceLevel,_that.availableStyles,_that.isStylesLoading);case _:
   return orElse();
 
 }
@@ -178,10 +179,10 @@ return $default(_that.currentStep,_that.lightStrongValue,_that.bitterSweetValue,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int currentStep,  double lightStrongValue,  double bitterSweetValue,  double dryFruityValue,  double crispMaltyValue,  Set<String> selectedStyles,  Set<String> selectedCountries,  String? experienceLevel)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int currentStep,  double lightStrongValue,  double bitterSweetValue,  double dryFruityValue,  Set<String> selectedStyles,  Set<String> selectedCountries,  String? experienceLevel,  List<String> availableStyles,  bool isStylesLoading)  $default,) {final _that = this;
 switch (_that) {
 case _OnboardingState():
-return $default(_that.currentStep,_that.lightStrongValue,_that.bitterSweetValue,_that.dryFruityValue,_that.crispMaltyValue,_that.selectedStyles,_that.selectedCountries,_that.experienceLevel);case _:
+return $default(_that.currentStep,_that.lightStrongValue,_that.bitterSweetValue,_that.dryFruityValue,_that.selectedStyles,_that.selectedCountries,_that.experienceLevel,_that.availableStyles,_that.isStylesLoading);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +199,10 @@ return $default(_that.currentStep,_that.lightStrongValue,_that.bitterSweetValue,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int currentStep,  double lightStrongValue,  double bitterSweetValue,  double dryFruityValue,  double crispMaltyValue,  Set<String> selectedStyles,  Set<String> selectedCountries,  String? experienceLevel)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int currentStep,  double lightStrongValue,  double bitterSweetValue,  double dryFruityValue,  Set<String> selectedStyles,  Set<String> selectedCountries,  String? experienceLevel,  List<String> availableStyles,  bool isStylesLoading)?  $default,) {final _that = this;
 switch (_that) {
 case _OnboardingState() when $default != null:
-return $default(_that.currentStep,_that.lightStrongValue,_that.bitterSweetValue,_that.dryFruityValue,_that.crispMaltyValue,_that.selectedStyles,_that.selectedCountries,_that.experienceLevel);case _:
+return $default(_that.currentStep,_that.lightStrongValue,_that.bitterSweetValue,_that.dryFruityValue,_that.selectedStyles,_that.selectedCountries,_that.experienceLevel,_that.availableStyles,_that.isStylesLoading);case _:
   return null;
 
 }
@@ -213,14 +214,13 @@ return $default(_that.currentStep,_that.lightStrongValue,_that.bitterSweetValue,
 
 
 class _OnboardingState implements OnboardingState {
-  const _OnboardingState({this.currentStep = 0, this.lightStrongValue = 50.0, this.bitterSweetValue = 50.0, this.dryFruityValue = 50.0, this.crispMaltyValue = 50.0, final  Set<String> selectedStyles = const {}, final  Set<String> selectedCountries = const {}, this.experienceLevel}): _selectedStyles = selectedStyles,_selectedCountries = selectedCountries;
+  const _OnboardingState({this.currentStep = 0, this.lightStrongValue = 50.0, this.bitterSweetValue = 50.0, this.dryFruityValue = 50.0, final  Set<String> selectedStyles = const {}, final  Set<String> selectedCountries = const {}, this.experienceLevel, final  List<String> availableStyles = const [], this.isStylesLoading = false}): _selectedStyles = selectedStyles,_selectedCountries = selectedCountries,_availableStyles = availableStyles;
   
 
 @override@JsonKey() final  int currentStep;
 @override@JsonKey() final  double lightStrongValue;
 @override@JsonKey() final  double bitterSweetValue;
 @override@JsonKey() final  double dryFruityValue;
-@override@JsonKey() final  double crispMaltyValue;
  final  Set<String> _selectedStyles;
 @override@JsonKey() Set<String> get selectedStyles {
   if (_selectedStyles is EqualUnmodifiableSetView) return _selectedStyles;
@@ -236,6 +236,14 @@ class _OnboardingState implements OnboardingState {
 }
 
 @override final  String? experienceLevel;
+ final  List<String> _availableStyles;
+@override@JsonKey() List<String> get availableStyles {
+  if (_availableStyles is EqualUnmodifiableListView) return _availableStyles;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_availableStyles);
+}
+
+@override@JsonKey() final  bool isStylesLoading;
 
 /// Create a copy of OnboardingState
 /// with the given fields replaced by the non-null parameter values.
@@ -247,16 +255,16 @@ _$OnboardingStateCopyWith<_OnboardingState> get copyWith => __$OnboardingStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OnboardingState&&(identical(other.currentStep, currentStep) || other.currentStep == currentStep)&&(identical(other.lightStrongValue, lightStrongValue) || other.lightStrongValue == lightStrongValue)&&(identical(other.bitterSweetValue, bitterSweetValue) || other.bitterSweetValue == bitterSweetValue)&&(identical(other.dryFruityValue, dryFruityValue) || other.dryFruityValue == dryFruityValue)&&(identical(other.crispMaltyValue, crispMaltyValue) || other.crispMaltyValue == crispMaltyValue)&&const DeepCollectionEquality().equals(other._selectedStyles, _selectedStyles)&&const DeepCollectionEquality().equals(other._selectedCountries, _selectedCountries)&&(identical(other.experienceLevel, experienceLevel) || other.experienceLevel == experienceLevel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OnboardingState&&(identical(other.currentStep, currentStep) || other.currentStep == currentStep)&&(identical(other.lightStrongValue, lightStrongValue) || other.lightStrongValue == lightStrongValue)&&(identical(other.bitterSweetValue, bitterSweetValue) || other.bitterSweetValue == bitterSweetValue)&&(identical(other.dryFruityValue, dryFruityValue) || other.dryFruityValue == dryFruityValue)&&const DeepCollectionEquality().equals(other._selectedStyles, _selectedStyles)&&const DeepCollectionEquality().equals(other._selectedCountries, _selectedCountries)&&(identical(other.experienceLevel, experienceLevel) || other.experienceLevel == experienceLevel)&&const DeepCollectionEquality().equals(other._availableStyles, _availableStyles)&&(identical(other.isStylesLoading, isStylesLoading) || other.isStylesLoading == isStylesLoading));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentStep,lightStrongValue,bitterSweetValue,dryFruityValue,crispMaltyValue,const DeepCollectionEquality().hash(_selectedStyles),const DeepCollectionEquality().hash(_selectedCountries),experienceLevel);
+int get hashCode => Object.hash(runtimeType,currentStep,lightStrongValue,bitterSweetValue,dryFruityValue,const DeepCollectionEquality().hash(_selectedStyles),const DeepCollectionEquality().hash(_selectedCountries),experienceLevel,const DeepCollectionEquality().hash(_availableStyles),isStylesLoading);
 
 @override
 String toString() {
-  return 'OnboardingState(currentStep: $currentStep, lightStrongValue: $lightStrongValue, bitterSweetValue: $bitterSweetValue, dryFruityValue: $dryFruityValue, crispMaltyValue: $crispMaltyValue, selectedStyles: $selectedStyles, selectedCountries: $selectedCountries, experienceLevel: $experienceLevel)';
+  return 'OnboardingState(currentStep: $currentStep, lightStrongValue: $lightStrongValue, bitterSweetValue: $bitterSweetValue, dryFruityValue: $dryFruityValue, selectedStyles: $selectedStyles, selectedCountries: $selectedCountries, experienceLevel: $experienceLevel, availableStyles: $availableStyles, isStylesLoading: $isStylesLoading)';
 }
 
 
@@ -267,7 +275,7 @@ abstract mixin class _$OnboardingStateCopyWith<$Res> implements $OnboardingState
   factory _$OnboardingStateCopyWith(_OnboardingState value, $Res Function(_OnboardingState) _then) = __$OnboardingStateCopyWithImpl;
 @override @useResult
 $Res call({
- int currentStep, double lightStrongValue, double bitterSweetValue, double dryFruityValue, double crispMaltyValue, Set<String> selectedStyles, Set<String> selectedCountries, String? experienceLevel
+ int currentStep, double lightStrongValue, double bitterSweetValue, double dryFruityValue, Set<String> selectedStyles, Set<String> selectedCountries, String? experienceLevel, List<String> availableStyles, bool isStylesLoading
 });
 
 
@@ -284,17 +292,18 @@ class __$OnboardingStateCopyWithImpl<$Res>
 
 /// Create a copy of OnboardingState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? currentStep = null,Object? lightStrongValue = null,Object? bitterSweetValue = null,Object? dryFruityValue = null,Object? crispMaltyValue = null,Object? selectedStyles = null,Object? selectedCountries = null,Object? experienceLevel = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? currentStep = null,Object? lightStrongValue = null,Object? bitterSweetValue = null,Object? dryFruityValue = null,Object? selectedStyles = null,Object? selectedCountries = null,Object? experienceLevel = freezed,Object? availableStyles = null,Object? isStylesLoading = null,}) {
   return _then(_OnboardingState(
 currentStep: null == currentStep ? _self.currentStep : currentStep // ignore: cast_nullable_to_non_nullable
 as int,lightStrongValue: null == lightStrongValue ? _self.lightStrongValue : lightStrongValue // ignore: cast_nullable_to_non_nullable
 as double,bitterSweetValue: null == bitterSweetValue ? _self.bitterSweetValue : bitterSweetValue // ignore: cast_nullable_to_non_nullable
 as double,dryFruityValue: null == dryFruityValue ? _self.dryFruityValue : dryFruityValue // ignore: cast_nullable_to_non_nullable
-as double,crispMaltyValue: null == crispMaltyValue ? _self.crispMaltyValue : crispMaltyValue // ignore: cast_nullable_to_non_nullable
 as double,selectedStyles: null == selectedStyles ? _self._selectedStyles : selectedStyles // ignore: cast_nullable_to_non_nullable
 as Set<String>,selectedCountries: null == selectedCountries ? _self._selectedCountries : selectedCountries // ignore: cast_nullable_to_non_nullable
 as Set<String>,experienceLevel: freezed == experienceLevel ? _self.experienceLevel : experienceLevel // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,availableStyles: null == availableStyles ? _self._availableStyles : availableStyles // ignore: cast_nullable_to_non_nullable
+as List<String>,isStylesLoading: null == isStylesLoading ? _self.isStylesLoading : isStylesLoading // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

@@ -398,17 +398,17 @@ abstract class AppLocalizations {
   /// **'Mapa świata'**
   String get mapTitle;
 
-  /// TEMP - mock data, replace when real backend wired up
+  /// No description provided for @mapCountriesDiscovered.
   ///
   /// In pl, this message translates to:
-  /// **'12 z 195 krajów odkrytych'**
-  String get mapCountriesDiscovered;
+  /// **'{count} z 195 krajów odkrytych'**
+  String mapCountriesDiscovered(int count);
 
-  /// TEMP - mock data, replace when real backend wired up
+  /// No description provided for @mapPercentDiscovered.
   ///
   /// In pl, this message translates to:
-  /// **'6% ODKRYTE'**
-  String get mapPercentDiscovered;
+  /// **'{percent}% ODKRYTE'**
+  String mapPercentDiscovered(int percent);
 
   /// No description provided for @mapRecentlyDiscovered.
   ///
@@ -935,13 +935,13 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingQ4Subtitle.
   ///
   /// In pl, this message translates to:
-  /// **'Chrupiące i suche, czy słodowe i pełne?'**
+  /// **'Suche i lekkie, czy słodowe i pełne?'**
   String get onboardingQ4Subtitle;
 
   /// No description provided for @onboardingQ4Left.
   ///
   /// In pl, this message translates to:
-  /// **'Orzeźwiające'**
+  /// **'Suche'**
   String get onboardingQ4Left;
 
   /// No description provided for @onboardingQ4Right.
@@ -1064,11 +1064,17 @@ abstract class AppLocalizations {
   /// **'CZY WIESZ, ŻE?'**
   String get onboardingFactBadge;
 
-  /// No description provided for @onboardingFactContent.
+  /// No description provided for @onboardingFactContentFruity.
   ///
   /// In pl, this message translates to:
-  /// **'Chmiel należy do tej samej rodziny roślin co konopie — to dlatego niektóre piwa mają tak wyraziste, ziołowe aromaty.'**
-  String get onboardingFactContent;
+  /// **'Chmiel można tak dobrać, że piwo pachnie mango czy marakują, mimo że w warzelni nie ma ani grama owoców - to zasługa naturalnych związków (tioli) uwalnianych przez drożdże podczas fermentacji.'**
+  String get onboardingFactContentFruity;
+
+  /// No description provided for @onboardingFactContentDry.
+  ///
+  /// In pl, this message translates to:
+  /// **'Klasyczne, wytrawne lagery leżakują w niskiej temperaturze nawet kilka tygodni - to właśnie ten długi, zimny spoczynek daje im tak czysty, chrupiący finisz.'**
+  String get onboardingFactContentDry;
 
   /// No description provided for @onboardingHookTitle.
   ///

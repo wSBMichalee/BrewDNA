@@ -8,7 +8,7 @@ import 'beer_state.dart';
 
 // TODO(taste-profiles): zastąpić realnym profilem z Supabase po domknięciu
 // zapisu OnboardingState -> taste_profiles. Patrz wątek "taste_profiles".
-const _tempTasteProfile = (lightStrong: 70.0, bitterSweet: 60.0, dryFruity: 40.0, crispMalty: 55.0);
+const _tempTasteProfile = (lightStrong: 70.0, bitterSweet: 60.0, dryFruity: 40.0);
 
 @injectable
 class BeerCubit extends Cubit<BeerState> {
@@ -73,12 +73,12 @@ class BeerCubit extends Cubit<BeerState> {
   }
 
   int calculateMatchPercentage(Beer beer) {
-    final lDiff = beer.lightStrong - _tempTasteProfile.lightStrong;
-    final bDiff = beer.bitterSweet - _tempTasteProfile.bitterSweet;
-    final dDiff = beer.dryFruity - _tempTasteProfile.dryFruity;
-    final cDiff = beer.crispMalty - _tempTasteProfile.crispMalty;
-    
-    final distance = math.sqrt(lDiff * lDiff + bDiff * bDiff + dDiff * dDiff + cDiff * cDiff);
+    final lsDiff = beer.lightStrong - _tempTasteProfile.lightStrong;
+    final bsDiff = beer.bitterSweet - _tempTasteProfile.bitterSweet;
+    final dfDiff = beer.dryFruity - _tempTasteProfile.dryFruity;
+
+    final distance = math.sqrt(
+        (lsDiff * lsDiff) + (bsDiff * bsDiff) + (dfDiff * dfDiff));
     const maxDistance = 200.0;
     
     final match = 100.0 - (distance / maxDistance * 100.0);

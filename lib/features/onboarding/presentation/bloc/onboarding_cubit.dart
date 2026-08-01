@@ -1,10 +1,24 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'onboarding_state.dart';
+import '../../../beer/domain/repositories/i_beer_repository.dart';
 
 @lazySingleton
 class OnboardingCubit extends Cubit<OnboardingState> {
-  OnboardingCubit() : super(const OnboardingState());
+  final IBeerRepository _beerRepository;
+
+  OnboardingCubit(this._beerRepository) : super(const OnboardingState()) {
+    loadStyles();
+  }
+
+  Future<void> loadStyles() async {
+    emit(state.copyWith(isStylesLoading: true));
+    final result = await _beerRepository.getAllStyles();
+    result.fold(
+      (error) => emit(state.copyWith(isStylesLoading: false)),
+      (styles) => emit(state.copyWith(availableStyles: styles, isStylesLoading: false)),
+    );
+  }
 
   void setStep(int step) {
     emit(state.copyWith(currentStep: step));
@@ -20,10 +34,6 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
   void updateDryFruity(double value) {
     emit(state.copyWith(dryFruityValue: value));
-  }
-
-  void updateCrispMalty(double value) {
-    emit(state.copyWith(crispMaltyValue: value));
   }
 
   void toggleStyle(String style) {
@@ -54,12 +64,8 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     final s = state;
     if (s.bitterSweetValue > 70 && s.lightStrongValue > 50) {
       return 'India Pale Ale (IPA)';
-    } else if (s.crispMaltyValue > 70 && s.lightStrongValue > 60) {
-      return 'Stout / Porter';
     } else if (s.dryFruityValue < 40 && s.lightStrongValue < 60) {
       return 'Wheat Beer / Hazy IPA';
-    } else if (s.crispMaltyValue < 40 && s.lightStrongValue < 50) {
-      return 'Pilsner / Lager';
     } else {
       return 'Pale Ale';
     }

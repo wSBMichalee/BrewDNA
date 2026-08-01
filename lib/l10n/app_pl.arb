@@ -50,13 +50,21 @@
   "historyTabHistory": "Historia",
   "historyEmptyState": "Brak danych",
   "mapTitle": "Mapa świata",
-  "mapCountriesDiscovered": "12 z 195 krajów odkrytych",
+  "mapCountriesDiscovered": "{count} z 195 krajów odkrytych",
   "@mapCountriesDiscovered": {
-    "description": "TEMP - mock data, replace when real backend wired up"
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
-  "mapPercentDiscovered": "6% ODKRYTE",
+  "mapPercentDiscovered": "{percent}% ODKRYTE",
   "@mapPercentDiscovered": {
-    "description": "TEMP - mock data, replace when real backend wired up"
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
   },
   "mapRecentlyDiscovered": "Ostatnio odkryte",
   "mapEmptyState": "Brak odkrytych piw.",
@@ -195,8 +203,8 @@
   "onboardingQ3Left": "Owocowe",
   "onboardingQ3Right": "Wytrawne",
   "onboardingQ4Title": "A może coś słodowego?",
-  "onboardingQ4Subtitle": "Chrupiące i suche, czy słodowe i pełne?",
-  "onboardingQ4Left": "Orzeźwiające",
+  "onboardingQ4Subtitle": "Suche i lekkie, czy słodowe i pełne?",
+  "onboardingQ4Left": "Suche",
   "onboardingQ4Right": "Słodowe",
   "onboardingNextButton": "Dalej",
   "onboardingQ5Title": "Jakie style już znasz i lubisz?",
@@ -223,7 +231,8 @@
   "onboardingAnalyzingWait": "Chwileczkę...",
   "onboardingFactTitle": "Twój profil smakowy zaczyna nabierać kształtu",
   "onboardingFactBadge": "CZY WIESZ, ŻE?",
-  "onboardingFactContent": "Chmiel należy do tej samej rodziny roślin co konopie — to dlatego niektóre piwa mają tak wyraziste, ziołowe aromaty.",
+  "onboardingFactContentFruity": "Chmiel można tak dobrać, że piwo pachnie mango czy marakują, mimo że w warzelni nie ma ani grama owoców - to zasługa naturalnych związków (tioli) uwalnianych przez drożdże podczas fermentacji.",
+  "onboardingFactContentDry": "Klasyczne, wytrawne lagery leżakują w niskiej temperaturze nawet kilka tygodni - to właśnie ten długi, zimny spoczynek daje im tak czysty, chrupiący finisz.",
   "onboardingHookTitle": "Świetnie!",
   "onboardingHookSubtitle": "Na podstawie Twoich odpowiedzi prawdopodobnie polubisz",
   "onboardingHookDescription": "SOCZYSTE, OWOCOWE, Z NUTĄ CYTRUSÓW",

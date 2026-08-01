@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';
 
 import '../../../../core/theme/app_theme.dart';
@@ -41,7 +42,7 @@ class _OnboardingViewState extends State<_OnboardingView> {
   }
 
   void _nextPage() {
-    if (_currentIndex < 9) {
+    if (_currentIndex < 8) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -61,13 +62,13 @@ class _OnboardingViewState extends State<_OnboardingView> {
   }
 
   int get _activeIndicatorStep {
-    if (_currentIndex <= 3) return _currentIndex;
-    if (_currentIndex == 4) return 3; // Interstitial Fact Page shares step 4
-    if (_currentIndex >= 5 && _currentIndex <= 7) return _currentIndex - 1;
-    return 6;
+    if (_currentIndex <= 2) return _currentIndex;
+    if (_currentIndex == 3) return 2; // Interstitial Fact Page shares step 3
+    if (_currentIndex >= 4 && _currentIndex <= 6) return _currentIndex - 1;
+    return 5;
   }
 
-  bool get _showTopBar => _currentIndex < 8; // Hide on Analyzing and Hook
+  bool get _showTopBar => _currentIndex < 7; // Hide on Analyzing and Hook
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +99,7 @@ class _OnboardingViewState extends State<_OnboardingView> {
                         Expanded(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(7, (index) {
+                            children: List.generate(6, (index) {
                               return Container(
                                 margin: const EdgeInsets.symmetric(
                                   horizontal: 4,
@@ -154,7 +155,9 @@ class _OnboardingViewState extends State<_OnboardingView> {
                         question: AppLocalizations.of(context)!.onboardingQ2Title,
                         subtitle: AppLocalizations.of(context)!.onboardingQ2Subtitle,
                         imageUrl:
-                            'https://media.screensdesign.com/gasset/e280ab6f53ad40c79d472cafd60b9b97_screen_image_beer_droplet_icon_4ed73202b0.png',
+                            'https://media.screensdesign.com/afprjsia/d68ae3d9-58f5-4438-9f60-9b67a71e5c34.png',
+                        imageUrlEnd:
+                            'https://images.pexels.com/photos/1089930/pexels-photo-1089930.jpeg',
                         leftLabel: AppLocalizations.of(context)!.onboardingQ2Left,
                         rightLabel: AppLocalizations.of(context)!.onboardingQ2Right,
                         sliderValue: state.lightStrongValue,
@@ -171,6 +174,8 @@ class _OnboardingViewState extends State<_OnboardingView> {
                         subtitle: AppLocalizations.of(context)!.onboardingQ3Subtitle,
                         imageUrl:
                             'https://media.screensdesign.com/gasset/a7a8bfb2bd8545cabebaf5c6701900e5_screen_image_citrus_icon_74e19ea847.png',
+                        imageUrlEnd:
+                            'https://media.screensdesign.com/gasset/e82346341291427ab997b8edb1aa3252_screen_image_ne_ipa_visual_8f69909d1e.png',
                         leftLabel: AppLocalizations.of(context)!.onboardingQ3Left,
                         rightLabel: AppLocalizations.of(context)!.onboardingQ3Right,
                         sliderValue: state.dryFruityValue,
@@ -179,48 +184,42 @@ class _OnboardingViewState extends State<_OnboardingView> {
                         buttonLabel: AppLocalizations.of(context)!.onboardingNextQuestionButton,
                         onNext: _nextPage,
                       ),
-                      // Page 3: Q4
-                      QuizQuestionPage(
-                        step: 4,
-                        question: AppLocalizations.of(context)!.onboardingQ4Title,
-                        subtitle: AppLocalizations.of(context)!.onboardingQ4Subtitle,
-                        imageUrl:
-                            'https://media.screensdesign.com/gasset/2481ee217f3f42989f7afa0f818186ed_screen_image_malt_icon_4562e687ca.png',
-                        leftLabel: AppLocalizations.of(context)!.onboardingQ4Left,
-                        rightLabel: AppLocalizations.of(context)!.onboardingQ4Right,
-                        sliderValue: state.crispMaltyValue,
-                        onSliderChanged: (v) =>
-                            context.read<OnboardingCubit>().updateCrispMalty(v),
-                        buttonLabel: AppLocalizations.of(context)!.onboardingNextButton,
+                      // Page 3: Interstitial
+                      InterstitialFactPage(
                         onNext: _nextPage,
+                        dryFruityValue: state.dryFruityValue,
                       ),
-                      // Page 4: Interstitial
-                      InterstitialFactPage(onNext: _nextPage),
-                      // Page 5: Styles
+                      // Page 4: Styles
+                      state.isStylesLoading
+                          ? Shimmer.fromColors(
+                              baseColor: AppColors.separator,
+                              highlightColor: AppColors.background,
+                              child: ChipSelectionPage(
+                                step: 4,
+                                totalSteps: 6,
+                                question: AppLocalizations.of(context)!.onboardingQ5Title,
+                                subtitle: AppLocalizations.of(context)!.onboardingQ5Subtitle,
+                                options: const ['IPA', 'Lager', 'Weizen', 'Stout', 'Sour', 'Belgijskie'],
+                                selectedValues: const {},
+                                onToggle: (_) {},
+                                onNext: () {},
+                              ),
+                            )
+                          : ChipSelectionPage(
+                              step: 4,
+                              totalSteps: 6,
+                              question: AppLocalizations.of(context)!.onboardingQ5Title,
+                              subtitle: AppLocalizations.of(context)!.onboardingQ5Subtitle,
+                              options: state.availableStyles,
+                              selectedValues: state.selectedStyles,
+                              onToggle: (v) =>
+                                  context.read<OnboardingCubit>().toggleStyle(v),
+                              onNext: _nextPage,
+                            ),
+                      // Page 5: Countries
                       ChipSelectionPage(
                         step: 5,
-                        totalSteps: 7,
-                        question: AppLocalizations.of(context)!.onboardingQ5Title,
-                        subtitle: AppLocalizations.of(context)!.onboardingQ5Subtitle,
-                        options: const [
-                          'IPA',
-                          'Lager',
-                          'Weizen',
-                          'Stout',
-                          'Sour',
-                          'Belgijskie',
-                          'Porter',
-                          'Pils',
-                        ],
-                        selectedValues: state.selectedStyles,
-                        onToggle: (v) =>
-                            context.read<OnboardingCubit>().toggleStyle(v),
-                        onNext: _nextPage,
-                      ),
-                      // Page 6: Countries
-                      ChipSelectionPage(
-                        step: 6,
-                        totalSteps: 7,
+                        totalSteps: 6,
                         question: AppLocalizations.of(context)!.onboardingQ6Title,
                         subtitle: AppLocalizations.of(context)!.onboardingQ6Subtitle,
                         options: const [
@@ -252,10 +251,10 @@ class _OnboardingViewState extends State<_OnboardingView> {
                             context.read<OnboardingCubit>().toggleCountry(v),
                         onNext: _nextPage,
                       ),
-                      // Page 7: Experience Level
+                      // Page 6: Experience Level
                       ExperienceLevelPage(
-                        step: 7,
-                        totalSteps: 7,
+                        step: 6,
+                        totalSteps: 6,
                         selectedLevel: state.experienceLevel,
                         onSelect: (v) => context
                             .read<OnboardingCubit>()
@@ -263,7 +262,10 @@ class _OnboardingViewState extends State<_OnboardingView> {
                         onNext: _nextPage,
                       ),
                       // Page 8: Analyzing Loading
-                      AnalyzingPage(onComplete: _nextPage),
+                      AnalyzingPage(
+                        onComplete: _nextPage,
+                        dryFruityValue: state.dryFruityValue,
+                      ),
                       // Page 9: Hook Result
                       const HookScreen(),
                     ],

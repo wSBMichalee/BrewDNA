@@ -143,6 +143,21 @@ class SupabaseBeerRepository implements IBeerRepository {
       return left(e.toString());
     }
   }
+
+  @override
+  Future<Either<String, List<String>>> getAllStyles() async {
+    try {
+      final response = await _supabase
+          .from('styles')
+          .select('name')
+          .order('name');
+      
+      final styles = (response as List).map((e) => e['name'] as String).toList();
+      return right(styles);
+    } catch (e) {
+      return left(e.toString());
+    }
+  }
   
   String _getCountryName(String countryCode) {
     switch (countryCode.toUpperCase()) {

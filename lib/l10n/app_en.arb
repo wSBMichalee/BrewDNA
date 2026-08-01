@@ -50,8 +50,22 @@
   "historyTabHistory": "History",
   "historyEmptyState": "No data available",
   "mapTitle": "World Map",
-  "mapCountriesDiscovered": "12 z 195 krajów odkrytych",
-  "mapPercentDiscovered": "6% ODKRYTE",
+  "mapCountriesDiscovered": "{count} of 195 countries discovered",
+  "@mapCountriesDiscovered": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mapPercentDiscovered": "{percent}% DISCOVERED",
+  "@mapPercentDiscovered": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "mapRecentlyDiscovered": "Recently discovered",
   "mapEmptyState": "No beers discovered yet.",
   "mapDummyCzech": "Czechy",
@@ -164,9 +178,9 @@
   "onboardingQ3Subtitle": "Think juicy NEIPA versus classic, dry pilsner.",
   "onboardingQ3Left": "Fruity",
   "onboardingQ3Right": "Dry",
-  "onboardingQ4Title": "How about malty notes?",
-  "onboardingQ4Subtitle": "Crisp and dry, or malty and full-bodied?",
-  "onboardingQ4Left": "Crisp",
+  "onboardingQ4Title": "Or maybe something malty?",
+  "onboardingQ4Subtitle": "Dry and light, or malty and full?",
+  "onboardingQ4Left": "Dry",
   "onboardingQ4Right": "Malty",
   "onboardingNextButton": "Next",
   "onboardingQ5Title": "What styles do you already know and enjoy?",
@@ -193,7 +207,8 @@
   "onboardingAnalyzingWait": "Just a moment...",
   "onboardingFactTitle": "Your taste profile is taking shape",
   "onboardingFactBadge": "DID YOU KNOW?",
-  "onboardingFactContent": "Hops belong to the same plant family as cannabis — that's why some beers have such distinct, herbal aromas.",
+  "onboardingFactContentFruity": "Hops can be selected so that the beer smells like mango or passion fruit, even though there isn't a single gram of fruit in the brewery - this is due to natural compounds (thiols) released by yeast during fermentation.",
+  "onboardingFactContentDry": "Classic, dry lagers are aged at low temperatures for up to several weeks - it's this long, cold rest that gives them such a clean, crisp finish.",
   "onboardingHookTitle": "Great!",
   "onboardingHookSubtitle": "Based on your answers, you'll probably like",
   "onboardingHookDescription": "SOCZYSTE, OWOCOWE, Z NUTĄ CYTRUSÓW",

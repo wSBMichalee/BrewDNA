@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
+import 'dart:ui' as ui;
 
 class ChipSelectionPage extends StatelessWidget {
   final int step;
@@ -54,52 +55,52 @@ class ChipSelectionPage extends StatelessWidget {
           ),
           SizedBox(height: AppSpacings.s32),
           Expanded(
-            child: SingleChildScrollView(
-              child: Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                alignment: WrapAlignment.center,
-                children: options.map((option) {
-                  final isSelected = selectedValues.contains(option);
-                  return GestureDetector(
-                    onTap: () => onToggle(option),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: AppSpacings.s20,
-                        vertical: AppSpacings.s12,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isSelected ? AppColors.accent : AppColors.white,
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                          color: isSelected
-                              ? AppColors.accent
-                              : AppColors.separator,
-                          width: 1,
+            child: GridView.builder(
+              padding: const EdgeInsets.only(bottom: AppSpacings.s32),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 3.0,
+              ),
+              itemCount: options.length,
+              itemBuilder: (context, index) {
+                final option = options[index];
+                final isSelected = selectedValues.contains(option);
+                return GestureDetector(
+                  onTap: () => onToggle(option),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(24),
+                    child: BackdropFilter(
+                      filter: ui.ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.symmetric(horizontal: AppSpacings.s8),
+                        decoration: BoxDecoration(
+                          color: isSelected ? AppColors.accent : AppColors.background.withValues(alpha: 0.65),
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(
+                            color: isSelected
+                                ? AppColors.accent
+                                : AppColors.separator.withValues(alpha: 0.5),
+                            width: 1,
+                          ),
                         ),
-                        boxShadow: isSelected
-                            ? []
-                            : [
-                                BoxShadow(
-                                  color: AppColors.black.withValues(
-                                    alpha: 0.02,
-                                  ),
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                      ),
-                      child: Text(
-                        option,
-                        style: AppTypography.body.copyWith(
-                          color: isSelected ? AppColors.white : AppColors.label,
-                          fontWeight: FontWeight.w600,
+                        child: Text(
+                          option,
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTypography.body.copyWith(
+                            color: isSelected ? AppColors.white : AppColors.label,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
-                  );
-                }).toList(),
-              ),
+                  ),
+                );
+              },
             ),
           ),
           SizedBox(height: AppSpacings.s16),

@@ -3,13 +3,41 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';
+import 'dart:ui' as ui;
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../bloc/onboarding_cubit.dart';
 
-class HookScreen extends StatelessWidget {
+class HookScreen extends StatefulWidget {
   const HookScreen({super.key});
+
+  @override
+  State<HookScreen> createState() => _HookScreenState();
+}
+
+class _HookScreenState extends State<HookScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _scaleAnimation = CurvedAnimation(parent: _controller, curve: Curves.elasticOut);
+    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,102 +49,142 @@ class HookScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Spacer(),
-          // Badge
-          Container(
-            width: 64,
-            height: 64,
-            decoration: const BoxDecoration(
-              color: AppColors.accentTint,
-              shape: BoxShape.circle,
-            ),
-            child: const Center(
-              child: Icon(
-                CupertinoIcons.checkmark_alt,
-                color: AppColors.accent,
-                size: 32,
+          // Badge with Animation
+          ScaleTransition(
+            scale: _scaleAnimation,
+            child: Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [AppColors.accent, Color(0xFFFFC107)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.accent.withValues(alpha: 0.4),
+                    blurRadius: 20,
+                    spreadRadius: 4,
+                  ),
+                ],
+              ),
+              child: const Center(
+                child: Icon(
+                  CupertinoIcons.checkmark_alt,
+                  color: AppColors.white,
+                  size: 40,
+                ),
               ),
             ),
           ),
           SizedBox(height: AppSpacings.s24),
-          Text(AppLocalizations.of(context)!.onboardingHookTitle, style: AppTypography.title2.copyWith(fontSize: 28)),
+          FadeTransition(
+            opacity: _fadeAnimation,
+            child: Text(
+              AppLocalizations.of(context)!.onboardingHookTitle, 
+              style: AppTypography.brandDisplay.copyWith(color: AppColors.label),
+              textAlign: TextAlign.center,
+            ),
+          ),
           SizedBox(height: AppSpacings.s12),
-          Text(
-            AppLocalizations.of(context)!.onboardingHookSubtitle,
-            style: AppTypography.body.copyWith(color: AppColors.labelSecondary),
-            textAlign: TextAlign.center,
+          FadeTransition(
+            opacity: _fadeAnimation,
+            child: Text(
+              AppLocalizations.of(context)!.onboardingHookSubtitle,
+              style: AppTypography.body.copyWith(color: AppColors.labelSecondary),
+              textAlign: TextAlign.center,
+            ),
           ),
           SizedBox(height: AppSpacings.s32),
 
-          // Result Card
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(
-              vertical: AppSpacings.s32,
-              horizontal: AppSpacings.s24,
-            ),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(AppRadius.card),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.black.withValues(alpha: 0.05),
-                  blurRadius: 15,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                Container(
-                  width: 100,
-                  height: 100,
-                  decoration: const BoxDecoration(
-                    color: AppColors.accentTint,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: CachedNetworkImage(
-                      imageUrl:
-                          'https://media.screensdesign.com/gasset/e82346341291427ab997b8edb1aa3252_screen_image_ne_ipa_visual_8f69909d1e.png',
-                      width: 70,
-                      height: 70,
-                      fit: BoxFit.contain,
+          // Result Card with Glassmorphism and Animation
+          FadeTransition(
+            opacity: _fadeAnimation,
+            child: SlideTransition(
+              position: Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero)
+                  .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutQuart)),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppRadius.card),
+                child: BackdropFilter(
+                  filter: ui.ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(
+                      vertical: AppSpacings.s32,
+                      horizontal: AppSpacings.s24,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.background.withValues(alpha: 0.65),
+                      borderRadius: BorderRadius.circular(AppRadius.card),
+                      border: Border.all(
+                        color: AppColors.separator.withValues(alpha: 0.5),
+                        width: 1,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: const BoxDecoration(
+                            color: AppColors.accentTint,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  'https://media.screensdesign.com/gasset/e82346341291427ab997b8edb1aa3252_screen_image_ne_ipa_visual_8f69909d1e.png',
+                              width: 70,
+                              height: 70,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: AppSpacings.s24),
+                        Text(
+                          styleName,
+                          style: AppTypography.title2.copyWith(color: AppColors.accent),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: AppSpacings.s8),
+                        Text(
+                          AppLocalizations.of(context)!.onboardingHookDescription,
+                          style: AppTypography.caption.copyWith(
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.0,
+                            color: AppColors.labelSecondary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                SizedBox(height: AppSpacings.s24),
-                Text(
-                  styleName,
-                  style: AppTypography.title2.copyWith(color: AppColors.accent),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: AppSpacings.s8),
-                Text(
-                  AppLocalizations.of(context)!.onboardingHookDescription,
-                  style: AppTypography.caption.copyWith(
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.0,
-                    color: AppColors.labelSecondary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+              ),
             ),
           ),
           SizedBox(height: AppSpacings.s32),
 
-          Text(
-            AppLocalizations.of(context)!.onboardingHookFooter,
-            style: AppTypography.body.copyWith(
-              fontStyle: FontStyle.italic,
-              color: AppColors.labelSecondary,
+          FadeTransition(
+            opacity: _fadeAnimation,
+            child: Text(
+              AppLocalizations.of(context)!.onboardingHookFooter,
+              style: AppTypography.body.copyWith(
+                fontStyle: FontStyle.italic,
+                color: AppColors.labelSecondary,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           ),
           const Spacer(),
-          AppButton(
-            text: AppLocalizations.of(context)!.onboardingHookRegisterButton,
-            onPressed: () => context.go('/auth/start'),
+          FadeTransition(
+            opacity: _fadeAnimation,
+            child: AppButton(
+              text: AppLocalizations.of(context)!.onboardingHookRegisterButton,
+              onPressed: () => context.go('/auth/start'),
+            ),
           ),
           SizedBox(height: AppSpacings.s16),
         ],

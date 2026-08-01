@@ -86,6 +86,11 @@ class MockBeerRepository implements IBeerRepository {
   }
 
   @override
+  Future<Either<String, List<String>>> getAllStyles() async {
+    return right(['IPA', 'Lager', 'Weizen', 'Stout', 'Sour', 'Belgijskie', 'Porter', 'Pils']);
+  }
+
+  @override
   Future<Either<String, Beer>> getBeerById(String id) async {
     await Future.delayed(Duration(milliseconds: 500));
     final beers = [_mockBeer, _mockBeer2, _mockBeer3];

@@ -164,10 +164,14 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mapTitle => 'Mapa świata';
 
   @override
-  String get mapCountriesDiscovered => '12 z 195 krajów odkrytych';
+  String mapCountriesDiscovered(int count) {
+    return '$count z 195 krajów odkrytych';
+  }
 
   @override
-  String get mapPercentDiscovered => '6% ODKRYTE';
+  String mapPercentDiscovered(int percent) {
+    return '$percent% ODKRYTE';
+  }
 
   @override
   String get mapRecentlyDiscovered => 'Ostatnio odkryte';
@@ -447,10 +451,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get onboardingQ4Title => 'A może coś słodowego?';
 
   @override
-  String get onboardingQ4Subtitle => 'Chrupiące i suche, czy słodowe i pełne?';
+  String get onboardingQ4Subtitle => 'Suche i lekkie, czy słodowe i pełne?';
 
   @override
-  String get onboardingQ4Left => 'Orzeźwiające';
+  String get onboardingQ4Left => 'Suche';
 
   @override
   String get onboardingQ4Right => 'Słodowe';
@@ -520,8 +524,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get onboardingFactBadge => 'CZY WIESZ, ŻE?';
 
   @override
-  String get onboardingFactContent =>
-      'Chmiel należy do tej samej rodziny roślin co konopie — to dlatego niektóre piwa mają tak wyraziste, ziołowe aromaty.';
+  String get onboardingFactContentFruity =>
+      'Chmiel można tak dobrać, że piwo pachnie mango czy marakują, mimo że w warzelni nie ma ani grama owoców - to zasługa naturalnych związków (tioli) uwalnianych przez drożdże podczas fermentacji.';
+
+  @override
+  String get onboardingFactContentDry =>
+      'Klasyczne, wytrawne lagery leżakują w niskiej temperaturze nawet kilka tygodni - to właśnie ten długi, zimny spoczynek daje im tak czysty, chrupiący finisz.';
 
   @override
   String get onboardingHookTitle => 'Świetnie!';

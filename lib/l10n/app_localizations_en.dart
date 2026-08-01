@@ -165,10 +165,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapTitle => 'World Map';
 
   @override
-  String get mapCountriesDiscovered => '12 z 195 krajów odkrytych';
+  String mapCountriesDiscovered(int count) {
+    return '$count of 195 countries discovered';
+  }
 
   @override
-  String get mapPercentDiscovered => '6% ODKRYTE';
+  String mapPercentDiscovered(int percent) {
+    return '$percent% DISCOVERED';
+  }
 
   @override
   String get mapRecentlyDiscovered => 'Recently discovered';
@@ -444,13 +448,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingQ3Right => 'Dry';
 
   @override
-  String get onboardingQ4Title => 'How about malty notes?';
+  String get onboardingQ4Title => 'Or maybe something malty?';
 
   @override
-  String get onboardingQ4Subtitle => 'Crisp and dry, or malty and full-bodied?';
+  String get onboardingQ4Subtitle => 'Dry and light, or malty and full?';
 
   @override
-  String get onboardingQ4Left => 'Crisp';
+  String get onboardingQ4Left => 'Dry';
 
   @override
   String get onboardingQ4Right => 'Malty';
@@ -520,8 +524,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingFactBadge => 'DID YOU KNOW?';
 
   @override
-  String get onboardingFactContent =>
-      'Hops belong to the same plant family as cannabis — that\'s why some beers have such distinct, herbal aromas.';
+  String get onboardingFactContentFruity =>
+      'Hops can be selected so that the beer smells like mango or passion fruit, even though there isn\'t a single gram of fruit in the brewery - this is due to natural compounds (thiols) released by yeast during fermentation.';
+
+  @override
+  String get onboardingFactContentDry =>
+      'Classic, dry lagers are aged at low temperatures for up to several weeks - it\'s this long, cold rest that gives them such a clean, crisp finish.';
 
   @override
   String get onboardingHookTitle => 'Great!';

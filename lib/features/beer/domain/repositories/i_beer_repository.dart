@@ -8,4 +8,5 @@ abstract class IBeerRepository {
   Future<Either<String, List<Beer>>> getTopRatedBeers();
   Future<Either<String, Beer>> getBeerOfTheDay();
   Future<Either<String, Beer>> getBeerById(String id);
+  Future<Either<String, List<String>>> getAllStyles();
 }

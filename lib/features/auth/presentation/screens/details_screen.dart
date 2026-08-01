@@ -279,7 +279,6 @@ class _AuthDetailsScreenState extends State<AuthDetailsScreen> {
                                           'axis_strength': onboardingState.lightStrongValue,
                                           'axis_bitterness': onboardingState.bitterSweetValue,
                                           'axis_fruitiness': onboardingState.dryFruityValue,
-                                          'axis_maltiness': onboardingState.crispMaltyValue,
                                           'preferred_styles': onboardingState.selectedStyles.toList(),
                                           'preferred_countries': onboardingState.selectedCountries.toList(),
                                           'experience_level': onboardingState.experienceLevel,

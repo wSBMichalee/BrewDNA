@@ -14,6 +14,7 @@ class QuizQuestionPage extends StatelessWidget {
   final String question;
   final String subtitle;
   final String imageUrl;
+  final String? imageUrlEnd;
   final String leftLabel;
   final String rightLabel;
   final String buttonLabel;
@@ -27,6 +28,7 @@ class QuizQuestionPage extends StatelessWidget {
     required this.question,
     required this.subtitle,
     required this.imageUrl,
+    this.imageUrlEnd,
     required this.leftLabel,
     required this.rightLabel,
     required this.buttonLabel,
@@ -37,13 +39,15 @@ class QuizQuestionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double fraction = sliderValue / 100;
+    
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24),
       child: Column(
         children: [
           SizedBox(height: AppSpacings.s32),
           Text(
-            AppLocalizations.of(context)!.onboardingStep(step.toString(), '4'),
+            AppLocalizations.of(context)!.onboardingStep(step.toString(), '3'),
             style: AppTypography.caption.copyWith(
               color: AppColors.accent,
               fontWeight: FontWeight.w700,
@@ -78,31 +82,50 @@ class QuizQuestionPage extends StatelessWidget {
                 ),
               ],
             ),
-            child: Center(
-              child: ColorFiltered(
-                colorFilter: ColorFilter.matrix(_saturationMatrix(
-                  lerpDouble(0.35, 1.6, sliderValue / 100)!
-                )),
-                child: CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  width: 140,
-                  height: 140,
-                  fit: BoxFit.contain,
-                  placeholder: (context, url) => Shimmer.fromColors(
-                    baseColor: AppColors.separator,
-                    highlightColor: AppColors.background,
-                    child: Container(
-                      width: 140,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(32),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(40),
+              child: imageUrlEnd != null
+                  ? Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Opacity(
+                          opacity: 1.0 - fraction,
+                          child: CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const SizedBox(),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                          ),
+                        ),
+                        Opacity(
+                          opacity: fraction,
+                          child: CachedNetworkImage(
+                            imageUrl: imageUrlEnd!,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const SizedBox(),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                          ),
+                        ),
+                      ],
+                    )
+                  : SizedBox.expand(
+                      child: ColorFiltered(
+                        colorFilter: ColorFilter.matrix(
+                            _saturationMatrix(lerpDouble(0.35, 1.6, fraction)!)),
+                        child: CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Shimmer.fromColors(
+                            baseColor: AppColors.separator,
+                            highlightColor: AppColors.background,
+                            child: Container(
+                              color: Colors.white,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                        ),
                       ),
                     ),
-                  ),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                ),
-              ),
             ),
           ),
           const Spacer(),

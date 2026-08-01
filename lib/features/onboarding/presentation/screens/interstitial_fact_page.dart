@@ -5,8 +5,13 @@ import '../../../../core/widgets/app_button.dart';
 
 class InterstitialFactPage extends StatelessWidget {
   final VoidCallback onNext;
+  final double dryFruityValue;
 
-  const InterstitialFactPage({super.key, required this.onNext});
+  const InterstitialFactPage({
+    super.key,
+    required this.onNext,
+    required this.dryFruityValue,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +65,9 @@ class InterstitialFactPage extends StatelessWidget {
                 ),
                 SizedBox(height: AppSpacings.s16),
                 Text(
-                  AppLocalizations.of(context)!.onboardingFactContent,
+                  dryFruityValue < 50
+                      ? AppLocalizations.of(context)!.onboardingFactContentFruity
+                      : AppLocalizations.of(context)!.onboardingFactContentDry,
                   style: AppTypography.body,
                   textAlign: TextAlign.center,
                 ),

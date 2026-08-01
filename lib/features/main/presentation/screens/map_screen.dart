@@ -5,9 +5,34 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/di/injection.dart';
 import '../../../beer/presentation/bloc/beer_cubit.dart';
 import '../../../beer/presentation/bloc/beer_state.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';
+import 'package:countries_world_map/countries_world_map.dart';
+import 'package:countries_world_map/data/maps/world_map.dart';
+
+const Map<String, String> _countryToCode = {
+  // Nazwy mockowane (z MockBeerRepository)
+  'Polska': 'pl',
+  'Poland': 'pl',
+  'Niemcy': 'de',
+  'Germany': 'de',
+  'Belgia': 'be',
+  'Belgium': 'be',
+  'Czechy': 'cz',
+  'Czech Republic': 'cz',
+  'Wielka Brytania': 'gb',
+  'United Kingdom': 'gb',
+  'United States': 'us',
+
+  // Realne dane z bazy z tabeli breweries (seed.sql)
+  'PL': 'pl',
+  'UK': 'gb',
+  'USA': 'us',
+  'DK': 'dk',
+  'SE': 'se',
+  'IE': 'ie',
+  'BE': 'be',
+};
 
 class MapScreen extends StatelessWidget {
   const MapScreen({super.key});
@@ -16,11 +41,33 @@ class MapScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<BeerCubit>()..loadHistory(),
-      child: Scaffold(
-        backgroundColor: AppColors.background,
-        body: SafeArea(
-          bottom: false,
-          child: CustomScrollView(
+      child: BlocBuilder<BeerCubit, BeerState>(
+        builder: (context, state) {
+          final int uniqueCountries = state.maybeWhen(
+            loaded: (history, _, __, ___, ____, _____, ______) =>
+                history.map((b) => b.country).toSet().length,
+            orElse: () => 0,
+          );
+          final int percent = (uniqueCountries / 195 * 100).floor();
+
+          final Map<String, Color> mapColors = {};
+          state.maybeWhen(
+            loaded: (history, _, __, ___, ____, _____, ______) {
+              for (final b in history) {
+                final code = _countryToCode[b.country];
+                if (code != null) {
+                  mapColors[code] = AppColors.accent;
+                }
+              }
+            },
+            orElse: () {},
+          );
+
+          return Scaffold(
+            backgroundColor: AppColors.background,
+            body: SafeArea(
+              bottom: false,
+              child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
                 child: Padding(
@@ -29,9 +76,9 @@ class MapScreen extends StatelessWidget {
                     children: [
                       Text(AppLocalizations.of(context)!.mapTitle, style: AppTypography.largeTitle),
                       const SizedBox(height: 8),
-                      // TODO: Get actual count of unique countries from user data
+                      // Actual count of unique countries from user data
                       Text(
-                        AppLocalizations.of(context)!.mapCountriesDiscovered,
+                        AppLocalizations.of(context)!.mapCountriesDiscovered(uniqueCountries),
                         style: AppTypography.subhead.copyWith(
                           color: AppColors.labelSecondary,
                         ),
@@ -61,23 +108,18 @@ class MapScreen extends StatelessWidget {
                     clipBehavior: Clip.antiAlias,
                     child: Stack(
                       children: [
-                        // Map Image Placeholder
+                        // Interactive World Map
                         Positioned.fill(
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                'https://media.screensdesign.com/afprjsia/b9d750c3-f6ef-466d-aba7-c452e804f85e.png', // A generic map graphic URL as placeholder, or we can use local asset if available
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Shimmer.fromColors(
-                              baseColor: AppColors.separator,
-                              highlightColor: AppColors.background,
-                              child: Container(color: Colors.white),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              color: Color(0xFFF5F5F5),
-                              child: Icon(
-                                CupertinoIcons.map,
-                                size: 64,
-                                color: AppColors.separator,
+                          child: RepaintBoundary(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: SimpleMap(
+                                instructions: SMapWorld.instructions,
+                                defaultColor: AppColors.separator.withValues(alpha: 0.3),
+                                colors: mapColors,
+                                callback: (id, name, tapDetails) {
+                                  debugPrint("Tapped country: $id, $name");
+                                },
                               ),
                             ),
                           ),
@@ -104,9 +146,9 @@ class MapScreen extends StatelessWidget {
                                   size: 14,
                                 ),
                                 const SizedBox(width: 4),
-                                // TODO: Calculate actual percentage based on discovered countries
+                                // Actual percentage based on discovered countries
                                 Text(
-                                  AppLocalizations.of(context)!.mapPercentDiscovered,
+                                  AppLocalizations.of(context)!.mapPercentDiscovered(percent),
                                   style: AppTypography.caption.copyWith(
                                     color: AppColors.white,
                                     fontWeight: FontWeight.bold,
@@ -133,9 +175,9 @@ class MapScreen extends StatelessWidget {
 
               SliverToBoxAdapter(child: SizedBox(height: AppSpacings.s16)),
 
-              // History List from Cubit
-              BlocBuilder<BeerCubit, BeerState>(
-                builder: (context, state) {
+              // History List from Cubit state
+              Builder(
+                builder: (context) {
                   return state.maybeWhen(
                     loading: () => SliverToBoxAdapter(
                       child: Shimmer.fromColors(
@@ -271,6 +313,8 @@ class MapScreen extends StatelessWidget {
             ],
           ),
         ),
+          ); // end of Scaffold
+        },
       ),
     );
   }
