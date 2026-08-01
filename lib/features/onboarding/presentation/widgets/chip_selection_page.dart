@@ -56,7 +56,7 @@ class ChipSelectionPage extends StatelessWidget {
           SizedBox(height: AppSpacings.s32),
           Expanded(
             child: GridView.builder(
-              padding: const EdgeInsets.only(bottom: AppSpacings.s32),
+              padding: EdgeInsets.only(bottom: AppSpacings.s32),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 12,
