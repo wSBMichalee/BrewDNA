@@ -128,7 +128,7 @@ class PaywallSelectionScreen extends StatelessWidget {
                           onPressed: () async {
                             await context.read<PaywallCubit>().confirmPlan();
                             if (context.mounted && context.read<PaywallCubit>().state.error == null) {
-                              context.go('/main/discover');
+                              context.go('/auth/welcome');
                             }
                           },
                         ),

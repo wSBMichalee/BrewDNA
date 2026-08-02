@@ -32,7 +32,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
     try {
       await context.read<AuthCubit>().signInWithEmail();
       if (mounted) {
-        context.go('/auth/welcome');
+        context.go('/main/discover');
       }
     } catch (e) {
       if (mounted) {
@@ -225,7 +225,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                           ),
                           const SizedBox(width: 4),
                           GestureDetector(
-                            onTap: () => context.push('/auth/start'),
+                            onTap: () => context.go('/onboarding/intro'),
                             child: Text(
                               'Zarejestruj się',
                               style: AppTypography.linkCaptionBold,

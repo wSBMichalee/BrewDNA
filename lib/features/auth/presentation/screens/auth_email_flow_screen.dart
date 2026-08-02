@@ -110,9 +110,33 @@ class _AuthEmailFlowScreenState extends State<AuthEmailFlowScreen> {
 
   Future<void> _handleSubmit(AuthState state) async {
     if (state.isReturningUser) {
-      // Login flow
-      // AuthCubit loginWithEmail should be called here, but it routes directly to welcome right now
-      context.go('/auth/welcome');
+      setState(() => _isLoading = true);
+      try {
+        await context.read<AuthCubit>().signInWithEmail();
+        if (mounted) {
+          context.go('/main/discover');
+        }
+      } catch (e) {
+        if (mounted) {
+          showCupertinoDialog(
+            context: context,
+            builder: (context) => CupertinoAlertDialog(
+              title: const Text('Błąd logowania'),
+              content: const Text('Nieprawidłowy e-mail lub hasło.'),
+              actions: [
+                CupertinoDialogAction(
+                  child: const Text('OK'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
+      }
     } else {
       // Register flow
       setState(() => _isLoading = true);
@@ -130,7 +154,7 @@ class _AuthEmailFlowScreenState extends State<AuthEmailFlowScreen> {
         await context.read<AuthCubit>().signUpWithEmail(tasteProfileData);
 
         if (mounted) {
-          context.go('/auth/welcome');
+          context.go('/paywall');
         }
       } catch (e) {
         if (mounted) {
@@ -311,7 +335,7 @@ class _AuthEmailFlowScreenState extends State<AuthEmailFlowScreen> {
                               AnimatedSize(
                                 duration: const Duration(milliseconds: 300),
                                 curve: Curves.easeInOut,
-                                child: (!state.isReturningUser && isPasswordValid) ? Column(
+                                child: (!state.isReturningUser) ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     SizedBox(height: AppSpacings.s32),
