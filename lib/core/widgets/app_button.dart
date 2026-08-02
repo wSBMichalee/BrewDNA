@@ -6,6 +6,10 @@ class AppButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isPrimary;
   final bool isLoading;
+  final Widget? icon;
+  final Color? backgroundColor;
+  final Color? textColor;
+  final Border? border;
 
   const AppButton({
     super.key,
@@ -13,6 +17,10 @@ class AppButton extends StatelessWidget {
     this.onPressed,
     this.isPrimary = true,
     this.isLoading = false,
+    this.icon,
+    this.backgroundColor,
+    this.textColor,
+    this.border,
   });
 
   @override
@@ -24,19 +32,29 @@ class AppButton extends StatelessWidget {
         height: 56,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: isPrimary ? AppColors.accent : AppColors.accentTint,
+          color: backgroundColor ?? (isPrimary ? AppColors.accent : AppColors.accentTint),
           borderRadius: BorderRadius.circular(AppRadius.button),
+          border: border,
         ),
         alignment: Alignment.center,
         child: isLoading
             ? CupertinoActivityIndicator(
-                color: isPrimary ? AppColors.background : AppColors.accent,
+                color: textColor ?? (isPrimary ? AppColors.background : AppColors.accent),
               )
-            : Text(
-                text,
-                style: AppTypography.headline.copyWith(
-                  color: isPrimary ? AppColors.background : AppColors.accent,
-                ),
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (icon != null) ...[
+                    icon!,
+                    SizedBox(width: AppSpacings.s12),
+                  ],
+                  Text(
+                    text,
+                    style: AppTypography.headline.copyWith(
+                      color: textColor ?? (isPrimary ? AppColors.background : AppColors.accent),
+                    ),
+                  ),
+                ],
               ),
       ),
     );

@@ -8,8 +8,11 @@ abstract class AuthState with _$AuthState {
     @Default('') String email,
     @Default('') String password,
     @Default('') String name,
-    @Default('Polska') String country,
+    @Default('') String country,
     @Default(false) bool acceptedTerms,
     @Default(false) bool isReturningUser,
+    @Default(false) bool isAuthenticated,
+    @Default(false) bool isLoading,
+    String? error,
   }) = _AuthState;
 }

@@ -9,13 +9,13 @@ import '../../features/onboarding/presentation/screens/splash_screen.dart';
 import '../../features/onboarding/presentation/screens/intro_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/onboarding/presentation/screens/hook_screen.dart';
-import '../../features/auth/presentation/screens/email_screen.dart';
-import '../../features/auth/presentation/screens/password_screen.dart';
-import '../../features/auth/presentation/screens/details_screen.dart';
+import '../../features/auth/presentation/screens/auth_email_flow_screen.dart';
 import '../../features/auth/presentation/screens/welcome_screen.dart';
 import '../../features/auth/presentation/screens/auth_start_screen.dart';
+import '../../features/auth/presentation/screens/auth_login_screen.dart';
 
-import '../../features/paywall/presentation/screens/paywall_screen.dart';
+import '../../features/paywall/presentation/screens/paywall_selection_screen.dart';
+import '../../features/paywall/presentation/screens/paywall_benefits_screen.dart';
 
 import '../../features/main/presentation/screens/scan_screen.dart';
 import '../../features/main/presentation/screens/history_screen.dart';
@@ -29,9 +29,9 @@ import '../../features/beer/presentation/screens/beer_reviews_screen.dart';
 import '../../features/beer/domain/entities/review.dart';
 import '../../features/beer/domain/entities/rating_histogram.dart';
 import 'main_shell.dart';
-import '../theme/app_theme.dart';
+
 import '../../core/di/injection.dart';
-import '../../features/auth/presentation/bloc/auth_cubit.dart';
+
 import '../../features/onboarding/presentation/bloc/onboarding_cubit.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -58,39 +58,7 @@ class AuthShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final location = GoRouterState.of(context).uri.toString();
-    final hideBack = location == '/' || location.startsWith('/onboarding') || location == '/auth/welcome' || location == '/auth/start';
-
-    return BlocProvider.value(
-      value: getIt<AuthCubit>(),
-      child: PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (didPop, result) {
-          if (didPop) return;
-          if (!hideBack && context.canPop()) {
-            context.pop();
-          }
-        },
-        child: Scaffold(
-          backgroundColor: AppColors.background,
-          appBar: hideBack
-              ? null
-              : AppBar(
-                  backgroundColor: AppColors.background,
-                  elevation: 0,
-                  leading: IconButton(
-                    icon: Icon(CupertinoIcons.back, color: AppColors.label),
-                    onPressed: () {
-                      if (context.canPop()) {
-                        context.pop();
-                      }
-                    },
-                  ),
-                ),
-          body: child,
-        ),
-      ),
-    );
+    return child;
   }
 }
 
@@ -105,7 +73,11 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/paywall',
-      builder: (context, state) => PaywallScreen(),
+      builder: (context, state) => PaywallSelectionScreen(),
+    ),
+    GoRoute(
+      path: '/paywall/benefits',
+      builder: (context, state) => PaywallBenefitsScreen(),
     ),
     // Auth Flow Shell
     ShellRoute(
@@ -136,16 +108,12 @@ final GoRouter appRouter = GoRouter(
         ),
 
         GoRoute(
-          path: '/auth/email',
-          builder: (context, state) => AuthEmailScreen(),
+          path: '/auth/email_flow',
+          builder: (context, state) => AuthEmailFlowScreen(),
         ),
         GoRoute(
-          path: '/auth/password',
-          builder: (context, state) => AuthPasswordScreen(),
-        ),
-        GoRoute(
-          path: '/auth/details',
-          builder: (context, state) => AuthDetailsScreen(),
+          path: '/auth/login',
+          builder: (context, state) => AuthLoginScreen(),
         ),
         GoRoute(
           path: '/auth/welcome',

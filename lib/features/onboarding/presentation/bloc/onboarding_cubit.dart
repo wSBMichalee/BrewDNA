@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'onboarding_state.dart';
@@ -15,8 +16,14 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     emit(state.copyWith(isStylesLoading: true));
     final result = await _beerRepository.getAllStyles();
     result.fold(
-      (error) => emit(state.copyWith(isStylesLoading: false)),
-      (styles) => emit(state.copyWith(availableStyles: styles, isStylesLoading: false)),
+      (error) {
+        debugPrint('BrewDNA Debug (Styles): error fetching styles: $error');
+        emit(state.copyWith(isStylesLoading: false));
+      },
+      (styles) {
+        debugPrint('BrewDNA Debug (Styles): fetched ${styles.length} styles');
+        emit(state.copyWith(availableStyles: styles, isStylesLoading: false));
+      },
     );
   }
 

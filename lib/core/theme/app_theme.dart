@@ -46,6 +46,13 @@ class AppTypography {
     fontSize: 40.sp,
   );
 
+  static TextStyle get pageHeadline => TextStyle(
+    fontFamily: 'Fraunces',
+    fontWeight: FontWeight.w700,
+    fontSize: 34.sp,
+    color: AppColors.label,
+  );
+
   static TextStyle get largeTitle => TextStyle(
     fontFamily: fontFamily,
     fontSize: 34.sp,
@@ -107,6 +114,20 @@ class AppTypography {
     fontSize: 12.sp,
     fontWeight: FontWeight.w400,
     color: AppColors.label,
+  );
+
+  static TextStyle get linkCaption => TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.labelSecondary,
+  );
+
+  static TextStyle get linkCaptionBold => TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.accent,
   );
 }
 

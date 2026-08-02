@@ -54,3 +54,4 @@ Pre-production checklist (przypomnij, jeśli temat wypłynie):
 
 - Włączyć z powrotem "Confirm email" w Supabase Auth
 - Dodać reset() dla OnboardingCubit na starcie intro_screen.dart
+- Skonfigurować własny provider SMTP (Resend/Postmark/SendGrid) w Supabase Auth, zamiast polegać na domyślnym (zapobiega bounce rate i rate limits).

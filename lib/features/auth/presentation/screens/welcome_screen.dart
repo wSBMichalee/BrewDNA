@@ -65,7 +65,7 @@ class AuthWelcomeScreen extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context)!.welcomeTitle(displayName),
-                        style: AppTypography.largeTitle,
+                        style: AppTypography.pageHeadline,
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: AppSpacings.s16),

@@ -47,7 +47,7 @@ class QuizQuestionPage extends StatelessWidget {
         children: [
           SizedBox(height: AppSpacings.s32),
           Text(
-            AppLocalizations.of(context)!.onboardingStep(step.toString(), '3'),
+            AppLocalizations.of(context)!.onboardingStep(step.toString(), '6'),
             style: AppTypography.caption.copyWith(
               color: AppColors.accent,
               fontWeight: FontWeight.w700,

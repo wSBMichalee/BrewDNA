@@ -2,8 +2,9 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../auth/presentation/bloc/auth_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -20,8 +21,8 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _outlineOpacity;
   late Animation<double> _fillHeight;
   late Animation<double> _elasticSettle;
-  late Animation<double> _bubblesOpacity;
   late Animation<double> _fadeTransition;
+  late Animation<double> _shineSweep;
 
   @override
   void initState() {
@@ -43,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
 
-    _fillHeight = Tween<double>(begin: 0, end: 0.45).animate(
+    _fillHeight = Tween<double>(begin: 0, end: 1.05).animate(
       CurvedAnimation(
         parent: _mainController,
         curve: Interval(0.13, 0.69, curve: Curves.easeInOut),
@@ -57,13 +58,12 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
 
-    _bubblesOpacity =
-        TweenSequence([
-          TweenSequenceItem(tween: Tween<double>(begin: 0, end: 1), weight: 50),
-          TweenSequenceItem(tween: Tween<double>(begin: 1, end: 0), weight: 50),
-        ]).animate(
-          CurvedAnimation(parent: _mainController, curve: Interval(0.55, 0.75)),
-        );
+    _shineSweep = Tween<double>(begin: -1.0, end: 2.0).animate(
+      CurvedAnimation(
+        parent: _mainController,
+        curve: Interval(0.70, 0.90, curve: Curves.easeInOut),
+      ),
+    );
 
     _fadeTransition = Tween<double>(begin: 1, end: 0).animate(
       CurvedAnimation(
@@ -72,10 +72,15 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
 
-    _mainController.forward().then((_) {
+    _mainController.forward().then((_) async {
       if (mounted) {
-        final session = Supabase.instance.client.auth.currentSession;
-        if (session != null) {
+        // Trigger a fresh session check
+        await context.read<AuthCubit>().checkSession();
+        
+        if (!mounted) return;
+        final isAuthenticated = context.read<AuthCubit>().state.isAuthenticated;
+        
+        if (isAuthenticated) {
           context.go('/main/discover');
         } else {
           context.go('/onboarding/intro');
@@ -125,7 +130,9 @@ class _SplashScreenState extends State<SplashScreen>
                         blendMode: BlendMode.srcIn,
                         shaderCallback: (bounds) {
                           return LinearGradient(
-                            colors: [AppColors.accent, AppColors.accent],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [AppColors.accentDeep, AppColors.accent],
                           ).createShader(bounds);
                         },
                         child: AnimatedBuilder(
@@ -147,39 +154,51 @@ class _SplashScreenState extends State<SplashScreen>
                                       color: AppColors.white,
                                     ),
                                   ),
-                                  if (_bubblesOpacity.value > 0)
-                                    Positioned.fill(
-                                      child: Opacity(
-                                        opacity: _bubblesOpacity.value,
-                                        child: CustomPaint(
-                                          painter: _BubblesPainter(
-                                            progress: _mainController.value,
-                                          ),
-                                        ),
+                                  Positioned.fill(
+                                    child: CustomPaint(
+                                      painter: _BubblesPainter(
+                                        fillPercent: _fillHeight.value,
                                       ),
                                     ),
+                                  ),
                                 ],
                               ),
                             );
                           },
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  bottom:
-                      AppSpacings.s48 + MediaQuery.of(context).padding.bottom,
-                  left: 0,
-                  right: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildDot(false),
-                      SizedBox(width: AppSpacings.s8),
-                      _buildDot(true),
-                      SizedBox(width: AppSpacings.s8),
-                      _buildDot(true),
+                      
+                      // Shine Sweep Layer
+                      AnimatedBuilder(
+                        animation: _shineSweep,
+                        builder: (context, child) {
+                          if (_shineSweep.value <= -1.0 || _shineSweep.value >= 2.0) {
+                            return const SizedBox.shrink();
+                          }
+                          return ShaderMask(
+                            blendMode: BlendMode.srcIn,
+                            shaderCallback: (bounds) {
+                              return LinearGradient(
+                                begin: Alignment(-1.5 + _shineSweep.value, -1.0),
+                                end: Alignment(0.5 + _shineSweep.value, 1.0),
+                                colors: [
+                                  Colors.transparent,
+                                  AppColors.white.withValues(alpha: 0.6),
+                                  Colors.transparent,
+                                ],
+                                stops: const [0.4, 0.5, 0.6],
+                              ).createShader(bounds);
+                            },
+                            child: Text(
+                              'BrewDNA',
+                              style: AppTypography.largeTitle.copyWith(
+                                fontSize: 64,
+                                color: AppColors.white,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -187,19 +206,6 @@ class _SplashScreenState extends State<SplashScreen>
             ),
           );
         },
-      ),
-    );
-  }
-
-  Widget _buildDot(bool faded) {
-    return Container(
-      width: 6,
-      height: 6,
-      decoration: BoxDecoration(
-        color: faded
-            ? AppColors.accent.withValues(alpha: 0.3)
-            : AppColors.accent,
-        shape: BoxShape.circle,
       ),
     );
   }
@@ -239,36 +245,47 @@ class _LiquidClipper extends CustomClipper<Path> {
 }
 
 class _BubblesPainter extends CustomPainter {
-  final double progress;
+  final double fillPercent;
 
-  _BubblesPainter({required this.progress});
+  _BubblesPainter({required this.fillPercent});
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (fillPercent <= 0.0 || fillPercent >= 1.0) return;
+
     final paint = Paint()
-      ..color = AppColors.accentTint
       ..style = PaintingStyle.fill;
 
-    final random = math.Random(42);
-
-    for (int i = 0; i < 6; i++) {
+    // Use a fixed random seed for consistent bubble positions
+    final random = math.Random(123);
+    final int bubbleCount = 8;
+    
+    for (int i = 0; i < bubbleCount; i++) {
       final startX = random.nextDouble() * size.width;
-      final startY = size.height * 0.8 + random.nextDouble() * 20;
-      final endY = size.height * 0.2;
-
-      double localProgress = ((progress - 0.55) / 0.2).clamp(0.0, 1.0);
-      final currentY = startY - ((startY - endY) * localProgress);
-      final currentX = startX + math.sin(localProgress * math.pi * 2 + i) * 5;
-
-      canvas.drawCircle(
-        Offset(currentX, currentY),
-        2.0 + random.nextDouble() * 3,
-        paint,
-      );
+      final speed = 0.5 + random.nextDouble() * 1.5; 
+      final spawnTime = random.nextDouble() * 0.7; // Spawns when fill is between 0 and 0.7
+      
+      if (fillPercent > spawnTime) {
+        final lifeTime = (fillPercent - spawnTime) * speed;
+        final waveHeight = size.height * (1.0 - fillPercent);
+        
+        // Starts below wave, moves up
+        final currentY = waveHeight + 20 - (lifeTime * size.height * 0.8);
+        final wobble = math.sin(lifeTime * math.pi * 6 + i) * 4;
+        final currentX = startX + wobble;
+        
+        // Fade out
+        final opacity = (1.0 - lifeTime * 1.5).clamp(0.0, 0.6);
+        
+        if (opacity > 0 && currentY > 0) {
+          paint.color = AppColors.white.withValues(alpha: opacity);
+          final radius = 2.0 + random.nextDouble() * 4.0;
+          canvas.drawCircle(Offset(currentX, currentY), radius, paint);
+        }
+      }
     }
   }
 
   @override
-  bool shouldRepaint(_BubblesPainter oldDelegate) =>
-      oldDelegate.progress != progress;
+  bool shouldRepaint(_BubblesPainter oldDelegate) => oldDelegate.fillPercent != fillPercent;
 }

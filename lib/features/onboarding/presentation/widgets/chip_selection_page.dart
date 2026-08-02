@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
@@ -55,53 +55,68 @@ class ChipSelectionPage extends StatelessWidget {
           ),
           SizedBox(height: AppSpacings.s32),
           Expanded(
-            child: GridView.builder(
-              padding: EdgeInsets.only(bottom: AppSpacings.s32),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 3.0,
-              ),
-              itemCount: options.length,
-              itemBuilder: (context, index) {
-                final option = options[index];
-                final isSelected = selectedValues.contains(option);
-                return GestureDetector(
-                  onTap: () => onToggle(option),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(24),
-                    child: BackdropFilter(
-                      filter: ui.ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                      child: Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.symmetric(horizontal: AppSpacings.s8),
-                        decoration: BoxDecoration(
-                          color: isSelected ? AppColors.accent : AppColors.background.withValues(alpha: 0.65),
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(
-                            color: isSelected
-                                ? AppColors.accent
-                                : AppColors.separator.withValues(alpha: 0.5),
-                            width: 1,
-                          ),
-                        ),
-                        child: Text(
-                          option,
+            child: options.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(CupertinoIcons.exclamationmark_triangle, color: AppColors.separator, size: 48),
+                        SizedBox(height: AppSpacings.s16),
+                        Text(
+                          'Brak dostępnych stylów piwa.',
+                          style: AppTypography.body.copyWith(color: AppColors.labelSecondary),
                           textAlign: TextAlign.center,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTypography.body.copyWith(
-                            color: isSelected ? AppColors.white : AppColors.label,
-                            fontWeight: FontWeight.w600,
+                        ),
+                      ],
+                    ),
+                  )
+                : GridView.builder(
+                    padding: EdgeInsets.only(bottom: AppSpacings.s32),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                      childAspectRatio: 3.0,
+                    ),
+                    itemCount: options.length,
+                    itemBuilder: (context, index) {
+                      final option = options[index];
+                      final isSelected = selectedValues.contains(option);
+                      return GestureDetector(
+                        onTap: () => onToggle(option),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: BackdropFilter(
+                            filter: ui.ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(horizontal: AppSpacings.s8),
+                              decoration: BoxDecoration(
+                                color: isSelected ? AppColors.accent : AppColors.background.withValues(alpha: 0.65),
+                                borderRadius: BorderRadius.circular(24),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? AppColors.accent
+                                      : AppColors.separator.withValues(alpha: 0.5),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Text(
+                                option,
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTypography.body.copyWith(
+                                  color: isSelected ? AppColors.white : AppColors.label,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
           SizedBox(height: AppSpacings.s16),
           AppButton(text: AppLocalizations.of(context)!.onboardingNextButton, onPressed: onNext),

@@ -8,6 +8,8 @@ import 'core/theme/app_theme.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'features/auth/presentation/bloc/auth_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +47,9 @@ class BrewDNAApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return MaterialApp.router(
+        return BlocProvider(
+          create: (_) => getIt<AuthCubit>(),
+          child: MaterialApp.router(
           title: 'BrewDNA',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
@@ -60,6 +64,7 @@ class BrewDNAApp extends StatelessWidget {
             Locale('pl'),
             Locale('en'),
           ],
+        ),
         );
       },
     );

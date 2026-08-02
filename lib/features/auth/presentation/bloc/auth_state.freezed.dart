@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AuthState {
 
- String get email; String get password; String get name; String get country; bool get acceptedTerms; bool get isReturningUser;
+ String get email; String get password; String get name; String get country; bool get acceptedTerms; bool get isReturningUser; bool get isAuthenticated; bool get isLoading; String? get error;
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AuthStateCopyWith<AuthState> get copyWith => _$AuthStateCopyWithImpl<AuthState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.name, name) || other.name == name)&&(identical(other.country, country) || other.country == country)&&(identical(other.acceptedTerms, acceptedTerms) || other.acceptedTerms == acceptedTerms)&&(identical(other.isReturningUser, isReturningUser) || other.isReturningUser == isReturningUser));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.name, name) || other.name == name)&&(identical(other.country, country) || other.country == country)&&(identical(other.acceptedTerms, acceptedTerms) || other.acceptedTerms == acceptedTerms)&&(identical(other.isReturningUser, isReturningUser) || other.isReturningUser == isReturningUser)&&(identical(other.isAuthenticated, isAuthenticated) || other.isAuthenticated == isAuthenticated)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,email,password,name,country,acceptedTerms,isReturningUser);
+int get hashCode => Object.hash(runtimeType,email,password,name,country,acceptedTerms,isReturningUser,isAuthenticated,isLoading,error);
 
 @override
 String toString() {
-  return 'AuthState(email: $email, password: $password, name: $name, country: $country, acceptedTerms: $acceptedTerms, isReturningUser: $isReturningUser)';
+  return 'AuthState(email: $email, password: $password, name: $name, country: $country, acceptedTerms: $acceptedTerms, isReturningUser: $isReturningUser, isAuthenticated: $isAuthenticated, isLoading: $isLoading, error: $error)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $AuthStateCopyWith<$Res>  {
   factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) _then) = _$AuthStateCopyWithImpl;
 @useResult
 $Res call({
- String email, String password, String name, String country, bool acceptedTerms, bool isReturningUser
+ String email, String password, String name, String country, bool acceptedTerms, bool isReturningUser, bool isAuthenticated, bool isLoading, String? error
 });
 
 
@@ -62,7 +62,7 @@ class _$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? email = null,Object? password = null,Object? name = null,Object? country = null,Object? acceptedTerms = null,Object? isReturningUser = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? email = null,Object? password = null,Object? name = null,Object? country = null,Object? acceptedTerms = null,Object? isReturningUser = null,Object? isAuthenticated = null,Object? isLoading = null,Object? error = freezed,}) {
   return _then(_self.copyWith(
 email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
@@ -70,7 +70,10 @@ as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non
 as String,country: null == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
 as String,acceptedTerms: null == acceptedTerms ? _self.acceptedTerms : acceptedTerms // ignore: cast_nullable_to_non_nullable
 as bool,isReturningUser: null == isReturningUser ? _self.isReturningUser : isReturningUser // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,isAuthenticated: null == isAuthenticated ? _self.isAuthenticated : isAuthenticated // ignore: cast_nullable_to_non_nullable
+as bool,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -155,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String email,  String password,  String name,  String country,  bool acceptedTerms,  bool isReturningUser)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String email,  String password,  String name,  String country,  bool acceptedTerms,  bool isReturningUser,  bool isAuthenticated,  bool isLoading,  String? error)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AuthState() when $default != null:
-return $default(_that.email,_that.password,_that.name,_that.country,_that.acceptedTerms,_that.isReturningUser);case _:
+return $default(_that.email,_that.password,_that.name,_that.country,_that.acceptedTerms,_that.isReturningUser,_that.isAuthenticated,_that.isLoading,_that.error);case _:
   return orElse();
 
 }
@@ -176,10 +179,10 @@ return $default(_that.email,_that.password,_that.name,_that.country,_that.accept
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String email,  String password,  String name,  String country,  bool acceptedTerms,  bool isReturningUser)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String email,  String password,  String name,  String country,  bool acceptedTerms,  bool isReturningUser,  bool isAuthenticated,  bool isLoading,  String? error)  $default,) {final _that = this;
 switch (_that) {
 case _AuthState():
-return $default(_that.email,_that.password,_that.name,_that.country,_that.acceptedTerms,_that.isReturningUser);case _:
+return $default(_that.email,_that.password,_that.name,_that.country,_that.acceptedTerms,_that.isReturningUser,_that.isAuthenticated,_that.isLoading,_that.error);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +199,10 @@ return $default(_that.email,_that.password,_that.name,_that.country,_that.accept
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String email,  String password,  String name,  String country,  bool acceptedTerms,  bool isReturningUser)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String email,  String password,  String name,  String country,  bool acceptedTerms,  bool isReturningUser,  bool isAuthenticated,  bool isLoading,  String? error)?  $default,) {final _that = this;
 switch (_that) {
 case _AuthState() when $default != null:
-return $default(_that.email,_that.password,_that.name,_that.country,_that.acceptedTerms,_that.isReturningUser);case _:
+return $default(_that.email,_that.password,_that.name,_that.country,_that.acceptedTerms,_that.isReturningUser,_that.isAuthenticated,_that.isLoading,_that.error);case _:
   return null;
 
 }
@@ -211,7 +214,7 @@ return $default(_that.email,_that.password,_that.name,_that.country,_that.accept
 
 
 class _AuthState implements AuthState {
-  const _AuthState({this.email = '', this.password = '', this.name = '', this.country = 'Polska', this.acceptedTerms = false, this.isReturningUser = false});
+  const _AuthState({this.email = '', this.password = '', this.name = '', this.country = '', this.acceptedTerms = false, this.isReturningUser = false, this.isAuthenticated = false, this.isLoading = false, this.error});
   
 
 @override@JsonKey() final  String email;
@@ -220,6 +223,9 @@ class _AuthState implements AuthState {
 @override@JsonKey() final  String country;
 @override@JsonKey() final  bool acceptedTerms;
 @override@JsonKey() final  bool isReturningUser;
+@override@JsonKey() final  bool isAuthenticated;
+@override@JsonKey() final  bool isLoading;
+@override final  String? error;
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +237,16 @@ _$AuthStateCopyWith<_AuthState> get copyWith => __$AuthStateCopyWithImpl<_AuthSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.name, name) || other.name == name)&&(identical(other.country, country) || other.country == country)&&(identical(other.acceptedTerms, acceptedTerms) || other.acceptedTerms == acceptedTerms)&&(identical(other.isReturningUser, isReturningUser) || other.isReturningUser == isReturningUser));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.name, name) || other.name == name)&&(identical(other.country, country) || other.country == country)&&(identical(other.acceptedTerms, acceptedTerms) || other.acceptedTerms == acceptedTerms)&&(identical(other.isReturningUser, isReturningUser) || other.isReturningUser == isReturningUser)&&(identical(other.isAuthenticated, isAuthenticated) || other.isAuthenticated == isAuthenticated)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,email,password,name,country,acceptedTerms,isReturningUser);
+int get hashCode => Object.hash(runtimeType,email,password,name,country,acceptedTerms,isReturningUser,isAuthenticated,isLoading,error);
 
 @override
 String toString() {
-  return 'AuthState(email: $email, password: $password, name: $name, country: $country, acceptedTerms: $acceptedTerms, isReturningUser: $isReturningUser)';
+  return 'AuthState(email: $email, password: $password, name: $name, country: $country, acceptedTerms: $acceptedTerms, isReturningUser: $isReturningUser, isAuthenticated: $isAuthenticated, isLoading: $isLoading, error: $error)';
 }
 
 
@@ -251,7 +257,7 @@ abstract mixin class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Re
   factory _$AuthStateCopyWith(_AuthState value, $Res Function(_AuthState) _then) = __$AuthStateCopyWithImpl;
 @override @useResult
 $Res call({
- String email, String password, String name, String country, bool acceptedTerms, bool isReturningUser
+ String email, String password, String name, String country, bool acceptedTerms, bool isReturningUser, bool isAuthenticated, bool isLoading, String? error
 });
 
 
@@ -268,7 +274,7 @@ class __$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? email = null,Object? password = null,Object? name = null,Object? country = null,Object? acceptedTerms = null,Object? isReturningUser = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? email = null,Object? password = null,Object? name = null,Object? country = null,Object? acceptedTerms = null,Object? isReturningUser = null,Object? isAuthenticated = null,Object? isLoading = null,Object? error = freezed,}) {
   return _then(_AuthState(
 email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
@@ -276,7 +282,10 @@ as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non
 as String,country: null == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
 as String,acceptedTerms: null == acceptedTerms ? _self.acceptedTerms : acceptedTerms // ignore: cast_nullable_to_non_nullable
 as bool,isReturningUser: null == isReturningUser ? _self.isReturningUser : isReturningUser // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,isAuthenticated: null == isAuthenticated ? _self.isAuthenticated : isAuthenticated // ignore: cast_nullable_to_non_nullable
+as bool,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

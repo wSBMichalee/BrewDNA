@@ -88,7 +88,7 @@ class IntroScreen extends StatelessWidget {
                     ).createShader(bounds),
                     child: Text(
                       'BrewDNA',
-                      style: AppTypography.brandDisplay.copyWith(color: Colors.white),
+                      style: AppTypography.pageHeadline.copyWith(color: AppColors.white),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -154,7 +154,7 @@ class IntroScreen extends StatelessWidget {
                   SizedBox(height: AppSpacings.s8),
                   _AnimatedLoginButton(
                     text: AppLocalizations.of(context)!.onboardingIntroLoginButton,
-                    onTap: () => context.go('/auth/start'),
+                    onTap: () => context.push('/auth/login'),
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).padding.bottom + AppSpacings.s16,

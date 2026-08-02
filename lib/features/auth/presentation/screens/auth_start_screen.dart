@@ -1,14 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';
-import 'package:sign_in_button/sign_in_button.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../bloc/auth_cubit.dart';
 
 class AuthStartScreen extends StatelessWidget {
   const AuthStartScreen({super.key});
@@ -59,41 +57,43 @@ class AuthStartScreen extends StatelessWidget {
                 children: [
                   Text(
                     AppLocalizations.of(context)!.authStartTitle,
-                    style: AppTypography.brandDisplay.copyWith(color: AppColors.label),
+                    style: AppTypography.pageHeadline,
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: AppSpacings.s48),
                   
                   // Apple Button
-                  SignInWithAppleButton(
-                    onPressed: () async {
-                      try {
-                        await Supabase.instance.client.auth.signInWithOAuth(OAuthProvider.apple);
-                      } catch (e) {
-                        debugPrint('Apple sign in error: $e');
-                      }
-                    },
-                    style: SignInWithAppleButtonStyle.black,
-                    height: 56,
-                    borderRadius: BorderRadius.all(Radius.circular(AppRadius.button)),
-                  ),
+                  Builder(builder: (context) {
+                    debugPrint('--- RENDERING NEW APP BUTTONS ON AUTH START SCREEN ---');
+                    return AppButton(
+                    text: AppLocalizations.of(context)!.authStartApple,
+                    onPressed: () => context.read<AuthCubit>().signInWithApple(),
+                    backgroundColor: AppColors.label,
+                    textColor: AppColors.background,
+                    icon: Icon(
+                      Icons.apple,
+                      color: AppColors.background,
+                      size: 24,
+                    ),
+                  );
+                  }),
                   SizedBox(height: AppSpacings.s16),
                   
                   // Google Button
-                  SizedBox(
-                    height: 56,
-                    child: SignInButton(
-                      Buttons.google,
-                      text: AppLocalizations.of(context)!.authStartGoogle,
-                      onPressed: () async {
-                        try {
-                          await Supabase.instance.client.auth.signInWithOAuth(OAuthProvider.google);
-                        } catch (e) {
-                          debugPrint('Google sign in error: $e');
-                        }
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppRadius.button),
+                  AppButton(
+                    text: AppLocalizations.of(context)!.authStartGoogle,
+                    onPressed: () => context.read<AuthCubit>().signInWithGoogle(),
+                    backgroundColor: AppColors.background,
+                    textColor: AppColors.label,
+                    border: Border.all(color: AppColors.separator),
+                    // Since CupertinoIcons doesn't have a Google logo, we can use an Image or just no icon. Wait! I will use a simple "G" text as icon for Google if there is no image. Or maybe use a raw Text widget as icon.
+                    // Actually, since I don't know if google logo exists in assets, let's just make it without icon or with a generic icon. But wait, Google brand requires the "G".
+                    // Let's use a Text icon.
+                    icon: Text(
+                      'G',
+                      style: AppTypography.headline.copyWith(
+                        color: AppColors.label,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -120,7 +120,7 @@ class AuthStartScreen extends StatelessWidget {
                   AppButton(
                     text: AppLocalizations.of(context)!.authStartEmail,
                     isPrimary: false,
-                    onPressed: () => context.go('/auth/email'),
+                    onPressed: () => context.push('/auth/email_flow'),
                   ),
                   
                   const Spacer(),
@@ -131,17 +131,14 @@ class AuthStartScreen extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context)!.authStartAlreadyHaveAccount,
-                        style: const TextStyle(color: AppColors.labelSecondary),
+                        style: AppTypography.linkCaption,
                       ),
                       const SizedBox(width: 4),
                       GestureDetector(
-                        onTap: () => context.go('/auth/login'),
+                        onTap: () => context.push('/auth/login'),
                         child: Text(
                           AppLocalizations.of(context)!.authStartLogin,
-                          style: AppTypography.body.copyWith(
-                            color: AppColors.accent,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: AppTypography.linkCaptionBold,
                         ),
                       ),
                     ],
