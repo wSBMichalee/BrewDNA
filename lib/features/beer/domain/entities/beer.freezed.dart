@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Beer {
 
- String get id; String get name; String get brewery; String get country; String get style; double get abv; double get rating; double get lightStrong; double get bitterSweet; double get dryFruity; double get crispMalty; String get imageUrl;
+ String get id; String get name; String get brewery; String get country; String get style; double get abv; double get rating; double get lightStrong; double get bitterSweet; double get dryFruity; String get imageUrl;
 /// Create a copy of Beer
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $BeerCopyWith<Beer> get copyWith => _$BeerCopyWithImpl<Beer>(this as Beer, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Beer&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.brewery, brewery) || other.brewery == brewery)&&(identical(other.country, country) || other.country == country)&&(identical(other.style, style) || other.style == style)&&(identical(other.abv, abv) || other.abv == abv)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.lightStrong, lightStrong) || other.lightStrong == lightStrong)&&(identical(other.bitterSweet, bitterSweet) || other.bitterSweet == bitterSweet)&&(identical(other.dryFruity, dryFruity) || other.dryFruity == dryFruity)&&(identical(other.crispMalty, crispMalty) || other.crispMalty == crispMalty)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Beer&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.brewery, brewery) || other.brewery == brewery)&&(identical(other.country, country) || other.country == country)&&(identical(other.style, style) || other.style == style)&&(identical(other.abv, abv) || other.abv == abv)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.lightStrong, lightStrong) || other.lightStrong == lightStrong)&&(identical(other.bitterSweet, bitterSweet) || other.bitterSweet == bitterSweet)&&(identical(other.dryFruity, dryFruity) || other.dryFruity == dryFruity)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,brewery,country,style,abv,rating,lightStrong,bitterSweet,dryFruity,crispMalty,imageUrl);
+int get hashCode => Object.hash(runtimeType,id,name,brewery,country,style,abv,rating,lightStrong,bitterSweet,dryFruity,imageUrl);
 
 @override
 String toString() {
-  return 'Beer(id: $id, name: $name, brewery: $brewery, country: $country, style: $style, abv: $abv, rating: $rating, lightStrong: $lightStrong, bitterSweet: $bitterSweet, dryFruity: $dryFruity, crispMalty: $crispMalty, imageUrl: $imageUrl)';
+  return 'Beer(id: $id, name: $name, brewery: $brewery, country: $country, style: $style, abv: $abv, rating: $rating, lightStrong: $lightStrong, bitterSweet: $bitterSweet, dryFruity: $dryFruity, imageUrl: $imageUrl)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $BeerCopyWith<$Res>  {
   factory $BeerCopyWith(Beer value, $Res Function(Beer) _then) = _$BeerCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String brewery, String country, String style, double abv, double rating, double lightStrong, double bitterSweet, double dryFruity, double crispMalty, String imageUrl
+ String id, String name, String brewery, String country, String style, double abv, double rating, double lightStrong, double bitterSweet, double dryFruity, String imageUrl
 });
 
 
@@ -65,7 +65,7 @@ class _$BeerCopyWithImpl<$Res>
 
 /// Create a copy of Beer
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? brewery = null,Object? country = null,Object? style = null,Object? abv = null,Object? rating = null,Object? lightStrong = null,Object? bitterSweet = null,Object? dryFruity = null,Object? crispMalty = null,Object? imageUrl = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? brewery = null,Object? country = null,Object? style = null,Object? abv = null,Object? rating = null,Object? lightStrong = null,Object? bitterSweet = null,Object? dryFruity = null,Object? imageUrl = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -77,7 +77,6 @@ as double,rating: null == rating ? _self.rating : rating // ignore: cast_nullabl
 as double,lightStrong: null == lightStrong ? _self.lightStrong : lightStrong // ignore: cast_nullable_to_non_nullable
 as double,bitterSweet: null == bitterSweet ? _self.bitterSweet : bitterSweet // ignore: cast_nullable_to_non_nullable
 as double,dryFruity: null == dryFruity ? _self.dryFruity : dryFruity // ignore: cast_nullable_to_non_nullable
-as double,crispMalty: null == crispMalty ? _self.crispMalty : crispMalty // ignore: cast_nullable_to_non_nullable
 as double,imageUrl: null == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -164,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String brewery,  String country,  String style,  double abv,  double rating,  double lightStrong,  double bitterSweet,  double dryFruity,  double crispMalty,  String imageUrl)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String brewery,  String country,  String style,  double abv,  double rating,  double lightStrong,  double bitterSweet,  double dryFruity,  String imageUrl)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Beer() when $default != null:
-return $default(_that.id,_that.name,_that.brewery,_that.country,_that.style,_that.abv,_that.rating,_that.lightStrong,_that.bitterSweet,_that.dryFruity,_that.crispMalty,_that.imageUrl);case _:
+return $default(_that.id,_that.name,_that.brewery,_that.country,_that.style,_that.abv,_that.rating,_that.lightStrong,_that.bitterSweet,_that.dryFruity,_that.imageUrl);case _:
   return orElse();
 
 }
@@ -185,10 +184,10 @@ return $default(_that.id,_that.name,_that.brewery,_that.country,_that.style,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String brewery,  String country,  String style,  double abv,  double rating,  double lightStrong,  double bitterSweet,  double dryFruity,  double crispMalty,  String imageUrl)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String brewery,  String country,  String style,  double abv,  double rating,  double lightStrong,  double bitterSweet,  double dryFruity,  String imageUrl)  $default,) {final _that = this;
 switch (_that) {
 case _Beer():
-return $default(_that.id,_that.name,_that.brewery,_that.country,_that.style,_that.abv,_that.rating,_that.lightStrong,_that.bitterSweet,_that.dryFruity,_that.crispMalty,_that.imageUrl);case _:
+return $default(_that.id,_that.name,_that.brewery,_that.country,_that.style,_that.abv,_that.rating,_that.lightStrong,_that.bitterSweet,_that.dryFruity,_that.imageUrl);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,10 +204,10 @@ return $default(_that.id,_that.name,_that.brewery,_that.country,_that.style,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String brewery,  String country,  String style,  double abv,  double rating,  double lightStrong,  double bitterSweet,  double dryFruity,  double crispMalty,  String imageUrl)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String brewery,  String country,  String style,  double abv,  double rating,  double lightStrong,  double bitterSweet,  double dryFruity,  String imageUrl)?  $default,) {final _that = this;
 switch (_that) {
 case _Beer() when $default != null:
-return $default(_that.id,_that.name,_that.brewery,_that.country,_that.style,_that.abv,_that.rating,_that.lightStrong,_that.bitterSweet,_that.dryFruity,_that.crispMalty,_that.imageUrl);case _:
+return $default(_that.id,_that.name,_that.brewery,_that.country,_that.style,_that.abv,_that.rating,_that.lightStrong,_that.bitterSweet,_that.dryFruity,_that.imageUrl);case _:
   return null;
 
 }
@@ -220,7 +219,7 @@ return $default(_that.id,_that.name,_that.brewery,_that.country,_that.style,_tha
 @JsonSerializable()
 
 class _Beer implements Beer {
-  const _Beer({required this.id, required this.name, required this.brewery, required this.country, required this.style, required this.abv, required this.rating, required this.lightStrong, required this.bitterSweet, required this.dryFruity, required this.crispMalty, required this.imageUrl});
+  const _Beer({required this.id, required this.name, required this.brewery, required this.country, required this.style, required this.abv, required this.rating, required this.lightStrong, required this.bitterSweet, required this.dryFruity, required this.imageUrl});
   factory _Beer.fromJson(Map<String, dynamic> json) => _$BeerFromJson(json);
 
 @override final  String id;
@@ -233,7 +232,6 @@ class _Beer implements Beer {
 @override final  double lightStrong;
 @override final  double bitterSweet;
 @override final  double dryFruity;
-@override final  double crispMalty;
 @override final  String imageUrl;
 
 /// Create a copy of Beer
@@ -249,16 +247,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Beer&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.brewery, brewery) || other.brewery == brewery)&&(identical(other.country, country) || other.country == country)&&(identical(other.style, style) || other.style == style)&&(identical(other.abv, abv) || other.abv == abv)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.lightStrong, lightStrong) || other.lightStrong == lightStrong)&&(identical(other.bitterSweet, bitterSweet) || other.bitterSweet == bitterSweet)&&(identical(other.dryFruity, dryFruity) || other.dryFruity == dryFruity)&&(identical(other.crispMalty, crispMalty) || other.crispMalty == crispMalty)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Beer&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.brewery, brewery) || other.brewery == brewery)&&(identical(other.country, country) || other.country == country)&&(identical(other.style, style) || other.style == style)&&(identical(other.abv, abv) || other.abv == abv)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.lightStrong, lightStrong) || other.lightStrong == lightStrong)&&(identical(other.bitterSweet, bitterSweet) || other.bitterSweet == bitterSweet)&&(identical(other.dryFruity, dryFruity) || other.dryFruity == dryFruity)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,brewery,country,style,abv,rating,lightStrong,bitterSweet,dryFruity,crispMalty,imageUrl);
+int get hashCode => Object.hash(runtimeType,id,name,brewery,country,style,abv,rating,lightStrong,bitterSweet,dryFruity,imageUrl);
 
 @override
 String toString() {
-  return 'Beer(id: $id, name: $name, brewery: $brewery, country: $country, style: $style, abv: $abv, rating: $rating, lightStrong: $lightStrong, bitterSweet: $bitterSweet, dryFruity: $dryFruity, crispMalty: $crispMalty, imageUrl: $imageUrl)';
+  return 'Beer(id: $id, name: $name, brewery: $brewery, country: $country, style: $style, abv: $abv, rating: $rating, lightStrong: $lightStrong, bitterSweet: $bitterSweet, dryFruity: $dryFruity, imageUrl: $imageUrl)';
 }
 
 
@@ -269,7 +267,7 @@ abstract mixin class _$BeerCopyWith<$Res> implements $BeerCopyWith<$Res> {
   factory _$BeerCopyWith(_Beer value, $Res Function(_Beer) _then) = __$BeerCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String brewery, String country, String style, double abv, double rating, double lightStrong, double bitterSweet, double dryFruity, double crispMalty, String imageUrl
+ String id, String name, String brewery, String country, String style, double abv, double rating, double lightStrong, double bitterSweet, double dryFruity, String imageUrl
 });
 
 
@@ -286,7 +284,7 @@ class __$BeerCopyWithImpl<$Res>
 
 /// Create a copy of Beer
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? brewery = null,Object? country = null,Object? style = null,Object? abv = null,Object? rating = null,Object? lightStrong = null,Object? bitterSweet = null,Object? dryFruity = null,Object? crispMalty = null,Object? imageUrl = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? brewery = null,Object? country = null,Object? style = null,Object? abv = null,Object? rating = null,Object? lightStrong = null,Object? bitterSweet = null,Object? dryFruity = null,Object? imageUrl = null,}) {
   return _then(_Beer(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -298,7 +296,6 @@ as double,rating: null == rating ? _self.rating : rating // ignore: cast_nullabl
 as double,lightStrong: null == lightStrong ? _self.lightStrong : lightStrong // ignore: cast_nullable_to_non_nullable
 as double,bitterSweet: null == bitterSweet ? _self.bitterSweet : bitterSweet // ignore: cast_nullable_to_non_nullable
 as double,dryFruity: null == dryFruity ? _self.dryFruity : dryFruity // ignore: cast_nullable_to_non_nullable
-as double,crispMalty: null == crispMalty ? _self.crispMalty : crispMalty // ignore: cast_nullable_to_non_nullable
 as double,imageUrl: null == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
 as String,
   ));

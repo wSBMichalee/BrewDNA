@@ -26,13 +26,6 @@ void main() async {
     publishableKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
   );
 
-  // Test query
-  try {
-    final res = await Supabase.instance.client.from('styles').select().limit(1);
-    debugPrint('TEST QUERY RESULT: $res');
-  } catch (e) {
-    debugPrint('TEST QUERY ERROR: $e');
-  }
 
   runApp(const BrewDNAApp());
 }

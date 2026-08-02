@@ -45,7 +45,6 @@ class SupabaseScanRepository implements IScanRepository {
           lightStrong: 50,
           bitterSweet: 50,
           dryFruity: 50,
-          crispMalty: 50,
           imageUrl: '',
         ),
       );

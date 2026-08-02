@@ -14,7 +14,7 @@ class MockBeerRepository implements IBeerRepository {
     lightStrong: 65,
     bitterSweet: 30,
     dryFruity: 20,
-    crispMalty: 40,
+
     imageUrl: '',
   );
 
@@ -29,7 +29,6 @@ class MockBeerRepository implements IBeerRepository {
     lightStrong: 95,
     bitterSweet: 70,
     dryFruity: 60,
-    crispMalty: 85,
     imageUrl: '',
   );
 
@@ -44,7 +43,6 @@ class MockBeerRepository implements IBeerRepository {
     lightStrong: 40,
     bitterSweet: 60,
     dryFruity: 80,
-    crispMalty: 30,
     imageUrl: '',
   );
 

@@ -17,7 +17,6 @@ _Beer _$BeerFromJson(Map<String, dynamic> json) => _Beer(
   lightStrong: (json['lightStrong'] as num).toDouble(),
   bitterSweet: (json['bitterSweet'] as num).toDouble(),
   dryFruity: (json['dryFruity'] as num).toDouble(),
-  crispMalty: (json['crispMalty'] as num).toDouble(),
   imageUrl: json['imageUrl'] as String,
 );
 
@@ -32,6 +31,5 @@ Map<String, dynamic> _$BeerToJson(_Beer instance) => <String, dynamic>{
   'lightStrong': instance.lightStrong,
   'bitterSweet': instance.bitterSweet,
   'dryFruity': instance.dryFruity,
-  'crispMalty': instance.crispMalty,
   'imageUrl': instance.imageUrl,
 };

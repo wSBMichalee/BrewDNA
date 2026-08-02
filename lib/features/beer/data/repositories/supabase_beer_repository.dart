@@ -26,7 +26,6 @@ class SupabaseBeerRepository implements IBeerRepository {
       lightStrong: (row['axis_strength'] as num?)?.toDouble() ?? 50.0,
       bitterSweet: (row['axis_bitterness'] as num?)?.toDouble() ?? 50.0,
       dryFruity: (row['axis_fruitiness'] as num?)?.toDouble() ?? 50.0,
-      crispMalty: (row['axis_maltiness'] as num?)?.toDouble() ?? 50.0,
       imageUrl: row['image_url'] as String? ?? '',
     );
   }

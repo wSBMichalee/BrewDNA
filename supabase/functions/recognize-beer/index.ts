@@ -21,8 +21,7 @@ Przeanalizuj etykietę piwa na obrazku i zwróć JSON o strukturze:
   "description": "Krótki, wygenerowany opis tego piwa (1-2 zdania)",
   "axis_strength": "Ocena mocy (0-100), 0=lekkie wodniste, 100=mocne palące",
   "axis_bitterness": "Ocena goryczki (0-100), 0=łagodne słodkie, 100=ekstremalnie gorzkie",
-  "axis_fruitiness": "Ocena owocowości (0-100), 0=całkowicie wytrawne ziemiste, 100=bomba owocowa",
-  "axis_maltiness": "Ocena słodowości (0-100), 0=bardzo rześkie, 100=gęste karmelowe/słodowe"
+  "axis_fruitiness": "Ocena owocowości/wytrawności (0-100), 0=bardzo wytrawne, 100=mocno owocowe/estrowe"
 }
 Zwróć TYLKO czysty JSON, bez żadnych znaczników markdown typu \`\`\`json.
 `;
@@ -146,7 +145,6 @@ serve(async (req) => {
           axis_strength: aiResult.axis_strength != null ? parseInt(aiResult.axis_strength) : null,
           axis_bitterness: aiResult.axis_bitterness != null ? parseInt(aiResult.axis_bitterness) : null,
           axis_fruitiness: aiResult.axis_fruitiness != null ? parseInt(aiResult.axis_fruitiness) : null,
-          axis_maltiness: aiResult.axis_maltiness != null ? parseInt(aiResult.axis_maltiness) : null,
         })
         .select("id")
         .single();

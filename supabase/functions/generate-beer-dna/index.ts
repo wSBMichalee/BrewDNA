@@ -34,7 +34,7 @@ serve(async (req) => {
     // Fetch user's taste profile
     const { data: tasteProfile, error: profileError } = await supabase
       .from("taste_profiles")
-      .select("axis_strength, axis_bitterness, axis_fruitiness, axis_maltiness, preferred_styles, preferred_countries, experience_level, rating_count, last_generated_at_count, insights_json")
+      .select("axis_strength, axis_bitterness, axis_fruitiness, preferred_styles, preferred_countries, experience_level, rating_count, last_generated_at_count, insights_json")
       .eq("user_id", user.id)
       .maybeSingle();
 
@@ -77,7 +77,6 @@ Wektory Smaku (0-100):
 - Moc: ${tasteProfile.axis_strength ?? 50}
 - Goryczka: ${tasteProfile.axis_bitterness ?? 50}
 - Owocowość: ${tasteProfile.axis_fruitiness ?? 50}
-- Słodowość: ${tasteProfile.axis_maltiness ?? 50}
 Ulubione style: ${tasteProfile.preferred_styles || 'brak danych'}
 Ulubione kraje: ${tasteProfile.preferred_countries || 'brak danych'}
 Poziom doświadczenia: ${tasteProfile.experience_level || 'beginner'}

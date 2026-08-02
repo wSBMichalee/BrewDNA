@@ -16,7 +16,6 @@ abstract class Beer with _$Beer {
     required double lightStrong,
     required double bitterSweet,
     required double dryFruity,
-    required double crispMalty,
     required String imageUrl,
   }) = _Beer;
 

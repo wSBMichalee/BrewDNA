@@ -225,7 +225,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                           ),
                           const SizedBox(width: 4),
                           GestureDetector(
-                            onTap: () => context.go('/auth/start'),
+                            onTap: () => context.push('/auth/start'),
                             child: Text(
                               'Zarejestruj się',
                               style: AppTypography.linkCaptionBold,
