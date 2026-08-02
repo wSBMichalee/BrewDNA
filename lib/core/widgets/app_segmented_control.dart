@@ -8,7 +8,7 @@ class AppSegmentedControl<T extends Object> extends StatelessWidget {
   final T groupValue;
   final ValueChanged<T?> onValueChanged;
 
-  AppSegmentedControl({
+  const AppSegmentedControl({
     super.key,
     required this.items,
     required this.groupValue,

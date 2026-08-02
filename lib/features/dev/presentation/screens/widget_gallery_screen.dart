@@ -12,7 +12,7 @@ import '../../../../core/widgets/app_avatar.dart';
 import '../../../../core/widgets/app_empty_state.dart';
 
 class WidgetGalleryScreen extends StatefulWidget {
-  WidgetGalleryScreen({super.key});
+  const WidgetGalleryScreen({super.key});
 
   @override
   State<WidgetGalleryScreen> createState() => _WidgetGalleryScreenState();

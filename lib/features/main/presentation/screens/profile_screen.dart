@@ -14,6 +14,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   int _selectedTasteTab = 0;
+  // ignore: unused_field
   String _brewDnaSummary = "Analizowanie Twojego DNA smakowego...";
 
   @override

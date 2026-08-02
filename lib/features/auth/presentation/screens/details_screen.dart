@@ -208,7 +208,7 @@ class _AuthDetailsScreenState extends State<AuthDetailsScreen> {
                     children: [
                       CupertinoSwitch(
                         value: state.acceptedTerms,
-                        activeColor: AppColors.accent,
+                        activeTrackColor: AppColors.accent,
                         onChanged: (val) =>
                             context.read<AuthCubit>().toggleTerms(val),
                       ),
@@ -291,7 +291,7 @@ class _AuthDetailsScreenState extends State<AuthDetailsScreen> {
                                     context.go('/auth/welcome');
                                   }
                                 }
-                              } on AuthException catch (e) {
+                              } on AuthException {
                                 if (mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(

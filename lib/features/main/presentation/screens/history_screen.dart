@@ -12,7 +12,7 @@ import '../../../beer/presentation/bloc/beer_cubit.dart';
 import '../../../beer/presentation/bloc/beer_state.dart';
 
 class HistoryScreen extends StatefulWidget {
-  HistoryScreen({super.key});
+  const HistoryScreen({super.key});
 
   @override
   State<HistoryScreen> createState() => _HistoryScreenState();

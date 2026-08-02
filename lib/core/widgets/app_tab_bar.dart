@@ -6,7 +6,7 @@ class AppTabBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
 
-  AppTabBar({
+  const AppTabBar({
     super.key,
     required this.currentIndex,
     required this.onTap,

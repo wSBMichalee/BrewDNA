@@ -9,7 +9,7 @@ class TasteSlider extends StatelessWidget {
   final double min;
   final double max;
 
-  TasteSlider({
+  const TasteSlider({
     super.key,
     required this.leftLabel,
     required this.rightLabel,

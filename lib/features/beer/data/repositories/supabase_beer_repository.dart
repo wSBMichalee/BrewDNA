@@ -116,7 +116,7 @@ class SupabaseBeerRepository implements IBeerRepository {
           .limit(1);
 
       if ((response as List).isNotEmpty) {
-        return right(_mapBeer(response.first as Map<String, dynamic>));
+        return right(_mapBeer(response.first));
       } else {
         return left('Brak piw w bazie.');
       }

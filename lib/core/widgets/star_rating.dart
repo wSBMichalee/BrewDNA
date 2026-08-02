@@ -7,7 +7,7 @@ class StarRating extends StatelessWidget {
   final double size;
   final int maxRating;
 
-  StarRating({
+  const StarRating({
     super.key,
     required this.rating,
     this.onRatingChanged,

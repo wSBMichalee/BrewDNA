@@ -49,37 +49,20 @@ class _HookScreenState extends State<HookScreen> with SingleTickerProviderStateM
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Spacer(),
-          // Badge with Animation
+          
+          // Hero Image (Beer) with Animation
           ScaleTransition(
             scale: _scaleAnimation,
-            child: Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.accent, Color(0xFFFFC107)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.accent.withValues(alpha: 0.4),
-                    blurRadius: 20,
-                    spreadRadius: 4,
-                  ),
-                ],
-              ),
-              child: const Center(
-                child: Icon(
-                  CupertinoIcons.checkmark_alt,
-                  color: AppColors.white,
-                  size: 40,
-                ),
-              ),
+            child: CachedNetworkImage(
+              imageUrl:
+                  'https://media.screensdesign.com/gasset/e82346341291427ab997b8edb1aa3252_screen_image_ne_ipa_visual_8f69909d1e.png',
+              height: 250,
+              fit: BoxFit.contain,
             ),
           ),
-          SizedBox(height: AppSpacings.s24),
+          SizedBox(height: AppSpacings.s32),
+
+          // Title
           FadeTransition(
             opacity: _fadeAnimation,
             child: Text(
@@ -89,6 +72,7 @@ class _HookScreenState extends State<HookScreen> with SingleTickerProviderStateM
             ),
           ),
           SizedBox(height: AppSpacings.s12),
+          // Subtitle
           FadeTransition(
             opacity: _fadeAnimation,
             child: Text(
@@ -112,7 +96,7 @@ class _HookScreenState extends State<HookScreen> with SingleTickerProviderStateM
                   child: Container(
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(
-                      vertical: AppSpacings.s32,
+                      vertical: AppSpacings.s24,
                       horizontal: AppSpacings.s24,
                     ),
                     decoration: BoxDecoration(
@@ -125,24 +109,6 @@ class _HookScreenState extends State<HookScreen> with SingleTickerProviderStateM
                     ),
                     child: Column(
                       children: [
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: const BoxDecoration(
-                            color: AppColors.accentTint,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  'https://media.screensdesign.com/gasset/e82346341291427ab997b8edb1aa3252_screen_image_ne_ipa_visual_8f69909d1e.png',
-                              width: 70,
-                              height: 70,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: AppSpacings.s24),
                         Text(
                           styleName,
                           style: AppTypography.title2.copyWith(color: AppColors.accent),
@@ -165,7 +131,7 @@ class _HookScreenState extends State<HookScreen> with SingleTickerProviderStateM
               ),
             ),
           ),
-          SizedBox(height: AppSpacings.s32),
+          SizedBox(height: AppSpacings.s16),
 
           FadeTransition(
             opacity: _fadeAnimation,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:native_glass_navbar/native_glass_navbar.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';

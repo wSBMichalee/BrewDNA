@@ -1,14 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:flutter/material.dart';
 import 'package:hop_iq/main.dart' as app;
 import 'package:hop_iq/core/routing/app_router.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:hop_iq/features/beer/domain/entities/review.dart';
 import 'package:hop_iq/features/beer/domain/entities/rating_histogram.dart';
-import 'package:hop_iq/core/di/injection.dart';
-import 'dart:io';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

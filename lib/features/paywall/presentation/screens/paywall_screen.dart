@@ -7,7 +7,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
 
 class PaywallScreen extends StatefulWidget {
-  PaywallScreen({super.key});
+  const PaywallScreen({super.key});
 
   @override
   State<PaywallScreen> createState() => _PaywallScreenState();

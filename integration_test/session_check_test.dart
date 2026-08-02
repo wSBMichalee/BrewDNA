@@ -1,9 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:hop_iq/main.dart' as app;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'dart:io';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
