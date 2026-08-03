@@ -42,11 +42,17 @@ class PaywallBenefitsScreen extends StatelessWidget {
             ),
           ),
           SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24, vertical: AppSpacings.s16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: IntrinsicHeight(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24, vertical: AppSpacings.s16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
                   Row(
                     children: [
                       CupertinoButton(
@@ -153,6 +159,11 @@ class PaywallBenefitsScreen extends StatelessWidget {
               ),
             ),
           ),
+        ),
+      );
+    },
+  ),
+),
         ],
       ),
     );

@@ -35,6 +35,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
         context.go('/main/discover');
       }
     } catch (e) {
+      debugPrint('LOGIN ERROR: $e');
       if (mounted) {
         String errorMessage = 'Nieprawidłowy e-mail lub hasło.';
         if (e.toString().contains('rate limit') || e.toString().contains('429')) {

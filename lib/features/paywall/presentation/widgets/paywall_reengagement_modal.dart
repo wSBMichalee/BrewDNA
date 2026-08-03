@@ -65,10 +65,11 @@ class _PaywallReengagementModalState extends State<PaywallReengagementModal> {
               border: Border.all(color: AppColors.separator.withValues(alpha: 0.5)),
             ),
             padding: EdgeInsets.all(AppSpacings.s24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
                 Align(
                   alignment: Alignment.topRight,
                   child: CupertinoButton(
@@ -142,6 +143,7 @@ class _PaywallReengagementModalState extends State<PaywallReengagementModal> {
                   },
                 ),
               ],
+            ),
             ),
           ),
         ),

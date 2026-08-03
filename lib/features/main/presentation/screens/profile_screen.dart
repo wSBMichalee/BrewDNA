@@ -4,6 +4,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_segmented_control.dart';
+import '../../../../core/widgets/app_button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import '../../../auth/presentation/bloc/auth_cubit.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -297,6 +301,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ],
                   ),
+                ),
+              ),
+              SizedBox(height: AppSpacings.s32),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24),
+                child: AppButton(
+                  text: 'Wyloguj się',
+                  onPressed: () async {
+                    await context.read<AuthCubit>().signOut();
+                    if (context.mounted) {
+                      context.go('/');
+                    }
+                  },
                 ),
               ),
             ],

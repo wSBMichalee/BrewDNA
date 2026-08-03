@@ -52,7 +52,7 @@ class PaywallSelectionScreen extends StatelessWidget {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        SizedBox(height: AppSpacings.s32),
+                        SizedBox(height: AppSpacings.s16),
                         Text(
                           'Wybierz swój plan',
                           style: AppTypography.brandDisplay.copyWith(color: AppColors.label),
@@ -64,27 +64,27 @@ class PaywallSelectionScreen extends StatelessWidget {
                           style: AppTypography.subhead.copyWith(color: AppColors.labelSecondary),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: AppSpacings.s32),
+                        SizedBox(height: AppSpacings.s16),
                         
                         _buildPlanCard(
                           context,
                           plan: PaywallPlan.premiumTrial,
                           title: 'Premium Trial',
-                          subtitle: 'Darmowe przez 7 dni, potem 19,99 zł/miesiąc',
-                          description: 'Dla każdego kto chce pełen dostęp do funkcji Premium, za darmo przez 7 dni',
+                          subtitle: 'Darmowe przez 7 dni, potem 19,99 zł/mies.',
+                          description: 'Pełen dostęp Premium, 7 dni za darmo',
                           isSelected: state.selectedPlan == PaywallPlan.premiumTrial,
                           badge: 'Polecane',
                         ),
-                        SizedBox(height: AppSpacings.s16),
+                        SizedBox(height: AppSpacings.s8),
                         _buildPlanCard(
                           context,
                           plan: PaywallPlan.premiumYearly,
                           title: 'Premium',
-                          subtitle: '199,99 zł/rok (16,66 zł/miesiąc)',
-                          description: 'Dla ciekawych piwa, którzy chcą poszerzać wiedzę',
+                          subtitle: '199,99 zł/rok (16,66 zł/mies.)',
+                          description: 'Poszerzaj wiedzę z pełnym dostępem',
                           isSelected: state.selectedPlan == PaywallPlan.premiumYearly,
                         ),
-                        SizedBox(height: AppSpacings.s16),
+                        SizedBox(height: AppSpacings.s8),
                         _buildPlanCard(
                           context,
                           plan: PaywallPlan.free,
@@ -94,7 +94,7 @@ class PaywallSelectionScreen extends StatelessWidget {
                           isSelected: state.selectedPlan == PaywallPlan.free,
                         ),
                         
-                        SizedBox(height: AppSpacings.s24),
+                        SizedBox(height: AppSpacings.s12),
                         Center(
                           child: CupertinoButton(
                             padding: EdgeInsets.zero,
@@ -177,7 +177,7 @@ class PaywallSelectionScreen extends StatelessWidget {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
             child: Container(
-              padding: EdgeInsets.all(AppSpacings.s20),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacings.s16, vertical: AppSpacings.s12),
               color: AppColors.white.withValues(alpha: 0.65), // Jasne szkło
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,7 +215,7 @@ class PaywallSelectionScreen extends StatelessWidget {
                         ),
                     ],
                   ),
-                  SizedBox(height: AppSpacings.s12),
+                  SizedBox(height: AppSpacings.s8),
                   Text(
                     subtitle,
                     style: AppTypography.subhead.copyWith(

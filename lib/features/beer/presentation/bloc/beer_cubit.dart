@@ -13,6 +13,8 @@ const _tempTasteProfile = (lightStrong: 70.0, bitterSweet: 60.0, dryFruity: 40.0
 @injectable
 class BeerCubit extends Cubit<BeerState> {
   final IBeerRepository _repository;
+  // Cache prekalkulowanych procentów dopasowania — uzupełniany raz w loadDiscoverData().
+  final Map<String, int> _matchPercentages = {};
 
   BeerCubit(this._repository) : super(const BeerState.initial());
 
@@ -36,21 +38,24 @@ class BeerCubit extends Cubit<BeerState> {
 
   Future<void> loadDiscoverData() async {
     _emitLoading();
+    final botdFuture = _repository.getBeerOfTheDay();
     final recFuture = _repository.getRecommendations();
     final countriesFuture = _repository.getTopCountries();
     final topRatedFuture = _repository.getTopRatedBeers();
 
-    final results = await Future.wait([recFuture, countriesFuture, topRatedFuture]);
+    final results = await Future.wait([botdFuture, recFuture, countriesFuture, topRatedFuture]);
 
-    final recResult = results[0] as Either<String, List<Beer>>;
-    final countriesResult = results[1] as Either<String, List<Map<String, dynamic>>>;
-    final topRatedResult = results[2] as Either<String, List<Beer>>;
+    final botdResult = results[0] as Either<String, Beer>;
+    final recResult = results[1] as Either<String, List<Beer>>;
+    final countriesResult = results[2] as Either<String, List<Map<String, dynamic>>>;
+    final topRatedResult = results[3] as Either<String, List<Beer>>;
 
     if (recResult.isLeft() || countriesResult.isLeft() || topRatedResult.isLeft()) {
       emit(BeerState.error('Failed to load discover data'));
       return;
     }
 
+    final beerOfTheDay = botdResult.toOption().toNullable();
     final recommendations = recResult.getOrElse((_) => []);
     final topCountries = countriesResult.getOrElse((_) => []);
     final topRatedBeers = topRatedResult.getOrElse((_) => []);
@@ -61,10 +66,15 @@ class BeerCubit extends Cubit<BeerState> {
       allBeers[beer.id] = beer;
     }
     
+    // Prekalkuluj raz — zamiast 2× per porównanie w sort i per render w itemBuilder.
+    for (final beer in allBeers.values) {
+      _matchPercentages[beer.id] = calculateMatchPercentage(beer);
+    }
     final matchedBeers = allBeers.values.toList()
-      ..sort((a, b) => calculateMatchPercentage(b).compareTo(calculateMatchPercentage(a)));
+      ..sort((a, b) => (_matchPercentages[b.id] ?? 0).compareTo(_matchPercentages[a.id] ?? 0));
 
     _emitLoaded(
+      beerOfTheDay: beerOfTheDay,
       recommendations: recommendations,
       topCountries: topCountries,
       topRatedBeers: topRatedBeers,
@@ -85,6 +95,10 @@ class BeerCubit extends Cubit<BeerState> {
     return match.clamp(0.0, 100.0).round();
   }
 
+  /// Zwraca prekalkulowany procent dopasowania dla piwa o danym [beerId].
+  /// Wartości są obliczane raz w [loadDiscoverData] i cachowane w [_matchPercentages].
+  int getMatchPercentage(String beerId) => _matchPercentages[beerId] ?? 0;
+
   Future<void> loadBeerById(String id) async {
     _emitLoading();
     final result = await _repository.getBeerById(id);
@@ -96,7 +110,7 @@ class BeerCubit extends Cubit<BeerState> {
 
   void _emitLoading() {
     state.maybeWhen(
-      loaded: (_, __, ___, ____, _____, ______, _______) {}, // Do not emit loading if already loaded
+      loaded: (_, _, _, _, _, _, _) {}, // Do not emit loading if already loaded
       orElse: () => emit(const BeerState.loading()),
     );
   }

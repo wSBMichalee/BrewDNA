@@ -241,6 +241,7 @@ class _AuthEmailFlowScreenState extends State<AuthEmailFlowScreen> {
                           controller: _emailController,
                           autofocus: true,
                           keyboardType: TextInputType.emailAddress,
+                          autofillHints: const [AutofillHints.email],
                           onChanged: (val) => _onEmailChanged(val, context),
                           decoration: InputDecoration(
                             hintText: AppLocalizations.of(context)!.emailHint,
@@ -276,6 +277,7 @@ class _AuthEmailFlowScreenState extends State<AuthEmailFlowScreen> {
                               TextField(
                                 controller: _passwordController,
                                 obscureText: _obscurePassword,
+                                autofillHints: const [AutofillHints.newPassword],
                                 onChanged: (val) => context.read<AuthCubit>().updatePassword(val),
                                 decoration: InputDecoration(
                                   hintText: AppLocalizations.of(context)!.passwordHint,
@@ -345,6 +347,9 @@ class _AuthEmailFlowScreenState extends State<AuthEmailFlowScreen> {
                                     // Name Field
                                     TextField(
                                       controller: _nameController,
+                                      autofillHints: const [AutofillHints.name],
+                                      keyboardType: TextInputType.name,
+                                      textCapitalization: TextCapitalization.words,
                                       onChanged: (val) => context.read<AuthCubit>().updateName(val),
                                       decoration: InputDecoration(
                                         hintText: AppLocalizations.of(context)!.detailsHint,
