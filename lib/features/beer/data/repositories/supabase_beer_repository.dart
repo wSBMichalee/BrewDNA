@@ -15,6 +15,17 @@ class SupabaseBeerRepository implements IBeerRepository {
     final breweryData = row['breweries'] as Map<String, dynamic>?;
     final styleData = row['styles'] as Map<String, dynamic>?;
 
+    int ratingCount = 0;
+    final ratingsData = row['ratings'];
+    if (ratingsData is List && ratingsData.isNotEmpty) {
+      final first = ratingsData.first;
+      if (first is Map<String, dynamic>) {
+        ratingCount = (first['count'] as num?)?.toInt() ?? 0;
+      }
+    } else if (row['rating_count'] != null) {
+      ratingCount = (row['rating_count'] as num?)?.toInt() ?? 0;
+    }
+
     return Beer(
       id: row['id'] as String,
       name: row['name'] as String,
@@ -23,6 +34,7 @@ class SupabaseBeerRepository implements IBeerRepository {
       style: styleData?['name'] as String? ?? 'Nieznany styl',
       abv: (row['abv'] as num?)?.toDouble() ?? 0.0,
       rating: (row['global_rating'] as num?)?.toDouble() ?? 0.0,
+      ratingCount: ratingCount,
       lightStrong: (row['axis_strength'] as num?)?.toDouble() ?? 50.0,
       bitterSweet: (row['axis_bitterness'] as num?)?.toDouble() ?? 50.0,
       dryFruity: (row['axis_fruitiness'] as num?)?.toDouble() ?? 50.0,
@@ -42,7 +54,7 @@ class SupabaseBeerRepository implements IBeerRepository {
     try {
       final response = await _supabase
           .from('beers')
-          .select('*, breweries(name, country), styles(name)')
+          .select('*, breweries(name, country), styles(name), ratings(count)')
           .limit(10);
 
       final beers = (response as List).map((e) => _mapBeer(e as Map<String, dynamic>)).toList();
@@ -93,7 +105,7 @@ class SupabaseBeerRepository implements IBeerRepository {
     try {
       final response = await _supabase
           .from('beers')
-          .select('*, breweries(name, country), styles(name)')
+          .select('*, breweries(name, country), styles(name), ratings(count)')
           .order('global_rating', ascending: false)
           .limit(10);
 
@@ -110,7 +122,7 @@ class SupabaseBeerRepository implements IBeerRepository {
       // Using highest rated as 'Beer of the Day' for now
       final response = await _supabase
           .from('beers')
-          .select('*, breweries(name, country), styles(name)')
+          .select('*, breweries(name, country), styles(name), ratings(count)')
           .order('global_rating', ascending: false)
           .limit(1);
 
@@ -129,7 +141,7 @@ class SupabaseBeerRepository implements IBeerRepository {
     try {
       final response = await _supabase
           .from('beers')
-          .select('*, breweries(name, country), styles(name)')
+          .select('*, breweries(name, country), styles(name), ratings(count)')
           .eq('id', id)
           .maybeSingle();
 

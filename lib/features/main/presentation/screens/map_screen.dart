@@ -110,19 +110,7 @@ class MapScreen extends StatelessWidget {
                       children: [
                         // Interactive World Map
                         Positioned.fill(
-                          child: RepaintBoundary(
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: SimpleMap(
-                                instructions: SMapWorld.instructions,
-                                defaultColor: AppColors.separator.withValues(alpha: 0.3),
-                                colors: mapColors,
-                                callback: (id, name, tapDetails) {
-                                  debugPrint("Tapped country: $id, $name");
-                                },
-                              ),
-                            ),
-                          ),
+                          child: _InteractiveWorldMap(mapColors: mapColors),
                         ),
                         // Badge
                         Positioned(
@@ -315,6 +303,72 @@ class MapScreen extends StatelessWidget {
         ),
           ); // end of Scaffold
         },
+      ),
+    );
+  }
+}
+
+/// Interaktywny widok mapy ze wsparciem dla gestów pinch-to-zoom, przeciągania (pan)
+/// oraz podwójnego tapnięcia (double-tap to zoom/reset).
+class _InteractiveWorldMap extends StatefulWidget {
+  final Map<String, Color> mapColors;
+
+  const _InteractiveWorldMap({required this.mapColors});
+
+  @override
+  State<_InteractiveWorldMap> createState() => _InteractiveWorldMapState();
+}
+
+class _InteractiveWorldMapState extends State<_InteractiveWorldMap> {
+  final TransformationController _transformationController =
+      TransformationController();
+  TapDownDetails? _doubleTapDetails;
+
+  @override
+  void dispose() {
+    _transformationController.dispose();
+    super.dispose();
+  }
+
+  void _handleDoubleTap() {
+    if (_transformationController.value != Matrix4.identity()) {
+      _transformationController.value = Matrix4.identity();
+    } else {
+      final position = _doubleTapDetails?.localPosition ?? Offset.zero;
+      _transformationController.value = Matrix4.identity()
+        ..translateByDouble(-position.dx * 1.5, -position.dy * 1.5, 0.0, 1.0)
+        ..scaleByDouble(2.5, 2.5, 1.0, 1.0);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onDoubleTapDown: (details) => _doubleTapDetails = details,
+      onDoubleTap: _handleDoubleTap,
+      child: InteractiveViewer(
+        transformationController: _transformationController,
+        minScale: 1.0,
+        maxScale: 5.0,
+        panEnabled: true,
+        scaleEnabled: true,
+        boundaryMargin: const EdgeInsets.all(40.0),
+        clipBehavior: Clip.none,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SimpleMap(
+            instructions: SMapWorld.instructions,
+            defaultColor: const Color(0xFFE0D7C8),
+            countryBorder: CountryBorder(
+              color: const Color(0xFFB5A88F),
+              width: 0.8,
+            ),
+            colors: widget.mapColors,
+            callback: (id, name, tapDetails) {
+              debugPrint("Tapped country: $id, $name");
+            },
+          ),
+        ),
       ),
     );
   }

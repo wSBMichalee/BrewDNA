@@ -6,7 +6,8 @@ import 'paywall_state.dart';
 
 @injectable
 class PaywallCubit extends Cubit<PaywallState> {
-  PaywallCubit() : super(const PaywallState());
+  PaywallCubit({PaywallPlan initialPlan = PaywallPlan.premiumTrial})
+      : super(PaywallState(selectedPlan: initialPlan));
 
   void selectPlan(PaywallPlan plan) {
     emit(state.copyWith(selectedPlan: plan));

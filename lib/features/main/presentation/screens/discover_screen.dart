@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -9,6 +8,7 @@ import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/widgets/star_rating.dart';
+import '../../../../core/widgets/beer_style_placeholder.dart';
 import '../../../beer/presentation/bloc/beer_cubit.dart';
 import '../../../beer/presentation/bloc/beer_state.dart';
 
@@ -314,7 +314,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                                     children: [
                                       // Image / Rich placeholder
                                       Positioned.fill(
-                                        child: _BeerImageOrPlaceholder(
+                                        child: BeerImageOrPlaceholder(
                                           imageUrl: beerOfTheDay.imageUrl,
                                           style: beerOfTheDay.style,
                                           isLarge: true,
@@ -472,7 +472,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                                               CrossAxisAlignment.stretch,
                                           children: [
                                             Expanded(
-                                              child: _BeerImageOrPlaceholder(
+                                              child: BeerImageOrPlaceholder(
                                                 imageUrl: recommendation.imageUrl,
                                                 style: recommendation.style,
                                               ),
@@ -638,7 +638,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                                           crossAxisAlignment: CrossAxisAlignment.stretch,
                                           children: [
                                             Expanded(
-                                              child: _BeerImageOrPlaceholder(
+                                              child: BeerImageOrPlaceholder(
                                                 imageUrl: beer.imageUrl,
                                                 style: beer.style,
                                               ),
@@ -737,7 +737,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                                 children: [
                                                   Expanded(
-                                                    child: _BeerImageOrPlaceholder(
+                                                    child: BeerImageOrPlaceholder(
                                                       imageUrl: beer.imageUrl,
                                                       style: beer.style,
                                                     ),
@@ -812,164 +812,6 @@ class _DiscoverScreenState extends State<DiscoverScreen>
             },
           ),
         ),
-      ),
-    );
-  }
-}
-
-/// Helper tematyczny mapujący styl piwa na odpowiednią ikonę i gradient.
-class _BeerStyleTheme {
-  final IconData icon;
-  final List<Color> gradientColors;
-  final Color iconColor;
-
-  const _BeerStyleTheme({
-    required this.icon,
-    required this.gradientColors,
-    required this.iconColor,
-  });
-
-  static _BeerStyleTheme fromStyle(String? styleName) {
-    final s = (styleName ?? '').toLowerCase();
-    if (s.contains('ipa') || s.contains('pale') || s.contains('hazy') || s.contains('hop')) {
-      return const _BeerStyleTheme(
-        icon: CupertinoIcons.sparkles,
-        gradientColors: [Color(0xFF162B0E), Color(0xFF38571E), Color(0xFF8F6315)],
-        iconColor: Color(0xFFF9E8A2),
-      );
-    } else if (s.contains('lager') || s.contains('pils')) {
-      return const _BeerStyleTheme(
-        icon: CupertinoIcons.sun_max_fill,
-        gradientColors: [Color(0xFF4A3405), Color(0xFF9E6E10), Color(0xFFD49A24)],
-        iconColor: Color(0xFFFFF7D6),
-      );
-    } else if (s.contains('stout')) {
-      return const _BeerStyleTheme(
-        icon: CupertinoIcons.moon_stars_fill,
-        gradientColors: [Color(0xFF0D0603), Color(0xFF1E0E06), Color(0xFF3B1E0C)],
-        iconColor: Color(0xFFE8BA87),
-      );
-    } else if (s.contains('porter')) {
-      return const _BeerStyleTheme(
-        icon: CupertinoIcons.moon_fill,
-        gradientColors: [Color(0xFF180A04), Color(0xFF30180A), Color(0xFF572F15)],
-        iconColor: Color(0xFFF0CCA0),
-      );
-    } else if (s.contains('weizen') || s.contains('wheat') || s.contains('pszen')) {
-      return const _BeerStyleTheme(
-        icon: CupertinoIcons.wind,
-        gradientColors: [Color(0xFF45300B), Color(0xFF8C6618), Color(0xFFC99832)],
-        iconColor: Color(0xFFFFFBE8),
-      );
-    } else if (s.contains('sour') || s.contains('kwas') || s.contains('gose') || s.contains('lambic')) {
-      return const _BeerStyleTheme(
-        icon: CupertinoIcons.drop_triangle_fill,
-        gradientColors: [Color(0xFF2E0A2B), Color(0xFF5C1A57), Color(0xFF993D90)],
-        iconColor: Color(0xFFFFD4F5),
-      );
-    } else if (s.contains('amber') || s.contains('belgian') || s.contains('ale') || s.contains('bock') || s.contains('koźlak')) {
-      return const _BeerStyleTheme(
-        icon: CupertinoIcons.flame_fill,
-        gradientColors: [Color(0xFF381205), Color(0xFF6E250A), Color(0xFFB85918)],
-        iconColor: Color(0xFFFFDFB8),
-      );
-    } else {
-      return const _BeerStyleTheme(
-        icon: CupertinoIcons.drop,
-        gradientColors: [Color(0xFF261508), Color(0xFF4A2A10), Color(0xFF8A551E)],
-        iconColor: Color(0xFFFBE4A8),
-      );
-    }
-  }
-}
-
-/// Dynamiczny placeholder z gradientem i ikoną dopasowaną do stylu piwa.
-class _BeerStylePlaceholder extends StatelessWidget {
-  final String style;
-  final bool isLarge;
-
-  const _BeerStylePlaceholder({
-    required this.style,
-    this.isLarge = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = _BeerStyleTheme.fromStyle(style);
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: theme.gradientColors,
-        ),
-      ),
-      child: Center(
-        child: Container(
-          width: isLarge ? 64 : 40,
-          height: isLarge ? 64 : 40,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.black.withValues(alpha: 0.25),
-            border: Border.all(
-              color: theme.iconColor.withValues(alpha: 0.3),
-              width: 1.5,
-            ),
-          ),
-          child: Icon(
-            theme.icon,
-            size: isLarge ? 32 : 20,
-            color: theme.iconColor,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Inteligentny widget obrazka: jeśli URL jest placeholderem/404, natychmiast
-/// renderuje _BeerStylePlaceholder bez wykonywania niepotrzebnych requestów HTTP.
-class _BeerImageOrPlaceholder extends StatelessWidget {
-  final String imageUrl;
-  final String style;
-  final bool isLarge;
-
-  const _BeerImageOrPlaceholder({
-    required this.imageUrl,
-    required this.style,
-    this.isLarge = false,
-  });
-
-  bool get _hasRealImage {
-    if (imageUrl.isEmpty) return false;
-    if (imageUrl.contains('image-placeholder') ||
-        imageUrl.contains('placeholder') ||
-        imageUrl.contains('screensdesign.com')) {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!_hasRealImage) {
-      return _BeerStylePlaceholder(
-        style: style,
-        isLarge: isLarge,
-      );
-    }
-
-    return CachedNetworkImage(
-      imageUrl: imageUrl,
-      fit: BoxFit.cover,
-      placeholder: (context, url) => Shimmer.fromColors(
-        baseColor: AppColors.separator,
-        highlightColor: AppColors.background,
-        child: Container(color: Colors.white),
-      ),
-      errorWidget: (context, url, error) => _BeerStylePlaceholder(
-        style: style,
-        isLarge: isLarge,
       ),
     );
   }

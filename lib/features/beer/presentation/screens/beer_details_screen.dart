@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/di/injection.dart';
+import '../../../../core/widgets/beer_style_placeholder.dart';
 import '../bloc/beer_cubit.dart';
 import '../bloc/beer_state.dart';
 import '../bloc/rating_cubit.dart';
@@ -45,7 +45,7 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                   style: AppTypography.body.copyWith(color: Colors.red),
                 ),
               ),
-                loaded: (history, recommendations, _, __, beerOfTheDay, selectedBeer, matchedBeers) {
+              loaded: (history, recommendations, topCountries, topRatedBeers, beerOfTheDay, selectedBeer, matchedBeers) {
                 if (selectedBeer == null) {
                   return Center(
                     child: Text(AppLocalizations.of(context)!.beerDetailsEmpty, style: AppTypography.body),
@@ -116,26 +116,10 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                         background: Stack(
                           fit: StackFit.expand,
                           children: [
-                            CachedNetworkImage(
-                              imageUrl: beer.imageUrl.isNotEmpty
-                                  ? beer.imageUrl
-                                  : 'https://media.screensdesign.com/afprjsia/3cefb0eb-c967-466d-88f5-373b5f92debb.png', // Temporary placeholder matching reference
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => Shimmer.fromColors(
-                                baseColor: AppColors.separator,
-                                highlightColor: AppColors.background,
-                                child: Container(color: Colors.white),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                color: AppColors.card,
-                                child: const Center(
-                                  child: Icon(
-                                    CupertinoIcons.photo,
-                                    size: 100,
-                                    color: AppColors.separator,
-                                  ),
-                                ),
-                              ),
+                            BeerImageOrPlaceholder(
+                              imageUrl: beer.imageUrl,
+                              style: beer.style,
+                              isHero: true,
                             ),
                             Container(
                               decoration: BoxDecoration(
@@ -147,7 +131,7 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                                     AppColors.background.withValues(alpha: 0.8),
                                     AppColors.background,
                                   ],
-                                  stops: const [0.6, 0.9, 1.0],
+                                  stops: const [0.65, 0.92, 1.0],
                                 ),
                               ),
                             ),
@@ -189,25 +173,43 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: AppSpacings.s16),
+                              SizedBox(height: AppSpacings.s12),
 
-                              Text(beer.name, style: AppTypography.largeTitle),
-                              SizedBox(height: AppSpacings.s8),
-                              Row(
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!.beerDetailsStyleCountry(beer.style, beer.country),
-                                    style: AppTypography.title2.copyWith(
-                                      color: AppColors.labelSecondary,
-                                      fontWeight: FontWeight.normal,
-                                    ),
+                              if (beer.brewery.isNotEmpty && beer.brewery != 'Nieznany browar') ...[
+                                Text(
+                                  beer.brewery.toUpperCase(),
+                                  style: AppTypography.caption.copyWith(
+                                    color: AppColors.labelSecondary,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 1.1,
+                                    fontSize: 12,
                                   ),
-                                ],
+                                ),
+                                const SizedBox(height: 4),
+                              ],
+
+                              Text(
+                                beer.name,
+                                style: AppTypography.title1.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.label,
+                                  fontSize: 24,
+                                  height: 1.2,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                AppLocalizations.of(context)!.beerDetailsStyleCountry(beer.style, beer.country),
+                                style: AppTypography.subhead.copyWith(
+                                  color: AppColors.labelSecondary,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                ),
                               ),
 
-                              SizedBox(height: AppSpacings.s24),
+                              SizedBox(height: AppSpacings.s20),
                               const Divider(color: AppColors.separator),
-                              SizedBox(height: AppSpacings.s24),
+                              SizedBox(height: AppSpacings.s20),
 
                               // Rating Section
                               BlocBuilder<RatingCubit, RatingState>(
@@ -265,36 +267,18 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                                                 ),
                                             ],
                                           ),
-                                          SizedBox(height: AppSpacings.s32),
-                                          Text(
-                                            beer.name,
-                                            style: const TextStyle(
-                                              fontSize: 40,
-                                              fontWeight: FontWeight.bold,
-                                              height: 1.1,
-                                            ),
-                                          ),
-                                          SizedBox(height: AppSpacings.s8),
-                                          Text(
-                                            AppLocalizations.of(context)!.beerDetailsStyleCountry(beer.style, beer.country),
-                                            style: AppTypography.title2
-                                                .copyWith(
-                                                  color:
-                                                      AppColors.labelSecondary,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                          ),
+                                          SizedBox(height: AppSpacings.s24),
 
-                                          SizedBox(height: AppSpacings.s32),
                                           Text(
                                             AppLocalizations.of(context)!.beerDetailsInsightsTitle,
-                                            style: AppTypography.title2,
+                                            style: AppTypography.title2.copyWith(fontSize: 18),
                                           ),
                                           SizedBox(height: AppSpacings.s4),
                                           Text(
                                             AppLocalizations.of(context)!.beerDetailsInsightsSubtitle,
                                             style: AppTypography.body.copyWith(
                                               color: AppColors.labelSecondary,
+                                              fontSize: 13,
                                             ),
                                           ),
                                           SizedBox(height: AppSpacings.s16),
@@ -391,28 +375,16 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                                               ),
                                             ],
                                           ),
-                                          const SizedBox(height: 32),
-                                          Container(
-                                            width: 200,
-                                            height: 40,
-                                            color: Colors.white,
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Container(
-                                            width: 150,
-                                            height: 24,
-                                            color: Colors.white,
-                                          ),
-                                          const SizedBox(height: 32),
+                                          const SizedBox(height: 24),
                                           Container(
                                             width: 120,
-                                            height: 24,
+                                            height: 20,
                                             color: Colors.white,
                                           ),
                                           const SizedBox(height: 4),
                                           Container(
                                             width: 180,
-                                            height: 16,
+                                            height: 14,
                                             color: Colors.white,
                                           ),
                                           const SizedBox(height: 16),

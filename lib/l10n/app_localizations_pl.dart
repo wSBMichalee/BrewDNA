@@ -9,7 +9,7 @@ class AppLocalizationsPl extends AppLocalizations {
   AppLocalizationsPl([String locale = 'pl']) : super(locale);
 
   @override
-  String get tabHistory => 'Historia';
+  String get tabHistory => 'Moje Piwa';
 
   @override
   String get tabMap => 'Mapa';

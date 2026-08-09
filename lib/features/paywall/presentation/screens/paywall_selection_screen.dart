@@ -5,16 +5,32 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hop_iq/core/theme/app_theme.dart';
 import 'package:hop_iq/core/widgets/app_button.dart';
+import '../../domain/entities/subscription_plan.dart';
 import '../bloc/paywall_cubit.dart';
 import '../bloc/paywall_state.dart';
 
 class PaywallSelectionScreen extends StatelessWidget {
-  const PaywallSelectionScreen({super.key});
+  final bool isManageMode;
+
+  const PaywallSelectionScreen({
+    super.key,
+    this.isManageMode = false,
+  });
 
   @override
   Widget build(BuildContext context) {
+    // TODO: replace with real subscription status once payment integration exists.
+    const currentSubscription = SubscriptionPlan.free;
+    final initialPlan = isManageMode
+        ? (currentSubscription == SubscriptionPlan.premium
+            ? PaywallPlan.premiumYearly
+            : (currentSubscription == SubscriptionPlan.premiumTrial
+                ? PaywallPlan.premiumTrial
+                : PaywallPlan.free))
+        : PaywallPlan.premiumTrial;
+
     return BlocProvider(
-      create: (context) => PaywallCubit(),
+      create: (context) => PaywallCubit(initialPlan: initialPlan),
       child: Scaffold(
         backgroundColor: AppColors.background,
         body: Stack(
@@ -46,13 +62,39 @@ class PaywallSelectionScreen extends StatelessWidget {
             ),
             SafeArea(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24, vertical: AppSpacings.s16),
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacings.s24,
+                  vertical: AppSpacings.s16,
+                ),
                 child: BlocBuilder<PaywallCubit, PaywallState>(
                   builder: (context, state) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        SizedBox(height: AppSpacings.s16),
+                        if (isManageMode) ...[
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Container(
+                                width: 36,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  color: AppColors.separator.withValues(alpha: 0.35),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  CupertinoIcons.xmark,
+                                  size: 18,
+                                  color: AppColors.label,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ] else ...[
+                          SizedBox(height: AppSpacings.s16),
+                        ],
                         Text(
                           'Wybierz swój plan',
                           style: AppTypography.brandDisplay.copyWith(color: AppColors.label),
@@ -123,12 +165,21 @@ class PaywallSelectionScreen extends StatelessWidget {
                           ),
                           
                         AppButton(
-                          text: state.selectedPlan == PaywallPlan.free ? 'Kontynuuj za darmo' : 'Rozpocznij',
+                          text: isManageMode
+                              ? 'Zmień plan'
+                              : (state.selectedPlan == PaywallPlan.free
+                                  ? 'Kontynuuj za darmo'
+                                  : 'Rozpocznij'),
                           isLoading: state.isLoading,
                           onPressed: () async {
                             await context.read<PaywallCubit>().confirmPlan();
-                            if (context.mounted && context.read<PaywallCubit>().state.error == null) {
-                              context.go('/auth/welcome');
+                            if (context.mounted &&
+                                context.read<PaywallCubit>().state.error == null) {
+                              if (isManageMode) {
+                                Navigator.of(context).pop();
+                              } else {
+                                context.go('/auth/welcome');
+                              }
                             }
                           },
                         ),

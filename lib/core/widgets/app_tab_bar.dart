@@ -25,7 +25,7 @@ class AppTabBar extends StatelessWidget {
             child: Container(
               height: 85,
               decoration: BoxDecoration(
-                color: AppColors.background.withOpacity(0.7),
+                color: AppColors.background.withValues(alpha: 0.7),
                 border: Border(
                   top: BorderSide(
                     color: AppColors.separator,
@@ -38,7 +38,7 @@ class AppTabBar extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildTabItem(icon: CupertinoIcons.book, label: 'Historia', index: 0),
+                    _buildTabItem(icon: CupertinoIcons.book, label: 'Moje Piwa', index: 0),
                     _buildTabItem(icon: CupertinoIcons.map, label: 'Mapa', index: 1),
                     SizedBox(width: 64), // Space for floating scan button
                     _buildTabItem(icon: CupertinoIcons.compass, label: 'Odkryj', index: 3),
@@ -63,7 +63,7 @@ class AppTabBar extends StatelessWidget {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.accent.withOpacity(0.3),
+                    color: AppColors.accent.withValues(alpha: 0.3),
                     blurRadius: 12,
                     offset: Offset(0, 4),
                   ),

@@ -22,6 +22,8 @@ import '../../features/main/presentation/screens/history_screen.dart';
 import '../../features/main/presentation/screens/map_screen.dart';
 import '../../features/main/presentation/screens/discover_screen.dart';
 import '../../features/main/presentation/screens/profile_screen.dart';
+import '../../features/profile/presentation/screens/settings_screen.dart';
+import '../../features/profile/presentation/screens/help_support_screen.dart';
 import '../../features/main/presentation/screens/scanning_analyzing_screen.dart';
 import '../../features/beer/presentation/bloc/scan_cubit.dart';
 import '../../features/beer/presentation/screens/beer_details_screen.dart';
@@ -73,7 +75,11 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/paywall',
-      builder: (context, state) => PaywallSelectionScreen(),
+      builder: (context, state) {
+        final isManageMode = (state.extra as Map<String, dynamic>?)?['isManageMode'] == true ||
+            state.uri.queryParameters['manage'] == 'true';
+        return PaywallSelectionScreen(isManageMode: isManageMode);
+      },
     ),
     GoRoute(
       path: '/paywall/benefits',
@@ -176,6 +182,14 @@ final GoRouter appRouter = GoRouter(
           reviews: extra['reviews'] as List<Review>,
         );
       },
+    ),
+    GoRoute(
+      path: '/main/settings',
+      builder: (context, state) => const SettingsScreen(),
+    ),
+    GoRoute(
+      path: '/main/help_support',
+      builder: (context, state) => const HelpSupportScreen(),
     ),
     GoRoute(
       path: '/_widget-gallery',

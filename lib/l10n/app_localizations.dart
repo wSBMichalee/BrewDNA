@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// No description provided for @tabHistory.
   ///
   /// In pl, this message translates to:
-  /// **'Historia'**
+  /// **'Moje Piwa'**
   String get tabHistory;
 
   /// No description provided for @tabMap.

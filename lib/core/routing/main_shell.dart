@@ -15,12 +15,15 @@ class MainShell extends StatelessWidget {
     if (location.startsWith('/main/map')) return 1;
     if (location.startsWith('/main/history')) return 2;
     if (location.startsWith('/main/profile')) return 3;
+    if (location.startsWith('/main/scan')) return 4;
     return 0;
   }
 
   @override
   Widget build(BuildContext context) {
     final currentIndex = _getCurrentIndex(context);
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       extendBody: true,
       body: Stack(alignment: Alignment.bottomCenter, children: [child]),
@@ -47,17 +50,30 @@ class MainShell extends StatelessWidget {
           }
         },
         tabs: [
-          NativeGlassNavBarItem(label: AppLocalizations.of(context)!.tabDiscover, symbol: 'sparkles'),
-          NativeGlassNavBarItem(label: AppLocalizations.of(context)!.tabMap, symbol: 'map.fill'),
-          NativeGlassNavBarItem(label: AppLocalizations.of(context)!.tabHistory, symbol: 'clock.fill'),
           NativeGlassNavBarItem(
-            label: AppLocalizations.of(context)!.tabProfile,
+            label: l10n.tabDiscover,
+            symbol: 'sparkles',
+          ),
+          NativeGlassNavBarItem(
+            label: l10n.tabMap,
+            symbol: 'map.fill',
+          ),
+          NativeGlassNavBarItem(
+            label: l10n.tabHistory,
+            symbol: 'mug.fill',
+          ),
+          NativeGlassNavBarItem(
+            label: l10n.tabProfile,
             symbol: 'person.crop.circle.fill',
           ),
-          NativeGlassNavBarItem(label: AppLocalizations.of(context)!.tabScan, symbol: 'camera.fill'),
+          NativeGlassNavBarItem(
+            label: l10n.tabScan,
+            symbol: 'camera.fill',
+          ),
         ],
         tintColor: AppColors.accent,
       ),
     );
   }
 }
+

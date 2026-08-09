@@ -13,6 +13,7 @@ abstract class Beer with _$Beer {
     required String style,
     required double abv,
     required double rating,
+    @Default(0) int ratingCount,
     required double lightStrong,
     required double bitterSweet,
     required double dryFruity,
