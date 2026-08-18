@@ -70,6 +70,7 @@ class MainShell extends StatelessWidget {
           AdaptiveNavigationDestination(
             label: l10n.tabScan,
             icon: 'camera.fill',
+            isSearch: true,
           ),
         ],
       ),
