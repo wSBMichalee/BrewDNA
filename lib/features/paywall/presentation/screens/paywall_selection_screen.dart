@@ -20,7 +20,6 @@ class PaywallSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: replace with real subscription status once payment integration exists.
-    const currentSubscription = SubscriptionPlan.free;
     final initialPlan = isManageMode
         ? (currentSubscription == SubscriptionPlan.premium
             ? PaywallPlan.premiumYearly

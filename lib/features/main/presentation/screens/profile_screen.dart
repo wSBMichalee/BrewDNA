@@ -573,7 +573,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   iconColor: AppColors.accent,
                   title: 'Subskrypcja Premium',
                   // TODO: replace with real subscription status once payment integration exists.
-                  badgeText: SubscriptionPlan.free != SubscriptionPlan.free ? 'PRO' : null,
+                  badgeText: currentSubscription != SubscriptionPlan.free ? 'PRO' : null,
                   onTap: () => context.push(
                     '/paywall',
                     extra: {'isManageMode': true},
