@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:native_glass_navbar/native_glass_navbar.dart';
+import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 
@@ -24,11 +24,12 @@ class MainShell extends StatelessWidget {
     final currentIndex = _getCurrentIndex(context);
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      extendBody: true,
+    return AdaptiveScaffold(
       body: Stack(alignment: Alignment.bottomCenter, children: [child]),
-      bottomNavigationBar: NativeGlassNavBar(
-        currentIndex: currentIndex,
+      bottomNavigationBar: AdaptiveBottomNavigationBar(
+        useNativeBottomBar: true,
+        selectedIndex: currentIndex,
+        selectedItemColor: AppColors.accent,
         onTap: (index) {
           HapticFeedback.selectionClick();
           switch (index) {
@@ -49,29 +50,28 @@ class MainShell extends StatelessWidget {
               break;
           }
         },
-        tabs: [
-          NativeGlassNavBarItem(
+        items: [
+          AdaptiveNavigationDestination(
             label: l10n.tabDiscover,
-            symbol: 'sparkles',
+            icon: 'sparkles',
           ),
-          NativeGlassNavBarItem(
+          AdaptiveNavigationDestination(
             label: l10n.tabMap,
-            symbol: 'map.fill',
+            icon: 'map.fill',
           ),
-          NativeGlassNavBarItem(
+          AdaptiveNavigationDestination(
             label: l10n.tabHistory,
-            symbol: 'mug.fill',
+            icon: 'mug.fill',
           ),
-          NativeGlassNavBarItem(
+          AdaptiveNavigationDestination(
             label: l10n.tabProfile,
-            symbol: 'person.crop.circle.fill',
+            icon: 'person.crop.circle.fill',
           ),
-          NativeGlassNavBarItem(
+          AdaptiveNavigationDestination(
             label: l10n.tabScan,
-            symbol: 'camera.fill',
+            icon: 'camera.fill',
           ),
         ],
-        tintColor: AppColors.accent,
       ),
     );
   }
