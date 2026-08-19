@@ -39,7 +39,6 @@ import '../../features/onboarding/presentation/bloc/onboarding_cubit.dart';
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _authShellNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _onboardingShellNavigatorKey = GlobalKey<NavigatorState>();
-final GlobalKey<NavigatorState> _mainShellNavigatorKey = GlobalKey<NavigatorState>();
 
 class OnboardingShell extends StatelessWidget {
   final Widget child;
@@ -128,26 +127,40 @@ final GoRouter appRouter = GoRouter(
       ],
     ),
     // Main App Shell
-    ShellRoute(
-      navigatorKey: _mainShellNavigatorKey,
-      builder: (context, state, child) => MainShell(child: child),
-      routes: [
-
-        GoRoute(
-          path: '/main/history',
-          pageBuilder: (context, state) => NoTransitionPage(child: HistoryScreen()),
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) => MainShell(navigationShell: navigationShell),
+      branches: [
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/main/discover',
+              pageBuilder: (context, state) => const NoTransitionPage(child: DiscoverScreen()),
+            ),
+          ],
         ),
-        GoRoute(
-          path: '/main/map',
-          pageBuilder: (context, state) => NoTransitionPage(child: MapScreen()),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/main/map',
+              pageBuilder: (context, state) => const NoTransitionPage(child: MapScreen()),
+            ),
+          ],
         ),
-        GoRoute(
-          path: '/main/discover',
-          pageBuilder: (context, state) => NoTransitionPage(child: DiscoverScreen()),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/main/history',
+              pageBuilder: (context, state) => const NoTransitionPage(child: HistoryScreen()),
+            ),
+          ],
         ),
-        GoRoute(
-          path: '/main/profile',
-          pageBuilder: (context, state) => NoTransitionPage(child: ProfileScreen()),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/main/profile',
+              pageBuilder: (context, state) => const NoTransitionPage(child: ProfileScreen()),
+            ),
+          ],
         ),
       ],
     ),

@@ -6,49 +6,32 @@ import 'package:hop_iq/l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 
 class MainShell extends StatelessWidget {
-  final Widget child;
-  const MainShell({super.key, required this.child});
-
-  int _getCurrentIndex(BuildContext context) {
-    final location = GoRouterState.of(context).uri.toString();
-    if (location.startsWith('/main/discover')) return 0;
-    if (location.startsWith('/main/map')) return 1;
-    if (location.startsWith('/main/history')) return 2;
-    if (location.startsWith('/main/profile')) return 3;
-    if (location.startsWith('/main/scan')) return 4;
-    return 0;
-  }
+  final StatefulNavigationShell navigationShell;
+  const MainShell({super.key, required this.navigationShell});
 
   @override
   Widget build(BuildContext context) {
-    final currentIndex = _getCurrentIndex(context);
+    final currentIndex = navigationShell.currentIndex;
     final l10n = AppLocalizations.of(context)!;
 
     return AdaptiveScaffold(
-      body: Stack(alignment: Alignment.bottomCenter, children: [child]),
+      minimizeBehavior: TabBarMinimizeBehavior.never,
+      body: Stack(alignment: Alignment.bottomCenter, children: [navigationShell]),
       bottomNavigationBar: AdaptiveBottomNavigationBar(
         useNativeBottomBar: true,
         selectedIndex: currentIndex,
         selectedItemColor: AppColors.accent,
         onTap: (index) {
-          HapticFeedback.selectionClick();
-          switch (index) {
-            case 0:
-              context.go('/main/discover');
-              break;
-            case 1:
-              context.go('/main/map');
-              break;
-            case 2:
-              context.go('/main/history');
-              break;
-            case 3:
-              context.go('/main/profile');
-              break;
-            case 4:
-              context.go('/main/scan');
-              break;
+          if (index == 4) {
+            HapticFeedback.selectionClick();
+            context.go('/main/scan');
+            return;
           }
+          HapticFeedback.selectionClick();
+          navigationShell.goBranch(
+            index,
+            initialLocation: index == navigationShell.currentIndex,
+          );
         },
         items: [
           AdaptiveNavigationDestination(
