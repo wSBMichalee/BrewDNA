@@ -159,7 +159,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyTabHistory => 'History';
 
   @override
-  String get historyEmptyState => 'No data available';
+  String get historyEmptyState => 'No beers in your history yet.';
+
+  @override
+  String get scanInstruction => 'Position the BEER LABEL within the frame';
 
   @override
   String get mapTitle => 'World Map';

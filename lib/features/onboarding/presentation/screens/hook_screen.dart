@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:ui' as ui;
 
 import '../../../../core/theme/app_theme.dart';
@@ -122,7 +121,7 @@ class _HookScreenState extends State<HookScreen> with SingleTickerProviderStateM
                             styleName,
                             style: AppTypography.title2.copyWith(
                               color: AppColors.accent,
-                              fontSize: 19.sp, // Reduced by ~14% from 22.sp for better wrapping
+                              fontSize: 19, // Reduced from 22 for better wrapping
                             ),
                             textAlign: TextAlign.center,
                           ),

@@ -19,6 +19,8 @@ import '../../../beer/presentation/bloc/beer_state.dart';
 import '../../../beer/presentation/widgets/share_card.dart';
 import '../../../beer/presentation/utils/share_utils.dart';
 import '../../../paywall/domain/entities/subscription_plan.dart';
+import '../../domain/entities/user_taste_stats.dart';
+import '../../../beer/domain/repositories/i_beer_repository.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -31,11 +33,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int _selectedTasteTab = 0;
   // ignore: unused_field
   String _brewDnaSummary = "Analizowanie Twojego DNA smakowego...";
+  
+  int _totalStylesCount = 8; // Default fallback
+
 
   @override
   void initState() {
     super.initState();
     _loadBrewDna();
+    _loadTotalStyles();
+  }
+
+  Future<void> _loadTotalStyles() async {
+    final repo = getIt<IBeerRepository>();
+    final result = await repo.getAllStyles();
+    result.fold(
+      (_) {},
+      (styles) {
+        if (mounted) {
+          setState(() {
+            _totalStylesCount = styles.length;
+          });
+        }
+      },
+    );
   }
 
   Future<void> _loadBrewDna() async {
@@ -120,7 +141,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // 1. Brandowany Header z gradientem, bąbelkami i przyciskiem Settings
-              _buildBrandedHeader(context),
+              BlocBuilder<BeerCubit, BeerState>(
+                builder: (context, state) {
+                  final stats = state.maybeWhen(
+                    loaded: (history, r, c, t, b, s, m) => UserTasteStats.fromHistory(history),
+                    orElse: () => const UserTasteStats(
+                      totalBeers: 0,
+                      uniqueBreweries: 0,
+                      uniqueCountries: 0,
+                      uniqueStylesCount: 0,
+                    ),
+                  );
+                  return _buildBrandedHeader(context, stats);
+                }
+              ),
 
               SizedBox(height: AppSpacings.s24),
 
@@ -191,110 +225,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // Progress Card
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24),
-                child: Container(
-                  padding: EdgeInsets.all(AppSpacings.s24),
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: AppColors.separator.withValues(alpha: 0.5),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context)!.profileTasteProgressText,
-                            style: AppTypography.subhead.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.profileTasteProgressPercent,
-                            style: AppTypography.subhead.copyWith(
-                              color: AppColors.accent,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: AppSpacings.s16),
-                      // Progress Bar
-                      Container(
-                        height: 8,
-                        width: double.infinity,
+                child: BlocBuilder<BeerCubit, BeerState>(
+                  builder: (context, state) {
+                    final stats = state.maybeWhen(
+                      loaded: (history, r, c, t, b, s, m) => UserTasteStats.fromHistory(history),
+                      orElse: () => null,
+                    );
+                    
+                    if (stats == null || stats.totalBeers == 0) {
+                      return Container(
+                        padding: EdgeInsets.all(AppSpacings.s24),
                         decoration: BoxDecoration(
-                          color: AppColors.separator.withValues(alpha: 0.3),
-                          borderRadius: BorderRadius.circular(4),
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(
+                            color: AppColors.separator.withValues(alpha: 0.5),
+                          ),
                         ),
-                        child: FractionallySizedBox(
-                          alignment: Alignment.centerLeft,
-                          widthFactor: 0.45,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.accent,
-                              borderRadius: BorderRadius.circular(4),
+                        child: Center(
+                          child: Text(
+                            "Brak danych — oceń pierwsze piwo",
+                            style: AppTypography.subhead.copyWith(
+                              color: AppColors.labelSecondary,
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: AppSpacings.s24),
-                      // Favorite Style
-                      Container(
-                        padding: EdgeInsets.all(AppSpacings.s16),
-                        decoration: BoxDecoration(
-                          color: AppColors.background,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: AppColors.white,
-                              child: Icon(
-                                CupertinoIcons.drop,
-                                color: AppColors.accent,
-                              ),
-                            ),
-                            SizedBox(width: AppSpacings.s16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!.profileTasteFavStyle,
-                                    style: AppTypography.body.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    AppLocalizations.of(context)!.profileTasteFavStyleLabel,
-                                    style: AppTypography.caption.copyWith(
-                                      color: AppColors.labelSecondary,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              children: List.generate(
-                                5,
-                                (index) => Icon(
-                                  index < 4
-                                      ? CupertinoIcons.star_fill
-                                      : CupertinoIcons.star_lefthalf_fill,
-                                  size: 14,
-                                  color: AppColors.accent,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                      );
+                    }
+                    
+                    return _selectedTasteTab == 0
+                        ? _buildStylesCard(context, stats)
+                        : _buildCountriesCard(context, stats);
+                  },
                 ),
               ),
 
@@ -368,7 +330,230 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildBrandedHeader(BuildContext context) {
+  Widget _buildStylesCard(BuildContext context, UserTasteStats stats) {
+    final progress = _totalStylesCount > 0 ? stats.uniqueStylesCount / _totalStylesCount : 0.0;
+    final percent = (progress * 100).round();
+    
+    return Container(
+      padding: EdgeInsets.all(AppSpacings.s24),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: AppColors.separator.withValues(alpha: 0.5),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Spróbowano ${stats.uniqueStylesCount} z $_totalStylesCount stylów",
+                style: AppTypography.subhead.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                "$percent%",
+                style: AppTypography.subhead.copyWith(
+                  color: AppColors.accent,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: AppSpacings.s16),
+          // Progress Bar
+          Container(
+            height: 8,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.separator.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: progress.clamp(0.0, 1.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.accent,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: AppSpacings.s24),
+          // Favorite Style
+          if (stats.favoriteStyle != null)
+            Container(
+              padding: EdgeInsets.all(AppSpacings.s16),
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: AppColors.white,
+                    child: Icon(
+                      CupertinoIcons.drop,
+                      color: AppColors.accent,
+                    ),
+                  ),
+                  SizedBox(width: AppSpacings.s16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          stats.favoriteStyle!,
+                          style: AppTypography.body.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "Ulubiony styl",
+                          style: AppTypography.caption.copyWith(
+                            color: AppColors.labelSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: List.generate(
+                      5,
+                      (index) {
+                        final avg = stats.favoriteStyleAvgRating ?? 0.0;
+                        if (index < avg.floor()) {
+                          return Icon(CupertinoIcons.star_fill, size: 14, color: AppColors.accent);
+                        } else if (index < avg.round()) {
+                          return Icon(CupertinoIcons.star_lefthalf_fill, size: 14, color: AppColors.accent);
+                        } else {
+                          return Icon(CupertinoIcons.star, size: 14, color: AppColors.separator);
+                        }
+                      }
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCountriesCard(BuildContext context, UserTasteStats stats) {
+    const totalCountries = 195;
+    final progress = stats.uniqueCountries / totalCountries;
+    final percent = (progress * 100).round();
+    
+    return Container(
+      padding: EdgeInsets.all(AppSpacings.s24),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: AppColors.separator.withValues(alpha: 0.5),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Odwiedzono ${stats.uniqueCountries} z $totalCountries krajów",
+                style: AppTypography.subhead.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                "$percent%",
+                style: AppTypography.subhead.copyWith(
+                  color: AppColors.accent,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: AppSpacings.s16),
+          // Progress Bar
+          Container(
+            height: 8,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.separator.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: progress.clamp(0.0, 1.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.accent,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: AppSpacings.s24),
+          // Favorite Country
+          if (stats.favoriteCountry != null)
+            Container(
+              padding: EdgeInsets.all(AppSpacings.s16),
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: AppColors.white,
+                    child: Icon(
+                      CupertinoIcons.globe,
+                      color: AppColors.accent,
+                    ),
+                  ),
+                  SizedBox(width: AppSpacings.s16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          stats.favoriteCountry!,
+                          style: AppTypography.body.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "Najczęściej wybierany kraj",
+                          style: AppTypography.caption.copyWith(
+                            color: AppColors.labelSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    "${stats.favoriteCountryBeersCount} piw",
+                    style: AppTypography.subhead.copyWith(
+                      color: AppColors.accent,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBrandedHeader(BuildContext context, UserTasteStats stats) {
     final topPadding = MediaQuery.of(context).padding.top;
     final l10n = AppLocalizations.of(context)!;
 
@@ -488,7 +673,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           const SizedBox(height: 4),
                           // TODO: Aggregated stats from checkins/ratings
                           Text(
-                            l10n.profileDummyStats,
+                            '${stats.totalBeers} piw · ${stats.uniqueBreweries} browarów · ${stats.uniqueCountries} krajów',
                             style: AppTypography.subhead.copyWith(
                               color: Colors.white.withValues(alpha: 0.95),
                               fontSize: 13,
@@ -804,33 +989,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildAchievementCard(IconData icon, String title, String subtitle) {
-    return Container(
-      width: 140,
-      padding: EdgeInsets.all(AppSpacings.s24),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.separator.withValues(alpha: 0.5)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(icon, color: AppColors.accent, size: 32),
-          SizedBox(height: AppSpacings.s16),
-          Text(
-            title,
-            style: AppTypography.subhead.copyWith(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            subtitle,
-            style: AppTypography.caption.copyWith(
-              color: AppColors.labelSecondary,
+    return SizedBox(
+      width: 144,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: AppSpacings.s12,
+          vertical: AppSpacings.s20,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: AppColors.separator.withValues(alpha: 0.5)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(icon, color: AppColors.accent, size: 32),
+            SizedBox(height: AppSpacings.s12),
+            Text(
+              title,
+              style: AppTypography.subhead.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 13, // Zmniejszony rozmiar fontu
+                height: 1.2,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              style: AppTypography.caption.copyWith(
+                color: AppColors.labelSecondary,
+                fontSize: 11, // Delikatnie mniejszy podtytuł dla lepszych proporcji
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
   }

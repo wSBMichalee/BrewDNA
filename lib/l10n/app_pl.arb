@@ -49,6 +49,7 @@
   "historyTabCellar": "Piwniczka",
   "historyTabHistory": "Historia",
   "historyEmptyState": "Brak danych",
+  "scanInstruction": "Umieść ETYKIETĘ PIWA w ramce",
   "mapTitle": "Mapa świata",
   "mapCountriesDiscovered": "{count} z 195 krajów odkrytych",
   "@mapCountriesDiscovered": {
@@ -106,8 +107,6 @@
   "@profileDummyName": {
     "description": "TEMP - mock data, replace when real backend wired up"
   },
-  "profileDummyStats": "68 piw · 31 browarów · 12 krajów",
-  "@profileDummyStats": {
     "description": "TEMP - mock data, replace when real backend wired up"
   },
   "profileAchievementsTitle": "Osiągnięcia",
@@ -120,10 +119,6 @@
   "profileTasteProfileTitle": "Profil smakowy",
   "profileTasteTabStyles": "Style",
   "profileTasteTabCountries": "Kraje",
-  "profileTasteProgressText": "Spróbowano 19 z 42 stylów",
-  "profileTasteProgressPercent": "45%",
-  "profileTasteFavStyle": "West Coast IPA",
-  "profileTasteFavStyleLabel": "Ulubiony styl",
   "profileBrewDnaTitle": "Twoje BrewDNA",
   "beerDetailsEmpty": "Brak danych piwa",
   "beerDetailsTopStyle": "TOP 2% W STYLU",

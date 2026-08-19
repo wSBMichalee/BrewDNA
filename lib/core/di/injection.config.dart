@@ -22,12 +22,16 @@ import '../../features/beer/data/repositories/supabase_beer_repository.dart'
     as _i812;
 import '../../features/beer/data/repositories/supabase_rating_repository.dart'
     as _i51;
+import '../../features/beer/data/repositories/supabase_scan_limit_repository.dart'
+    as _i127;
 import '../../features/beer/data/repositories/supabase_scan_repository.dart'
     as _i347;
 import '../../features/beer/domain/repositories/i_beer_repository.dart'
     as _i425;
 import '../../features/beer/domain/repositories/i_rating_repository.dart'
     as _i100;
+import '../../features/beer/domain/repositories/i_scan_limit_repository.dart'
+    as _i573;
 import '../../features/beer/domain/repositories/i_scan_repository.dart' as _i83;
 import '../../features/beer/presentation/bloc/beer_cubit.dart' as _i378;
 import '../../features/beer/presentation/bloc/rating_cubit.dart' as _i848;
@@ -35,6 +39,7 @@ import '../../features/beer/presentation/bloc/scan_cubit.dart' as _i1012;
 import '../../features/onboarding/presentation/bloc/onboarding_cubit.dart'
     as _i153;
 import '../../features/paywall/presentation/bloc/paywall_cubit.dart' as _i766;
+import '../../features/paywall/presentation/bloc/paywall_state.dart' as _i734;
 import 'app_module.dart' as _i460;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -45,8 +50,10 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final appModule = _$AppModule();
-    gh.factory<_i766.PaywallCubit>(() => _i766.PaywallCubit());
     gh.lazySingleton<_i454.SupabaseClient>(() => appModule.supabase);
+    gh.lazySingleton<_i573.IScanLimitRepository>(
+      () => _i127.SupabaseScanLimitRepository(gh<_i454.SupabaseClient>()),
+    );
     gh.lazySingleton<_i589.IAuthRepository>(
       () => _i487.SupabaseAuthRepository(),
     );
@@ -61,6 +68,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i153.OnboardingCubit>(
       () => _i153.OnboardingCubit(gh<_i425.IBeerRepository>()),
+    );
+    gh.factory<_i766.PaywallCubit>(
+      () => _i766.PaywallCubit(initialPlan: gh<_i734.PaywallPlan>()),
     );
     gh.factory<_i378.BeerCubit>(
       () => _i378.BeerCubit(gh<_i425.IBeerRepository>()),

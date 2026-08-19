@@ -2,6 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:fpdart/fpdart.dart';
 import 'dart:math' as math;
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import '../../domain/repositories/i_beer_repository.dart';
 import '../../domain/entities/beer.dart';
 import 'beer_state.dart';
@@ -38,6 +41,40 @@ class BeerCubit extends Cubit<BeerState> {
 
   Future<void> loadDiscoverData() async {
     _emitLoading();
+
+    try {
+      final connectivityResult = await Connectivity().checkConnectivity();
+      // Jeśli system raportuje całkowity brak sieci (nawet na symulatorze), 
+      // upewnijmy się robiąc szybki DNS lookup (fallback dla symulatora iOS)
+      if (connectivityResult.contains(ConnectivityResult.none)) {
+        bool hasRealInternet = false;
+        // Pętla retry dla symulatora iOS: pierwsze zapytanie DNS po uruchomieniu
+        // często rzuca timeout/SocketException, zanim symulator "obudzi" sieć.
+        for (int i = 0; i < 3; i++) {
+          try {
+            final result = await InternetAddress.lookup('google.com')
+                .timeout(const Duration(seconds: 3));
+            if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+              hasRealInternet = true;
+              break; // Sukces, przerywamy pętlę
+            }
+          } catch (_) {
+            // Czekamy chwilę przed kolejną próbą
+            if (i < 2) await Future.delayed(const Duration(milliseconds: 1000));
+          }
+        }
+
+        if (!hasRealInternet) {
+          emit(const BeerState.error('NO_INTERNET'));
+          return;
+        }
+      }
+    } catch (e) {
+      // W przypadku MissingPluginException (np. po dodaniu paczki bez pełnego przebudowania apki)
+      // po prostu ignorujemy sprawdzanie, żeby nie zablokować ładowania (nie utknąć na shimmerze).
+      debugPrint('Connectivity check failed: $e');
+    }
+
     final botdFuture = _repository.getBeerOfTheDay();
     final recFuture = _repository.getRecommendations();
     final countriesFuture = _repository.getTopCountries();

@@ -11,6 +11,7 @@ import '../../../../core/widgets/star_rating.dart';
 import '../../../../core/widgets/beer_style_placeholder.dart';
 import '../../../beer/presentation/bloc/beer_cubit.dart';
 import '../../../beer/presentation/bloc/beer_state.dart';
+import '../../../../core/widgets/app_error_widget.dart';
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
@@ -78,7 +79,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                     width: 150,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.card,
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
@@ -86,7 +87,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                     width: 36,
                     height: 36,
                     decoration: const BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.card,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -99,7 +100,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                 width: 200,
                 height: 20,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.card,
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
@@ -112,7 +113,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
               child: Container(
                 height: 420,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.card,
                   borderRadius: BorderRadius.circular(32),
                 ),
               ),
@@ -130,7 +131,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                     width: 150,
                     height: 24,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.card,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -138,7 +139,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                     width: 80,
                     height: 16,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.card,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -159,7 +160,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                     width: 150,
                     margin: EdgeInsets.only(right: AppSpacings.s16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.card,
                       borderRadius: BorderRadius.circular(16),
                     ),
                   );
@@ -184,11 +185,10 @@ class _DiscoverScreenState extends State<DiscoverScreen>
             builder: (context, beerState) {
               return beerState.maybeWhen(
                 loading: () => _buildSkeleton(),
-                error: (msg) => Center(
-                  child: Text(
-                    msg,
-                    style: AppTypography.body.copyWith(color: Colors.red),
-                  ),
+                error: (msg) => AppErrorWidget(
+                  message: msg,
+                  isNoInternet: msg == 'NO_INTERNET',
+                  onRetry: () => _beerCubit.loadDiscoverData(),
                 ),
                 loaded: (history, recommendations, topCountries, topRatedBeers, beerOfTheDay, _, matchedBeers) {
                   // Uruchom animację tylko raz przy pierwszym załadowaniu danych

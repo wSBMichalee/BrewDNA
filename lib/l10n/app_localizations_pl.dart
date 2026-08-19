@@ -161,6 +161,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get historyEmptyState => 'Brak danych';
 
   @override
+  String get scanInstruction => 'Umieść ETYKIETĘ PIWA w ramce';
+
+  @override
   String get mapTitle => 'Mapa świata';
 
   @override

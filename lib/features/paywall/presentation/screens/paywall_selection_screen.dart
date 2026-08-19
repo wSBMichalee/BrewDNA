@@ -11,10 +11,12 @@ import '../bloc/paywall_state.dart';
 
 class PaywallSelectionScreen extends StatelessWidget {
   final bool isManageMode;
+  final bool isPromoModal;
 
   const PaywallSelectionScreen({
     super.key,
     this.isManageMode = false,
+    this.isPromoModal = false,
   });
 
   @override
@@ -31,7 +33,7 @@ class PaywallSelectionScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => PaywallCubit(initialPlan: initialPlan),
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: isPromoModal ? AppColors.transparent : AppColors.background,
         body: Stack(
           children: [
             // Subtelne, eleganckie tło gradientowe dla efektu glassmorphism
@@ -70,7 +72,21 @@ class PaywallSelectionScreen extends StatelessWidget {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        if (isManageMode) ...[
+                        if (isPromoModal && !isManageMode) ...[
+                          // Drag handle for bottom sheet
+                          Center(
+                            child: Container(
+                              width: 36,
+                              height: 4,
+                              margin: EdgeInsets.only(bottom: AppSpacings.s16),
+                              decoration: BoxDecoration(
+                                color: AppColors.separator,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                          ),
+                        ],
+                        if (isManageMode || isPromoModal) ...[
                           Align(
                             alignment: Alignment.topRight,
                             child: CupertinoButton(
@@ -166,15 +182,15 @@ class PaywallSelectionScreen extends StatelessWidget {
                         AppButton(
                           text: isManageMode
                               ? 'Zmień plan'
-                              : (state.selectedPlan == PaywallPlan.free
-                                  ? 'Kontynuuj za darmo'
-                                  : 'Rozpocznij'),
+                              : (isPromoModal
+                                  ? (state.selectedPlan == PaywallPlan.free ? 'Kontynuuj za darmo' : 'Rozpocznij')
+                                  : (state.selectedPlan == PaywallPlan.free ? 'Kontynuuj za darmo' : 'Rozpocznij')),
                           isLoading: state.isLoading,
                           onPressed: () async {
                             await context.read<PaywallCubit>().confirmPlan();
                             if (context.mounted &&
                                 context.read<PaywallCubit>().state.error == null) {
-                              if (isManageMode) {
+                              if (isManageMode || isPromoModal) {
                                 Navigator.of(context).pop();
                               } else {
                                 context.go('/auth/welcome');

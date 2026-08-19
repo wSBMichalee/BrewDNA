@@ -392,6 +392,12 @@ abstract class AppLocalizations {
   /// **'Brak danych'**
   String get historyEmptyState;
 
+  /// No description provided for @scanInstruction.
+  ///
+  /// In pl, this message translates to:
+  /// **'Umieść ETYKIETĘ PIWA w ramce'**
+  String get scanInstruction;
+
   /// No description provided for @mapTitle.
   ///
   /// In pl, this message translates to:
