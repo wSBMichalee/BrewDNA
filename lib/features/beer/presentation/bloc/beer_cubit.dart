@@ -109,6 +109,7 @@ class BeerCubit extends Cubit<BeerState> {
   }
 
   void _emitLoading() {
+    if (isClosed) return;
     state.maybeWhen(
       loaded: (_, _, _, _, _, _, _) {}, // Do not emit loading if already loaded
       orElse: () => emit(const BeerState.loading()),
@@ -124,6 +125,7 @@ class BeerCubit extends Cubit<BeerState> {
     Beer? selectedBeer,
     List<Beer>? matchedBeers,
   }) {
+    if (isClosed) return;
     state.maybeWhen(
       loaded:
           (
