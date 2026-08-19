@@ -107,8 +107,6 @@
   "@profileDummyName": {
     "description": "TEMP - mock data, replace when real backend wired up"
   },
-    "description": "TEMP - mock data, replace when real backend wired up"
-  },
   "profileAchievementsTitle": "Osiągnięcia",
   "profileAchievement1Title": "Odkrywca",
   "profileAchievement1Subtitle": "19 stylów",
