@@ -7,7 +7,6 @@ import 'package:shimmer/shimmer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/widgets/app_segmented_control.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/beer_style_placeholder.dart';
@@ -21,6 +20,8 @@ import '../../../beer/presentation/utils/share_utils.dart';
 import '../../../paywall/domain/entities/subscription_plan.dart';
 import '../../domain/entities/user_taste_stats.dart';
 import '../../../beer/domain/repositories/i_beer_repository.dart';
+import '../../domain/entities/taste_profile.dart';
+import '../../domain/repositories/i_taste_profile_repository.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -30,34 +31,34 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int _selectedTasteTab = 0;
+  TasteProfile? _tasteProfile;
+  bool _isLoadingTasteProfile = true;
   // ignore: unused_field
   String _brewDnaSummary = "Analizowanie Twojego DNA smakowego...";
   
-  int _totalStylesCount = 8; // Default fallback
 
 
   @override
   void initState() {
     super.initState();
+    _loadTasteProfile();
     _loadBrewDna();
-    _loadTotalStyles();
   }
 
-  Future<void> _loadTotalStyles() async {
-    final repo = getIt<IBeerRepository>();
-    final result = await repo.getAllStyles();
-    result.fold(
-      (_) {},
-      (styles) {
-        if (mounted) {
-          setState(() {
-            _totalStylesCount = styles.length;
-          });
-        }
-      },
-    );
+  Future<void> _loadTasteProfile() async {
+    final repo = getIt<ITasteProfileRepository>();
+    final result = await repo.getTasteProfile();
+    if (mounted) {
+      setState(() {
+        _isLoadingTasteProfile = false;
+        result.fold(
+          (l) => null,
+          (profile) => _tasteProfile = profile,
+        );
+      });
+    }
   }
+
 
   Future<void> _loadBrewDna() async {
     try {
@@ -206,58 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(height: AppSpacings.s16),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24),
-                child: AppSegmentedControl<int>(
-                  items: {
-                    0: AppLocalizations.of(context)!.profileTasteTabStyles,
-                    1: AppLocalizations.of(context)!.profileTasteTabCountries,
-                  },
-                  groupValue: _selectedTasteTab,
-                  onValueChanged: (index) {
-                    if (index != null) {
-                      setState(() => _selectedTasteTab = index);
-                    }
-                  },
-                ),
-              ),
-
-              SizedBox(height: AppSpacings.s24),
-
-              // Progress Card
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSpacings.s24),
-                child: BlocBuilder<BeerCubit, BeerState>(
-                  builder: (context, state) {
-                    final stats = state.maybeWhen(
-                      loaded: (history, r, c, t, b, s, m) => UserTasteStats.fromHistory(history),
-                      orElse: () => null,
-                    );
-                    
-                    if (stats == null || stats.totalBeers == 0) {
-                      return Container(
-                        padding: EdgeInsets.all(AppSpacings.s24),
-                        decoration: BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(
-                            color: AppColors.separator.withValues(alpha: 0.5),
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Brak danych — oceń pierwsze piwo",
-                            style: AppTypography.subhead.copyWith(
-                              color: AppColors.labelSecondary,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                    
-                    return _selectedTasteTab == 0
-                        ? _buildStylesCard(context, stats)
-                        : _buildCountriesCard(context, stats);
-                  },
-                ),
+                child: _buildTasteProfileCircles(),
               ),
 
               SizedBox(height: AppSpacings.s32),
@@ -330,10 +280,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildStylesCard(BuildContext context, UserTasteStats stats) {
-    final progress = _totalStylesCount > 0 ? stats.uniqueStylesCount / _totalStylesCount : 0.0;
-    final percent = (progress * 100).round();
+  Widget _buildTasteProfileCircles() {
+    if (_isLoadingTasteProfile) {
+      return const Center(child: CupertinoActivityIndicator());
+    }
     
+    final profile = _tasteProfile ?? const TasteProfile(
+      calculatedStrength: 50,
+      calculatedBitterness: 50,
+      calculatedFruitiness: 50,
+    );
+
     return Container(
       padding: EdgeInsets.all(AppSpacings.s24),
       decoration: BoxDecoration(
@@ -350,206 +307,117 @@ class _ProfileScreenState extends State<ProfileScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Spróbowano ${stats.uniqueStylesCount} z $_totalStylesCount stylów",
-                style: AppTypography.subhead.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                AppLocalizations.of(context)!.profileTasteProfileTitle,
+                style: AppTypography.headline,
               ),
-              Text(
-                "$percent%",
-                style: AppTypography.subhead.copyWith(
-                  color: AppColors.accent,
-                  fontWeight: FontWeight.bold,
-                ),
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: () => _showEditTasteProfileSheet(profile),
+                child: const Icon(CupertinoIcons.pencil, color: AppColors.labelSecondary),
               ),
             ],
           ),
-          SizedBox(height: AppSpacings.s16),
-          // Progress Bar
-          Container(
-            height: 8,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: AppColors.separator.withValues(alpha: 0.3),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: FractionallySizedBox(
-              alignment: Alignment.centerLeft,
-              widthFactor: progress.clamp(0.0, 1.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.accent,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-            ),
-          ),
           SizedBox(height: AppSpacings.s24),
-          // Favorite Style
-          if (stats.favoriteStyle != null)
-            Container(
-              padding: EdgeInsets.all(AppSpacings.s16),
-              decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.circular(16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildTasteAxisCircle(
+                context,
+                title: AppLocalizations.of(context)!.onboardingQ1Left, // Słodkie/Goryczka
+                value: profile.effectiveBitterness,
+                color: const Color(0xFF6A994E), // Zgaszona zieleń
+                icon: CupertinoIcons.leaf_arrow_circlepath,
               ),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: AppColors.white,
-                    child: Icon(
-                      CupertinoIcons.drop,
-                      color: AppColors.accent,
-                    ),
-                  ),
-                  SizedBox(width: AppSpacings.s16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          stats.favoriteStyle!,
-                          style: AppTypography.body.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          "Ulubiony styl",
-                          style: AppTypography.caption.copyWith(
-                            color: AppColors.labelSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    children: List.generate(
-                      5,
-                      (index) {
-                        final avg = stats.favoriteStyleAvgRating ?? 0.0;
-                        if (index < avg.floor()) {
-                          return Icon(CupertinoIcons.star_fill, size: 14, color: AppColors.accent);
-                        } else if (index < avg.round()) {
-                          return Icon(CupertinoIcons.star_lefthalf_fill, size: 14, color: AppColors.accent);
-                        } else {
-                          return Icon(CupertinoIcons.star, size: 14, color: AppColors.separator);
-                        }
-                      }
-                    ),
-                  ),
-                ],
+              _buildTasteAxisCircle(
+                context,
+                title: AppLocalizations.of(context)!.onboardingQ2Left, // Lekkie/Mocne
+                value: profile.effectiveStrength,
+                color: const Color(0xFFBC4749), // Ciemne bordo
+                icon: CupertinoIcons.bolt_fill,
               ),
-            ),
+              _buildTasteAxisCircle(
+                context,
+                title: AppLocalizations.of(context)!.onboardingQ3Right, // Owocowe
+                value: profile.effectiveFruitiness,
+                color: const Color(0xFFF2A65A), // Pomarańcz
+                icon: CupertinoIcons.drop_fill,
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildCountriesCard(BuildContext context, UserTasteStats stats) {
-    const totalCountries = 195;
-    final progress = stats.uniqueCountries / totalCountries;
-    final percent = (progress * 100).round();
-    
-    return Container(
-      padding: EdgeInsets.all(AppSpacings.s24),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.separator.withValues(alpha: 0.5),
-        ),
-      ),
+  Widget _buildTasteAxisCircle(
+    BuildContext context, {
+    required String title,
+    required double value,
+    required Color color,
+    required IconData icon,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        _showEditTasteProfileSheet(_tasteProfile ?? const TasteProfile());
+      },
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Odwiedzono ${stats.uniqueCountries} z $totalCountries krajów",
-                style: AppTypography.subhead.copyWith(
-                  fontWeight: FontWeight.bold,
+          Icon(icon, color: color, size: 24),
+          SizedBox(height: AppSpacings.s8),
+          SizedBox(
+            width: 80,
+            height: 80,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                CircularProgressIndicator(
+                  value: value / 100,
+                  strokeWidth: 8,
+                  backgroundColor: AppColors.separator.withValues(alpha: 0.3),
+                  valueColor: AlwaysStoppedAnimation<Color>(color),
+                  strokeCap: StrokeCap.round,
                 ),
-              ),
-              Text(
-                "$percent%",
-                style: AppTypography.subhead.copyWith(
-                  color: AppColors.accent,
-                  fontWeight: FontWeight.bold,
+                Center(
+                  child: Text(
+                    '${value.round()}%',
+                    style: AppTypography.headline.copyWith(
+                      color: AppColors.label,
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: AppSpacings.s16),
-          // Progress Bar
-          Container(
-            height: 8,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: AppColors.separator.withValues(alpha: 0.3),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: FractionallySizedBox(
-              alignment: Alignment.centerLeft,
-              widthFactor: progress.clamp(0.0, 1.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.accent,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
+              ],
             ),
           ),
-          SizedBox(height: AppSpacings.s24),
-          // Favorite Country
-          if (stats.favoriteCountry != null)
-            Container(
-              padding: EdgeInsets.all(AppSpacings.s16),
-              decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: AppColors.white,
-                    child: Icon(
-                      CupertinoIcons.globe,
-                      color: AppColors.accent,
-                    ),
-                  ),
-                  SizedBox(width: AppSpacings.s16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          stats.favoriteCountry!,
-                          style: AppTypography.body.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          "Najczęściej wybierany kraj",
-                          style: AppTypography.caption.copyWith(
-                            color: AppColors.labelSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    "${stats.favoriteCountryBeersCount} piw",
-                    style: AppTypography.subhead.copyWith(
-                      color: AppColors.accent,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+          SizedBox(height: AppSpacings.s8),
+          Text(
+            title,
+            style: AppTypography.caption.copyWith(
+              color: AppColors.labelSecondary,
             ),
+          ),
         ],
       ),
+    );
+  }
+
+  void _showEditTasteProfileSheet(TasteProfile profile) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) {
+        return _TasteProfileEditorSheet(
+          profile: profile,
+          onSave: (strength, bitterness, fruitiness) async {
+            setState(() => _isLoadingTasteProfile = true);
+            final repo = getIt<ITasteProfileRepository>();
+            await repo.updateDeclaredPreferences(
+              declaredStrength: strength,
+              declaredBitterness: bitterness,
+              declaredFruitiness: fruitiness,
+            );
+            _loadTasteProfile();
+          },
+        );
+      },
     );
   }
 
@@ -1155,6 +1023,120 @@ class _ProfileShareSheetState extends State<_ProfileShareSheet> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _TasteProfileEditorSheet extends StatefulWidget {
+  final TasteProfile profile;
+  final Function(double strength, double bitterness, double fruitiness) onSave;
+
+  const _TasteProfileEditorSheet({
+    required this.profile,
+    required this.onSave,
+  });
+
+  @override
+  State<_TasteProfileEditorSheet> createState() => _TasteProfileEditorSheetState();
+}
+
+class _TasteProfileEditorSheetState extends State<_TasteProfileEditorSheet> {
+  late double _strength;
+  late double _bitterness;
+  late double _fruitiness;
+
+  @override
+  void initState() {
+    super.initState();
+    _strength = widget.profile.declaredStrength?.toDouble() ?? widget.profile.calculatedStrength?.toDouble() ?? 50.0;
+    _bitterness = widget.profile.declaredBitterness?.toDouble() ?? widget.profile.calculatedBitterness?.toDouble() ?? 50.0;
+    _fruitiness = widget.profile.declaredFruitiness?.toDouble() ?? widget.profile.calculatedFruitiness?.toDouble() ?? 50.0;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(
+        top: AppSpacings.s24,
+        left: AppSpacings.s24,
+        right: AppSpacings.s24,
+        bottom: MediaQuery.of(context).padding.bottom + AppSpacings.s24,
+      ),
+      decoration: const BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              "Edytuj preferencje smaku",
+              style: AppTypography.title2,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: AppSpacings.s8),
+            Text(
+              "Suwaki definiują Twoje zadeklarowane preferencje. Wpływają one na finalny profil w 30%, reszta to historia ocen.",
+              style: AppTypography.caption.copyWith(color: AppColors.labelSecondary),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: AppSpacings.s32),
+            _buildSliderRow(
+              "Słodkie", "Goryczka", 
+              _bitterness, 
+              (v) => setState(() => _bitterness = v),
+              const Color(0xFF6A994E),
+            ),
+            SizedBox(height: AppSpacings.s24),
+            _buildSliderRow(
+              "Lekkie", "Mocne", 
+              _strength, 
+              (v) => setState(() => _strength = v),
+              const Color(0xFFBC4749),
+            ),
+            SizedBox(height: AppSpacings.s24),
+            _buildSliderRow(
+              "Wytrawne", "Owocowe", 
+              _fruitiness, 
+              (v) => setState(() => _fruitiness = v),
+              const Color(0xFFF2A65A),
+            ),
+            SizedBox(height: AppSpacings.s48),
+            AppButton(
+              text: "Zapisz",
+              onPressed: () {
+                widget.onSave(_strength, _bitterness, _fruitiness);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSliderRow(String left, String right, double value, ValueChanged<double> onChanged, Color activeColor) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(left, style: AppTypography.subhead),
+            Text(right, style: AppTypography.subhead),
+          ],
+        ),
+        SizedBox(height: AppSpacings.s8),
+        CupertinoSlider(
+          value: value,
+          min: 0,
+          max: 100,
+          activeColor: activeColor,
+          onChanged: onChanged,
+        ),
+      ],
     );
   }
 }

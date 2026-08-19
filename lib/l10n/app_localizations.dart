@@ -530,12 +530,6 @@ abstract class AppLocalizations {
   /// **'Michał'**
   String get profileDummyName;
 
-  /// TEMP - mock data, replace when real backend wired up
-  ///
-  /// In pl, this message translates to:
-  /// **'68 piw · 31 browarów · 12 krajów'**
-  String get profileDummyStats;
-
   /// No description provided for @profileAchievementsTitle.
   ///
   /// In pl, this message translates to:
@@ -595,30 +589,6 @@ abstract class AppLocalizations {
   /// In pl, this message translates to:
   /// **'Kraje'**
   String get profileTasteTabCountries;
-
-  /// No description provided for @profileTasteProgressText.
-  ///
-  /// In pl, this message translates to:
-  /// **'Spróbowano 19 z 42 stylów'**
-  String get profileTasteProgressText;
-
-  /// No description provided for @profileTasteProgressPercent.
-  ///
-  /// In pl, this message translates to:
-  /// **'45%'**
-  String get profileTasteProgressPercent;
-
-  /// No description provided for @profileTasteFavStyle.
-  ///
-  /// In pl, this message translates to:
-  /// **'West Coast IPA'**
-  String get profileTasteFavStyle;
-
-  /// No description provided for @profileTasteFavStyleLabel.
-  ///
-  /// In pl, this message translates to:
-  /// **'Ulubiony styl'**
-  String get profileTasteFavStyleLabel;
 
   /// No description provided for @profileBrewDnaTitle.
   ///

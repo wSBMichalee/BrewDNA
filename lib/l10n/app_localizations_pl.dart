@@ -236,9 +236,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get profileDummyName => 'Michał';
 
   @override
-  String get profileDummyStats => '68 piw · 31 browarów · 12 krajów';
-
-  @override
   String get profileAchievementsTitle => 'Osiągnięcia';
 
   @override
@@ -267,18 +264,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get profileTasteTabCountries => 'Kraje';
-
-  @override
-  String get profileTasteProgressText => 'Spróbowano 19 z 42 stylów';
-
-  @override
-  String get profileTasteProgressPercent => '45%';
-
-  @override
-  String get profileTasteFavStyle => 'West Coast IPA';
-
-  @override
-  String get profileTasteFavStyleLabel => 'Ulubiony styl';
 
   @override
   String get profileBrewDnaTitle => 'Twoje BrewDNA';

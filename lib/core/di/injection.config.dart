@@ -36,6 +36,10 @@ import '../../features/beer/domain/repositories/i_scan_repository.dart' as _i83;
 import '../../features/beer/presentation/bloc/beer_cubit.dart' as _i378;
 import '../../features/beer/presentation/bloc/rating_cubit.dart' as _i848;
 import '../../features/beer/presentation/bloc/scan_cubit.dart' as _i1012;
+import '../../features/main/data/repositories/supabase_taste_profile_repository.dart'
+    as _i777;
+import '../../features/main/domain/repositories/i_taste_profile_repository.dart'
+    as _i238;
 import '../../features/onboarding/presentation/bloc/onboarding_cubit.dart'
     as _i153;
 import '../../features/paywall/presentation/bloc/paywall_cubit.dart' as _i766;
@@ -71,6 +75,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i766.PaywallCubit>(
       () => _i766.PaywallCubit(initialPlan: gh<_i734.PaywallPlan>()),
+    );
+    gh.lazySingleton<_i238.ITasteProfileRepository>(
+      () => _i777.SupabaseTasteProfileRepository(gh<_i454.SupabaseClient>()),
     );
     gh.factory<_i378.BeerCubit>(
       () => _i378.BeerCubit(gh<_i425.IBeerRepository>()),
