@@ -8,12 +8,12 @@ class SupabaseAuthRepository implements IAuthRepository {
 
   @override
   Future<void> signInWithApple() async {
-    await _authClient.signInWithOAuth(OAuthProvider.apple);
+    await _authClient.signInWithOAuth(OAuthProvider.apple, redirectTo: 'io.supabase.brewdna://login-callback/');
   }
 
   @override
   Future<void> signInWithGoogle() async {
-    await _authClient.signInWithOAuth(OAuthProvider.google);
+    await _authClient.signInWithOAuth(OAuthProvider.google, redirectTo: 'io.supabase.brewdna://login-callback/');
   }
 
   @override

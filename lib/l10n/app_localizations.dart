@@ -1279,6 +1279,12 @@ abstract class AppLocalizations {
   /// In pl, this message translates to:
   /// **'{count} piw'**
   String beersCount(int count);
+
+  /// No description provided for @tasteProfileBalanced.
+  ///
+  /// In pl, this message translates to:
+  /// **'Zbalansowane'**
+  String get tasteProfileBalanced;
 }
 
 class _AppLocalizationsDelegate

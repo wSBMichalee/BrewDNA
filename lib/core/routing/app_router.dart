@@ -13,6 +13,7 @@ import '../../features/auth/presentation/screens/auth_email_flow_screen.dart';
 import '../../features/auth/presentation/screens/welcome_screen.dart';
 import '../../features/auth/presentation/screens/auth_start_screen.dart';
 import '../../features/auth/presentation/screens/auth_login_screen.dart';
+import '../../features/auth/presentation/screens/auth_login_email_screen.dart';
 
 import '../../features/paywall/presentation/screens/paywall_selection_screen.dart';
 import '../../features/paywall/presentation/screens/paywall_benefits_screen.dart';
@@ -119,6 +120,10 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           path: '/auth/login',
           builder: (context, state) => AuthLoginScreen(),
+        ),
+        GoRoute(
+          path: '/auth/login_email',
+          builder: (context, state) => AuthLoginEmailScreen(),
         ),
         GoRoute(
           path: '/auth/welcome',

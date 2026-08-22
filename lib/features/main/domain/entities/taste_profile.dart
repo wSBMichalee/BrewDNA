@@ -19,21 +19,11 @@ abstract class TasteProfile with _$TasteProfile {
   factory TasteProfile.fromJson(Map<String, dynamic> json) =>
       _$TasteProfileFromJson(json);
 
-  /// Zwraca efektywny wskaźnik mocy (70% calculated, 30% declared).
-  /// Jeśli brakuje jednego z nich, używa drugiego w 100%.
-  /// Jeśli brakuje obu, zwraca 50 (neutralny środek).
-  double get effectiveStrength => _calculateEffective(calculatedStrength, declaredStrength);
+  /// Zwraca wyliczony wskaźnik mocy (na podstawie historii ocen).
+  /// Jeśli brakuje danych z ocen (np. konto bez recenzji), zwraca 50 (neutralny środek).
+  double get effectiveStrength => (calculatedStrength ?? 50.0).toDouble();
 
-  double get effectiveBitterness => _calculateEffective(calculatedBitterness, declaredBitterness);
+  double get effectiveBitterness => (calculatedBitterness ?? 50.0).toDouble();
 
-  double get effectiveFruitiness => _calculateEffective(calculatedFruitiness, declaredFruitiness);
-
-  double _calculateEffective(num? calc, num? decl) {
-    if (calc != null && decl != null) {
-      return (calc * 0.7) + (decl * 0.3);
-    }
-    if (calc != null) return calc.toDouble();
-    if (decl != null) return decl.toDouble();
-    return 50.0;
-  }
+  double get effectiveFruitiness => (calculatedFruitiness ?? 50.0).toDouble();
 }

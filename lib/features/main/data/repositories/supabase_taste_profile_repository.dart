@@ -20,7 +20,7 @@ class SupabaseTasteProfileRepository implements ITasteProfileRepository {
 
       final response = await _supabaseClient
           .from('taste_profiles')
-          .select('calculated_strength, calculated_bitterness, calculated_fruitiness, declared_strength, declared_bitterness, declared_fruitiness')
+          .select('calculated_strength, calculated_bitterness, calculated_fruitiness, declared_strength, declared_bitterness, declared_fruitiness, rating_count')
           .eq('user_id', user.id)
           .maybeSingle();
 
@@ -28,7 +28,16 @@ class SupabaseTasteProfileRepository implements ITasteProfileRepository {
         return right(null);
       }
 
-      return right(TasteProfile.fromJson(response));
+      // Jeśli rating_count jest 0, to calculated_* zawierają jedynie bazodanowe zera z DEFAULT 0
+      // Ignorujemy je, żeby model nie przeliczył 0 jako realnej oceny
+      final data = Map<String, dynamic>.from(response);
+      if (data['rating_count'] == 0) {
+        data['calculated_strength'] = null;
+        data['calculated_bitterness'] = null;
+        data['calculated_fruitiness'] = null;
+      }
+
+      return right(TasteProfile.fromJson(data));
     } catch (e) {
       return left('Błąd pobierania profilu smaku: $e');
     }
@@ -51,7 +60,7 @@ class SupabaseTasteProfileRepository implements ITasteProfileRepository {
         'declared_strength': declaredStrength,
         'declared_bitterness': declaredBitterness,
         'declared_fruitiness': declaredFruitiness,
-      });
+      }, onConflict: 'user_id');
 
       return right(null);
     } catch (e) {

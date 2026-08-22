@@ -640,4 +640,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String beersCount(int count) {
     return '$count piw';
   }
+
+  @override
+  String get tasteProfileBalanced => 'Zbalansowane';
 }

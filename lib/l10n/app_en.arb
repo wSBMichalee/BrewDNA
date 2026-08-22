@@ -249,5 +249,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "tasteProfileBalanced": "Balanced"
 }

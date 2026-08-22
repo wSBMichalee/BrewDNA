@@ -642,4 +642,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String beersCount(int count) {
     return '$count beers';
   }
+
+  @override
+  String get tasteProfileBalanced => 'Balanced';
 }
