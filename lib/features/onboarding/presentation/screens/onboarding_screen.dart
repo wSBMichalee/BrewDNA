@@ -139,8 +139,7 @@ class _OnboardingViewState extends State<_OnboardingView> {
                         totalSteps: 6,
                         question: AppLocalizations.of(context)!.onboardingQ1Title,
                         subtitle: AppLocalizations.of(context)!.onboardingQ1Subtitle,
-                        imageUrl:
-                            'https://media.screensdesign.com/afprjsia/ef4321e8-c7db-4471-ba73-59f70ecf2758.png',
+                        imageUrl: 'assets/images/onboarding_hops.png',
                         leftLabel: AppLocalizations.of(context)!.onboardingQ1Left,
                         rightLabel: AppLocalizations.of(context)!.onboardingQ1Right,
                         sliderValue: state.bitterSweetValue,
@@ -156,10 +155,8 @@ class _OnboardingViewState extends State<_OnboardingView> {
                         totalSteps: 6,
                         question: AppLocalizations.of(context)!.onboardingQ2Title,
                         subtitle: AppLocalizations.of(context)!.onboardingQ2Subtitle,
-                        imageUrl:
-                            'https://media.screensdesign.com/afprjsia/d68ae3d9-58f5-4438-9f60-9b67a71e5c34.png',
-                        imageUrlEnd:
-                            'https://images.pexels.com/photos/1089930/pexels-photo-1089930.jpeg',
+                        imageUrl: 'assets/images/onboarding_light_beer.png',
+                        imageUrlEnd: 'assets/images/onboarding_dark_beer.png',
                         leftLabel: AppLocalizations.of(context)!.onboardingQ2Left,
                         rightLabel: AppLocalizations.of(context)!.onboardingQ2Right,
                         sliderValue: state.lightStrongValue,
@@ -175,10 +172,13 @@ class _OnboardingViewState extends State<_OnboardingView> {
                         totalSteps: 6,
                         question: AppLocalizations.of(context)!.onboardingQ3Title,
                         subtitle: AppLocalizations.of(context)!.onboardingQ3Subtitle,
-                        imageUrl:
-                            'https://media.screensdesign.com/gasset/a7a8bfb2bd8545cabebaf5c6701900e5_screen_image_citrus_icon_74e19ea847.png',
-                        imageUrlEnd:
-                            'https://media.screensdesign.com/gasset/e82346341291427ab997b8edb1aa3252_screen_image_ne_ipa_visual_8f69909d1e.png',
+                        imageUrl: 'assets/images/onboarding_citrus.png',
+                        // Q3 prawe (Ziemiste/Chlebowe) nie było wprost zdefiniowane, ale usunę imageUrlEnd, 
+                        // lub dam mu to samo jeśli quiz_question_page wymaga
+                        // Właściwie usunięcie imageUrlEnd zmieni zachowanie suwaka, zostawię assets/images/onboarding_citrus.png jako lewe, 
+                        // Zostawię pusty lub cokolwiek dla imageUrlEnd jeśli nie ma? 
+                        // User mówił: "onboarding Q3-lewa (Owoce) → onboarding_citrus.png". O prawej nie wspomniał.
+                        // Usunę imageUrlEnd i zobaczę czy quiz_question_page radzi sobie z null. Tak, ma imageUrlEnd? (nullable).
                         leftLabel: AppLocalizations.of(context)!.onboardingQ3Left,
                         rightLabel: AppLocalizations.of(context)!.onboardingQ3Right,
                         sliderValue: state.dryFruityValue,

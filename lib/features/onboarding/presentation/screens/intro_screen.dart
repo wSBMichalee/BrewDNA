@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,22 +41,9 @@ class _IntroScreenState extends State<IntroScreen> {
               fit: StackFit.expand,
               children: [
                 ClipRect(
-                  child: CachedNetworkImage(
-                    imageUrl:
-                        'https://media.screensdesign.com/afprjsia/d68ae3d9-58f5-4438-9f60-9b67a71e5c34.png',
+                  child: Image.asset(
+                    'assets/images/onboarding_light_beer.png',
                     fit: BoxFit.cover,
-                    placeholder: (context, url) =>
-                        Container(color: AppColors.accentTint),
-                    errorWidget: (context, url, error) => Container(
-                      color: AppColors.accentTint,
-                      child: const Center(
-                        child: Icon(
-                          Icons.local_drink,
-                          color: AppColors.accent,
-                          size: 64,
-                        ),
-                      ),
-                    ),
                   )
                   .animate(onPlay: (controller) => controller.repeat(reverse: true))
                   .scale(

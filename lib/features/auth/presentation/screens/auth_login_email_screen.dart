@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
@@ -78,15 +77,9 @@ class _AuthLoginEmailScreenState extends State<AuthLoginEmailScreen> {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    CachedNetworkImage(
-                      imageUrl:
-                          'https://media.screensdesign.com/gasset/04578a9f0f674e60beaacfb3c2de1cfc_screen_image_success_hero_image_395e267d88.jpg',
+                    Image.asset(
+                      'assets/images/auth_hero.png',
                       fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          Container(color: AppColors.background),
-                      errorWidget: (context, url, error) => Container(
-                        color: AppColors.background,
-                      ),
                     ),
                     // Gradient overlay to blend with background seamlessly
                     Positioned.fill(

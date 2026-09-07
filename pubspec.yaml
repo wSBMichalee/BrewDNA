@@ -104,11 +104,11 @@ flutter:
   assets:
     - .env
     - assets/icon/
-    - assets/images/onboarding_light_beer.jpg
-    - assets/images/onboarding_hops.jpg
-    - assets/images/onboarding_dark_beer.jpg
-    - assets/images/onboarding_citrus.jpg
-    - assets/images/auth_hero.jpg
+    - assets/images/onboarding_light_beer.png
+    - assets/images/onboarding_hops.png
+    - assets/images/onboarding_dark_beer.png
+    - assets/images/onboarding_citrus.png
+    - assets/images/auth_hero.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

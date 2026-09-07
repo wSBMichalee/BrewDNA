@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'dart:ui' show lerpDouble;
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';
 
 import '../../../../core/theme/app_theme.dart';
@@ -92,20 +89,16 @@ class QuizQuestionPage extends StatelessWidget {
                       children: [
                         Opacity(
                           opacity: 1.0 - fraction,
-                          child: CachedNetworkImage(
-                            imageUrl: imageUrl,
+                          child: Image.asset(
+                            imageUrl,
                             fit: BoxFit.cover,
-                            placeholder: (context, url) => const SizedBox(),
-                            errorWidget: (context, url, error) => const Icon(Icons.error),
                           ),
                         ),
                         Opacity(
                           opacity: fraction,
-                          child: CachedNetworkImage(
-                            imageUrl: imageUrlEnd!,
+                          child: Image.asset(
+                            imageUrlEnd!,
                             fit: BoxFit.cover,
-                            placeholder: (context, url) => const SizedBox(),
-                            errorWidget: (context, url, error) => const Icon(Icons.error),
                           ),
                         ),
                       ],
@@ -114,17 +107,9 @@ class QuizQuestionPage extends StatelessWidget {
                       child: ColorFiltered(
                         colorFilter: ColorFilter.matrix(
                             _saturationMatrix(lerpDouble(0.35, 1.6, fraction)!)),
-                        child: CachedNetworkImage(
-                          imageUrl: imageUrl,
+                        child: Image.asset(
+                          imageUrl,
                           fit: BoxFit.cover,
-                          placeholder: (context, url) => Shimmer.fromColors(
-                            baseColor: AppColors.separator,
-                            highlightColor: AppColors.background,
-                            child: Container(
-                              color: Colors.white,
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => const Icon(Icons.error),
                         ),
                       ),
                     ),
