@@ -322,7 +322,7 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                                                   ),
                                                   child: Text(
                                                     "Błąd ładowania DNA: ${snapshot.error}",
-                                                    style: AppTypography.caption.copyWith(color: AppColors.error),
+                                                    style: AppTypography.caption.copyWith(color: Colors.red),
                                                   ),
                                                 );
                                               }
