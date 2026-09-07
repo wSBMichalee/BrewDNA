@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:hop_iq/l10n/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/di/injection.dart';
@@ -161,6 +162,12 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                               Row(
                                 children: [
                                   _buildBadge(
+                                    CupertinoIcons.sparkles,
+                                    "${context.read<BeerCubit>().calculateMatchPercentage(beer)}% BeerDNA",
+                                    AppColors.gold,
+                                  ),
+                                  SizedBox(width: AppSpacings.s8),
+                                  _buildBadge(
                                     CupertinoIcons.circle_fill,
                                     AppLocalizations.of(context)!.beerDetailsTopStyle,
                                     AppColors.accent,
@@ -283,64 +290,74 @@ class _BeerDetailsScreenState extends State<BeerDetailsScreen> {
                                           ),
                                           SizedBox(height: AppSpacings.s16),
 
-                                          Container(
-                                            padding: EdgeInsets.all(
-                                              AppSpacings.s16,
+                                          FutureBuilder<FunctionResponse>(
+                                            future: Supabase.instance.client.functions.invoke(
+                                              'generate-beer-dna',
+                                              body: {'beer_id': beer.id},
                                             ),
-                                            decoration: BoxDecoration(
-                                              color: AppColors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(24),
-                                              border: Border.all(
-                                                color: AppColors.separator
-                                                    .withValues(alpha: 0.5),
-                                              ),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                CircleAvatar(
-                                                  backgroundColor: AppColors
-                                                      .gold
-                                                      .withValues(alpha: 0.2),
-                                                  radius: 24,
-                                                  child: Icon(
-                                                    CupertinoIcons.drop_fill,
-                                                    color: AppColors.gold,
-                                                  ), // Zastępcza ikona szklanki
-                                                ),
-                                                SizedBox(
-                                                  width: AppSpacings.s16,
-                                                ),
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        beer.style,
-                                                        style: AppTypography
-                                                            .subhead
-                                                            .copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                      ),
-                                                      Text(
-                                                        AppLocalizations.of(context)!.beerDetailsStyleMatch,
-                                                        style: AppTypography
-                                                            .caption
-                                                            .copyWith(
-                                                              color: AppColors
-                                                                  .labelSecondary,
-                                                            ),
-                                                      ),
-                                                    ],
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                                return Container(
+                                                  padding: EdgeInsets.all(AppSpacings.s16),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColors.white,
+                                                    borderRadius: BorderRadius.circular(24),
+                                                    border: Border.all(
+                                                      color: AppColors.separator.withValues(alpha: 0.5),
+                                                    ),
+                                                  ),
+                                                  child: const Center(child: CupertinoActivityIndicator()),
+                                                );
+                                              }
+                                              
+                                              if (snapshot.hasError) {
+                                                return Container(
+                                                  padding: EdgeInsets.all(AppSpacings.s16),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColors.white,
+                                                    borderRadius: BorderRadius.circular(24),
+                                                    border: Border.all(
+                                                      color: AppColors.separator.withValues(alpha: 0.5),
+                                                    ),
+                                                  ),
+                                                  child: Text(
+                                                    "Błąd ładowania DNA: ${snapshot.error}",
+                                                    style: AppTypography.caption.copyWith(color: AppColors.error),
+                                                  ),
+                                                );
+                                              }
+
+                                              final data = snapshot.data?.data;
+                                              final insightText = data is Map ? data['insight'] : data.toString();
+
+                                              return Container(
+                                                padding: EdgeInsets.all(AppSpacings.s16),
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.white,
+                                                  borderRadius: BorderRadius.circular(24),
+                                                  border: Border.all(
+                                                    color: AppColors.separator.withValues(alpha: 0.5),
                                                   ),
                                                 ),
-                                              ],
-                                            ),
+                                                child: Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    CircleAvatar(
+                                                      backgroundColor: AppColors.gold.withValues(alpha: 0.2),
+                                                      radius: 24,
+                                                      child: Icon(CupertinoIcons.sparkles, color: AppColors.gold),
+                                                    ),
+                                                    SizedBox(width: AppSpacings.s16),
+                                                    Expanded(
+                                                      child: Text(
+                                                        insightText ?? "Brak danych",
+                                                        style: AppTypography.subhead,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
                                           ),
                                         ],
                                       );
