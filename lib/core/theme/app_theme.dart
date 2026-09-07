@@ -43,89 +43,89 @@ class AppTypography {
   static TextStyle get brandDisplay => TextStyle(
     fontFamily: 'Fraunces',
     fontWeight: FontWeight.w700,
-    fontSize: 40,
+    fontSize: 40.sp,
   );
 
   static TextStyle get pageHeadline => TextStyle(
     fontFamily: 'Fraunces',
     fontWeight: FontWeight.w700,
-    fontSize: 34,
+    fontSize: 34.sp,
     color: AppColors.label,
   );
 
   static TextStyle get largeTitle => TextStyle(
     fontFamily: fontFamily,
-    fontSize: 34,
+    fontSize: 34.sp,
     fontWeight: FontWeight.w700,
     color: AppColors.label,
   );
 
   static TextStyle get title1 => TextStyle(
     fontFamily: fontFamily,
-    fontSize: 28,
+    fontSize: 28.sp,
     fontWeight: FontWeight.w700,
     color: AppColors.label,
   );
 
   static TextStyle get title2 => TextStyle(
     fontFamily: fontFamily,
-    fontSize: 22,
+    fontSize: 22.sp,
     fontWeight: FontWeight.w700,
     color: AppColors.label,
   );
 
   static TextStyle get title3 => TextStyle(
     fontFamily: fontFamily,
-    fontSize: 20,
+    fontSize: 20.sp,
     fontWeight: FontWeight.w600,
     color: AppColors.label,
   );
 
   static TextStyle get headline => TextStyle(
     fontFamily: fontFamily,
-    fontSize: 17,
+    fontSize: 17.sp,
     fontWeight: FontWeight.w600,
     color: AppColors.label,
   );
 
   static TextStyle get body => TextStyle(
     fontFamily: fontFamily,
-    fontSize: 17,
+    fontSize: 17.sp,
     fontWeight: FontWeight.w400,
     color: AppColors.label,
   );
 
   static TextStyle get subhead => TextStyle(
     fontFamily: fontFamily,
-    fontSize: 15,
+    fontSize: 15.sp,
     fontWeight: FontWeight.w400,
     color: AppColors.label,
   );
 
   static TextStyle get footnote => TextStyle(
     fontFamily: fontFamily,
-    fontSize: 13,
+    fontSize: 13.sp,
     fontWeight: FontWeight.w400,
     color: AppColors.label,
   );
 
   static TextStyle get caption => TextStyle(
     fontFamily: fontFamily,
-    fontSize: 12,
+    fontSize: 12.sp,
     fontWeight: FontWeight.w400,
     color: AppColors.label,
   );
 
   static TextStyle get linkCaption => TextStyle(
     fontFamily: fontFamily,
-    fontSize: 15,
+    fontSize: 15.sp,
     fontWeight: FontWeight.w400,
     color: AppColors.labelSecondary,
   );
 
   static TextStyle get linkCaptionBold => TextStyle(
     fontFamily: fontFamily,
-    fontSize: 15,
+    fontSize: 15.sp,
     fontWeight: FontWeight.w600,
     color: AppColors.accent,
   );

@@ -6,6 +6,7 @@ import 'dart:ui' as ui;
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/beer_style_placeholder.dart';
 
 class HookScreen extends StatefulWidget {
   const HookScreen({super.key});
@@ -55,11 +56,12 @@ class _HookScreenState extends State<HookScreen> with SingleTickerProviderStateM
           // Hero Image (Beer) with Animation
           ScaleTransition(
             scale: _scaleAnimation,
-            child: CachedNetworkImage(
-              imageUrl:
-                  'https://media.screensdesign.com/gasset/e82346341291427ab997b8edb1aa3252_screen_image_ne_ipa_visual_8f69909d1e.png',
+            child: SizedBox(
               height: 250,
-              fit: BoxFit.contain,
+              child: BeerStylePlaceholder(
+                style: styleName,
+                isHero: true,
+              ),
             ),
           ),
           SizedBox(height: AppSpacings.s32),
@@ -124,6 +126,8 @@ class _HookScreenState extends State<HookScreen> with SingleTickerProviderStateM
                               fontSize: 19, // Reduced from 22 for better wrapping
                             ),
                             textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           SizedBox(height: AppSpacings.s8),
                           Text(

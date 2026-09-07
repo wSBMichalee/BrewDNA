@@ -11,6 +11,7 @@ import '../../../../core/widgets/app_button.dart';
 
 class QuizQuestionPage extends StatelessWidget {
   final int step;
+  final int totalSteps;
   final String question;
   final String subtitle;
   final String imageUrl;
@@ -25,6 +26,7 @@ class QuizQuestionPage extends StatelessWidget {
   const QuizQuestionPage({
     super.key,
     required this.step,
+    required this.totalSteps,
     required this.question,
     required this.subtitle,
     required this.imageUrl,
@@ -47,7 +49,7 @@ class QuizQuestionPage extends StatelessWidget {
         children: [
           SizedBox(height: AppSpacings.s32),
           Text(
-            AppLocalizations.of(context)!.onboardingStep(step.toString(), '6'),
+            AppLocalizations.of(context)!.onboardingStep(step.toString(), totalSteps.toString()),
             style: AppTypography.caption.copyWith(
               color: AppColors.accent,
               fontWeight: FontWeight.w700,

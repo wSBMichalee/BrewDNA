@@ -136,6 +136,7 @@ class _OnboardingViewState extends State<_OnboardingView> {
                       // Page 0: Q1
                       QuizQuestionPage(
                         step: 1,
+                        totalSteps: 6,
                         question: AppLocalizations.of(context)!.onboardingQ1Title,
                         subtitle: AppLocalizations.of(context)!.onboardingQ1Subtitle,
                         imageUrl:
@@ -152,6 +153,7 @@ class _OnboardingViewState extends State<_OnboardingView> {
                       // Page 1: Q2
                       QuizQuestionPage(
                         step: 2,
+                        totalSteps: 6,
                         question: AppLocalizations.of(context)!.onboardingQ2Title,
                         subtitle: AppLocalizations.of(context)!.onboardingQ2Subtitle,
                         imageUrl:
@@ -170,6 +172,7 @@ class _OnboardingViewState extends State<_OnboardingView> {
                       // Page 2: Q3
                       QuizQuestionPage(
                         step: 3,
+                        totalSteps: 6,
                         question: AppLocalizations.of(context)!.onboardingQ3Title,
                         subtitle: AppLocalizations.of(context)!.onboardingQ3Subtitle,
                         imageUrl:
