@@ -79,9 +79,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i238.ITasteProfileRepository>(
       () => _i777.SupabaseTasteProfileRepository(gh<_i454.SupabaseClient>()),
     );
-    gh.factory<_i378.BeerCubit>(
-      () => _i378.BeerCubit(gh<_i425.IBeerRepository>()),
-    );
     gh.factory<_i52.AuthCubit>(
       () => _i52.AuthCubit(gh<_i589.IAuthRepository>()),
     );
@@ -90,6 +87,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i1012.ScanCubit>(
       () => _i1012.ScanCubit(gh<_i83.IScanRepository>()),
+    );
+    gh.factory<_i378.BeerCubit>(
+      () => _i378.BeerCubit(
+        gh<_i425.IBeerRepository>(),
+        gh<_i238.ITasteProfileRepository>(),
+      ),
     );
     return this;
   }

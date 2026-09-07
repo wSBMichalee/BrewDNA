@@ -7,19 +7,19 @@ import 'package:flutter/foundation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import '../../domain/repositories/i_beer_repository.dart';
 import '../../domain/entities/beer.dart';
+import '../../../main/domain/repositories/i_taste_profile_repository.dart';
+import '../../../main/domain/entities/taste_profile.dart';
 import 'beer_state.dart';
-
-// TODO(taste-profiles): zastąpić realnym profilem z Supabase po domknięciu
-// zapisu OnboardingState -> taste_profiles. Patrz wątek "taste_profiles".
-const _tempTasteProfile = (lightStrong: 70.0, bitterSweet: 60.0, dryFruity: 40.0);
 
 @injectable
 class BeerCubit extends Cubit<BeerState> {
   final IBeerRepository _repository;
+  final ITasteProfileRepository _tasteProfileRepository;
   // Cache prekalkulowanych procentów dopasowania — uzupełniany raz w loadDiscoverData().
   final Map<String, int> _matchPercentages = {};
+  TasteProfile? _currentTasteProfile;
 
-  BeerCubit(this._repository) : super(const BeerState.initial());
+  BeerCubit(this._repository, this._tasteProfileRepository) : super(const BeerState.initial());
 
   Future<void> loadBeerOfTheDay() async {
     _emitLoading();
@@ -75,6 +75,12 @@ class BeerCubit extends Cubit<BeerState> {
       debugPrint('Connectivity check failed: $e');
     }
 
+    final tasteProfileResult = await _tasteProfileRepository.getTasteProfile();
+    tasteProfileResult.fold(
+      (error) => _currentTasteProfile = null,
+      (profile) => _currentTasteProfile = profile,
+    );
+
     final botdFuture = _repository.getBeerOfTheDay();
     final recFuture = _repository.getRecommendations();
     final countriesFuture = _repository.getTopCountries();
@@ -120,9 +126,13 @@ class BeerCubit extends Cubit<BeerState> {
   }
 
   int calculateMatchPercentage(Beer beer) {
-    final lsDiff = beer.lightStrong - _tempTasteProfile.lightStrong;
-    final bsDiff = beer.bitterSweet - _tempTasteProfile.bitterSweet;
-    final dfDiff = beer.dryFruity - _tempTasteProfile.dryFruity;
+    final profLightStrong = _currentTasteProfile?.effectiveStrength ?? 50.0;
+    final profBitterSweet = _currentTasteProfile?.effectiveBitterness ?? 50.0;
+    final profDryFruity = _currentTasteProfile?.effectiveFruitiness ?? 50.0;
+
+    final lsDiff = beer.lightStrong - profLightStrong;
+    final bsDiff = beer.bitterSweet - profBitterSweet;
+    final dfDiff = beer.dryFruity - profDryFruity;
 
     final distance = math.sqrt(
         (lsDiff * lsDiff) + (bsDiff * bsDiff) + (dfDiff * dfDiff));
