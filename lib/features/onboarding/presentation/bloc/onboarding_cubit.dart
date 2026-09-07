@@ -12,6 +12,11 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     loadStyles();
   }
 
+  void reset() {
+    emit(const OnboardingState());
+    loadStyles();
+  }
+
   Future<void> loadStyles() async {
     emit(state.copyWith(isStylesLoading: true));
     final result = await _beerRepository.getAllStyles();

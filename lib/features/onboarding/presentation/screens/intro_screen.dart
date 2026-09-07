@@ -9,8 +9,26 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/custom_icons.dart';
 
-class IntroScreen extends StatelessWidget {
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/onboarding_cubit.dart';
+
+class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
+
+  @override
+  State<IntroScreen> createState() => _IntroScreenState();
+}
+
+class _IntroScreenState extends State<IntroScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<OnboardingCubit>().reset();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
