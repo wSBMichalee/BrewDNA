@@ -193,7 +193,7 @@ class PaywallSelectionScreen extends StatelessWidget {
                               if (isManageMode || isPromoModal) {
                                 Navigator.of(context).pop();
                               } else {
-                                context.go('/onboarding/intro');
+                                context.go('/main/discover');
                               }
                             }
                           },
