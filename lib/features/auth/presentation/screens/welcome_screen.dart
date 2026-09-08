@@ -30,6 +30,10 @@ class AuthWelcomeScreen extends StatelessWidget {
                     Image.asset(
                       'assets/images/auth_hero.png',
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: AppColors.accentTint,
+                        child: const Icon(CupertinoIcons.sparkles, size: 48),
+                      ),
                     ),
                     // Gradient overlay to blend with background
                     Positioned.fill(

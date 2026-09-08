@@ -44,6 +44,16 @@ class _IntroScreenState extends State<IntroScreen> {
                   child: Image.asset(
                     'assets/images/onboarding_light_beer.png',
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: AppColors.accentTint,
+                      child: const Center(
+                        child: Icon(
+                          Icons.local_drink,
+                          color: AppColors.accent,
+                          size: 64,
+                        ),
+                      ),
+                    ),
                   )
                   .animate(onPlay: (controller) => controller.repeat(reverse: true))
                   .scale(

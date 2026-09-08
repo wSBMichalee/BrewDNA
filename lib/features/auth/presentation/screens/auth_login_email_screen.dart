@@ -80,6 +80,9 @@ class _AuthLoginEmailScreenState extends State<AuthLoginEmailScreen> {
                     Image.asset(
                       'assets/images/auth_hero.png',
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: AppColors.background,
+                      ),
                     ),
                     // Gradient overlay to blend with background seamlessly
                     Positioned.fill(

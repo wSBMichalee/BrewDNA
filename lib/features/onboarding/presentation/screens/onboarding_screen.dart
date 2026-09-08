@@ -173,12 +173,7 @@ class _OnboardingViewState extends State<_OnboardingView> {
                         question: AppLocalizations.of(context)!.onboardingQ3Title,
                         subtitle: AppLocalizations.of(context)!.onboardingQ3Subtitle,
                         imageUrl: 'assets/images/onboarding_citrus.png',
-                        // Q3 prawe (Ziemiste/Chlebowe) nie było wprost zdefiniowane, ale usunę imageUrlEnd, 
-                        // lub dam mu to samo jeśli quiz_question_page wymaga
-                        // Właściwie usunięcie imageUrlEnd zmieni zachowanie suwaka, zostawię assets/images/onboarding_citrus.png jako lewe, 
-                        // Zostawię pusty lub cokolwiek dla imageUrlEnd jeśli nie ma? 
-                        // User mówił: "onboarding Q3-lewa (Owoce) → onboarding_citrus.png". O prawej nie wspomniał.
-                        // Usunę imageUrlEnd i zobaczę czy quiz_question_page radzi sobie z null. Tak, ma imageUrlEnd? (nullable).
+                        imageUrlEnd: 'assets/images/onboarding_light_beer.png',
                         leftLabel: AppLocalizations.of(context)!.onboardingQ3Left,
                         rightLabel: AppLocalizations.of(context)!.onboardingQ3Right,
                         sliderValue: state.dryFruityValue,

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'dart:ui' show lerpDouble;
 
 import 'package:hop_iq/l10n/app_localizations.dart';
@@ -92,6 +93,7 @@ class QuizQuestionPage extends StatelessWidget {
                           child: Image.asset(
                             imageUrl,
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
                           ),
                         ),
                         Opacity(
@@ -99,6 +101,7 @@ class QuizQuestionPage extends StatelessWidget {
                           child: Image.asset(
                             imageUrlEnd!,
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
                           ),
                         ),
                       ],
@@ -110,6 +113,7 @@ class QuizQuestionPage extends StatelessWidget {
                         child: Image.asset(
                           imageUrl,
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
                         ),
                       ),
                     ),
